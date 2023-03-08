@@ -1,0 +1,30 @@
+
+spring:
+#    profiles:
+#        active: dev
+    application:
+        name: austin
+    datasource:
+        url: jdbc:mysql://${austin.database.ip}:${austin.database.port}/austin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+        username: ${austin.database.username}
+        password: ${austin.database.password}
+        driver-class-name: com.mysql.jdbc.Driver
+    rabbitmq:
+        host:
+        port:
+        username: root
+        password: 123456
+        publisher-confirm-type: correlated
+        publisher-returns: true
+    redis:
+        host: ${austin.redis.ip}
+        port: 6379
+        password: ${austin.redis.password}
+austin:
+    rabbitmq:
+        topic:
+            name: austinRabbit
+        exchange:
+            name: austin.port
+server:
+    port: 9955
