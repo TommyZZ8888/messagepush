@@ -28,3 +28,11 @@ austin:
             name: austin.port
 server:
     port: 9955
+
+ok:
+    http:
+        connect-timeout: 30
+        keep-alive-duration: 300
+        max-idle-connections: 200
+        read-timeout: 30
+        write-timeout: 30

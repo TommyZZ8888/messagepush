@@ -25,6 +25,7 @@ public enum RespStatusEnum {
      */
     SERVICE_ERROR("B0001", "服务执行异常"),
     RESOURCE_NOT_FOUND("B0404", "资源不存在"),
+    NULL_POINT("B0002","空指针异常"),
 
 
     /**
