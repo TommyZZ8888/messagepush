@@ -1,6 +1,9 @@
 package com.zz.messagepush.support.domain.entity;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import cn.hutool.db.DaoTemplate;
 import lombok.Data;
 
 /**
@@ -117,12 +120,12 @@ public class MessageTemplateEntity implements Serializable {
     /**
      * 创建时间
      */
-    private Integer created;
+    private Date created;
 
     /**
      * 更新时间
      */
-    private Integer updated;
+    private Date updated;
 
     private static final long serialVersionUID = 1L;
 }

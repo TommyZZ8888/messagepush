@@ -1,7 +1,7 @@
 
 spring:
-#    profiles:
-#        active: dev
+    profiles:
+        active: dev
     application:
         name: austin
     datasource:
@@ -10,10 +10,10 @@ spring:
         password: ${austin.database.password}
         driver-class-name: com.mysql.jdbc.Driver
     rabbitmq:
-        host:
-        port:
-        username: root
-        password: 123456
+        host: 172.16.25.234
+        port: 15672
+        username: guest
+        password: guest
         publisher-confirm-type: correlated
         publisher-returns: true
     redis:
@@ -36,3 +36,11 @@ ok:
         max-idle-connections: 200
         read-timeout: 30
         write-timeout: 30
+tencent:
+    sms:
+        account:
+            secret-id: AKIDHRNBnAKH3czCcnkXBdyFOUs6B9uZ2MUM
+            secret-key: L3byTwEIAzazEG6o9MP4Y8Xmu211ud9V
+            sign-name: 4d348fb534fe55e53f12c984b7742e43
+            sms-sdk-app-id: 1400801615
+            template-id: 1728494

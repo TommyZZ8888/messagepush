@@ -1,0 +1,54 @@
+2023-03-13 17:19:45.216 [main] INFO  c.a.b.nacos.config.util.NacosConfigPropertiesUtils - nacosConfigProperties : NacosConfigProperties{serverAddr='127.0.0.1:8848', contextPath='null', encode='null', endpoint='null', namespace='null', accessKey='null', secretKey='null', ramRoleName='null', autoRefresh=false, dataId='null', dataIds='null', group='DEFAULT_GROUP', type=PROPERTIES, maxRetry='null', configLongPollTimeout='null', configRetryTime='null', enableRemoteSyncConfig=false, extConfig=[], bootstrap=Bootstrap{enable=false, logEnable=false}}
+2023-03-13 17:19:45.444 [main] INFO  c.a.b.nacos.config.util.NacosConfigPropertiesUtils - nacosConfigProperties : NacosConfigProperties{serverAddr='127.0.0.1:8848', contextPath='null', encode='null', endpoint='null', namespace='null', accessKey='null', secretKey='null', ramRoleName='null', autoRefresh=false, dataId='null', dataIds='null', group='DEFAULT_GROUP', type=PROPERTIES, maxRetry='null', configLongPollTimeout='null', configRetryTime='null', enableRemoteSyncConfig=false, extConfig=[], bootstrap=Bootstrap{enable=false, logEnable=false}}
+2023-03-13 17:19:45.509 [main] INFO  c.a.b.n.c.a.NacosConfigApplicationContextInitializer - [Nacos Config Boot] : The preload configuration is not enabled
+2023-03-13 17:19:45.517 [main] INFO  com.zz.messagepush.web.WebTest - Starting WebTest using Java 11 on DESKTOP-STAACOU with PID 24580 (started by DELL in D:\test\items\messagepush\web)
+2023-03-13 17:19:45.517 [main] INFO  com.zz.messagepush.web.WebTest - No active profile set, falling back to default profiles: default
+2023-03-13 17:19:47.988 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-03-13 17:19:47.991 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-03-13 17:19:48.021 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2023-03-13 17:19:48.311 [main] INFO  c.c.f.f.internals.provider.DefaultServerProvider - Environment is set to null. Because it is not available in either (1) JVM system property 'env', (2) OS env variable 'ENV' nor (3) property 'env' from the properties InputStream.
+2023-03-13 17:19:49.081 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.dtp.starter.common.autoconfigure.BaseBeanAutoConfiguration' of type [com.dtp.starter.common.autoconfigure.BaseBeanAutoConfiguration$$EnhancerBySpringCGLIB$$77468c00] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2023-03-13 17:19:49.314 [main] INFO  c.a.d.s.b.a.DruidDataSourceAutoConfigure - Init DruidDataSource
+2023-03-13 17:19:49.737 [main] INFO  com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+2023-03-13 17:19:53.400 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2023-03-13 17:19:54.634 [main] INFO  com.dtp.core.support.DtpBannerPrinter - 
+|  __ \                            (_) |__   __|   
+| |  | |_   _ _ __   __ _ _ __ ___  _  ___| |_ __  
+| |  | | | | | '_ \ / _` | '_ ` _ \| |/ __| | '_ \ 
+| |__| | |_| | | | | (_| | | | | | | | (__| | |_) |
+|_____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|_| .__/ 
+         __/ |                              | |    
+        |___/                               |_|    
+ :: Dynamic Thread Pool :: 
+2023-03-13 17:20:05.140 [main] INFO  com.dtp.starter.apollo.refresh.ApolloRefresher - DynamicTp refresher, add listener success, namespace: application
+2023-03-13 17:20:06.357 [main] INFO  com.zz.messagepush.web.WebTest - Started WebTest in 21.481 seconds (JVM running for 23.662)
+2023-03-13 17:20:16.117 [SpringApplicationShutdownHook] INFO  com.alibaba.druid.pool.DruidDataSource - {dataSource-1} closed
+2023-03-13 17:20:16.118 [SpringApplicationShutdownHook] INFO  c.a.n.s.c.a.c.NacosValueAnnotationBeanPostProcessor - class com.alibaba.nacos.spring.context.annotation.config.NacosValueAnnotationBeanPostProcessor was destroying!
+2023-03-13 17:20:16.119 [SpringApplicationShutdownHook] INFO  c.a.n.s.b.f.a.AnnotationNacosInjectedBeanPostProcessor - class com.alibaba.nacos.spring.beans.factory.annotation.AnnotationNacosInjectedBeanPostProcessor was destroying!
+2023-03-13 17:25:41.869 [main] INFO  c.a.b.nacos.config.util.NacosConfigPropertiesUtils - nacosConfigProperties : NacosConfigProperties{serverAddr='127.0.0.1:8848', contextPath='null', encode='null', endpoint='null', namespace='null', accessKey='null', secretKey='null', ramRoleName='null', autoRefresh=false, dataId='null', dataIds='null', group='DEFAULT_GROUP', type=PROPERTIES, maxRetry='null', configLongPollTimeout='null', configRetryTime='null', enableRemoteSyncConfig=false, extConfig=[], bootstrap=Bootstrap{enable=false, logEnable=false}}
+2023-03-13 17:25:41.927 [main] INFO  c.a.b.nacos.config.util.NacosConfigPropertiesUtils - nacosConfigProperties : NacosConfigProperties{serverAddr='127.0.0.1:8848', contextPath='null', encode='null', endpoint='null', namespace='null', accessKey='null', secretKey='null', ramRoleName='null', autoRefresh=false, dataId='null', dataIds='null', group='DEFAULT_GROUP', type=PROPERTIES, maxRetry='null', configLongPollTimeout='null', configRetryTime='null', enableRemoteSyncConfig=false, extConfig=[], bootstrap=Bootstrap{enable=false, logEnable=false}}
+2023-03-13 17:25:41.936 [main] INFO  c.a.b.n.c.a.NacosConfigApplicationContextInitializer - [Nacos Config Boot] : The preload configuration is not enabled
+2023-03-13 17:25:41.943 [main] INFO  com.zz.messagepush.web.WebTest - Starting WebTest using Java 11 on DESKTOP-STAACOU with PID 8812 (started by DELL in D:\test\items\messagepush\web)
+2023-03-13 17:25:41.944 [main] INFO  com.zz.messagepush.web.WebTest - The following profiles are active: dev
+2023-03-13 17:25:43.237 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-03-13 17:25:43.239 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-03-13 17:25:43.262 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 0 Redis repository interfaces.
+2023-03-13 17:25:43.427 [main] INFO  c.c.f.f.internals.provider.DefaultServerProvider - Environment is set to null. Because it is not available in either (1) JVM system property 'env', (2) OS env variable 'ENV' nor (3) property 'env' from the properties InputStream.
+2023-03-13 17:25:44.068 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.dtp.starter.common.autoconfigure.BaseBeanAutoConfiguration' of type [com.dtp.starter.common.autoconfigure.BaseBeanAutoConfiguration$$EnhancerBySpringCGLIB$$89ed4fad] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2023-03-13 17:25:44.224 [main] INFO  c.a.d.s.b.a.DruidDataSourceAutoConfigure - Init DruidDataSource
+2023-03-13 17:25:44.453 [main] INFO  com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+2023-03-13 17:25:47.221 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2023-03-13 17:25:48.116 [main] INFO  com.dtp.core.support.DtpBannerPrinter - 
+|  __ \                            (_) |__   __|   
+| |  | |_   _ _ __   __ _ _ __ ___  _  ___| |_ __  
+| |  | | | | | '_ \ / _` | '_ ` _ \| |/ __| | '_ \ 
+| |__| | |_| | | | | (_| | | | | | | | (__| | |_) |
+|_____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|_| .__/ 
+         __/ |                              | |    
+        |___/                               |_|    
+ :: Dynamic Thread Pool :: 
+2023-03-13 17:25:58.480 [main] INFO  com.dtp.starter.apollo.refresh.ApolloRefresher - DynamicTp refresher, add listener success, namespace: application
+2023-03-13 17:25:59.529 [main] INFO  com.zz.messagepush.web.WebTest - Started WebTest in 17.933 seconds (JVM running for 19.63)
+2023-03-13 17:26:51.917 [SpringApplicationShutdownHook] INFO  com.alibaba.druid.pool.DruidDataSource - {dataSource-1} closed
+2023-03-13 17:26:51.918 [SpringApplicationShutdownHook] INFO  c.a.n.s.c.a.c.NacosValueAnnotationBeanPostProcessor - class com.alibaba.nacos.spring.context.annotation.config.NacosValueAnnotationBeanPostProcessor was destroying!
+2023-03-13 17:26:51.918 [SpringApplicationShutdownHook] INFO  c.a.n.s.b.f.a.AnnotationNacosInjectedBeanPostProcessor - class com.alibaba.nacos.spring.beans.factory.annotation.AnnotationNacosInjectedBeanPostProcessor was destroying!

@@ -1,6 +1,7 @@
 package com.zz.messagepush.support.domain.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,12 +45,12 @@ public class ChannelAccountEntity implements Serializable {
     /**
      * 创建时间
      */
-    private Integer created;
+    private Date created;
 
     /**
      * 更新时间
      */
-    private Integer updated;
+    private Date updated;
 
     /**
      * 是否删除：0.不删除 1.删除

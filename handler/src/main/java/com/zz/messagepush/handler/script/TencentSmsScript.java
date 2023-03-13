@@ -1,81 +1,126 @@
 package com.zz.messagepush.handler.script;
 
-import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
-import com.zz.messagepush.common.domain.SmsParam;
+import com.google.common.base.Throwables;
+import com.tencentcloudapi.common.Credential;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
+import com.tencentcloudapi.common.profile.ClientProfile;
+import com.tencentcloudapi.common.profile.HttpProfile;
+import com.tencentcloudapi.sms.v20210111.SmsClient;
+import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
+import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
+import com.tencentcloudapi.sms.v20210111.models.SendStatus;
+import com.zz.messagepush.common.domain.dto.SmsParamDTO;
+import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.utils.OkHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author 张卫刚
  * @Date Created on 2023/3/10
+ * 1. 发送短信接入文档：<a href="https://cloud.tencent.com/document/api/382/55981">https://cloud.tencent.com/document/api/382/55981</a>
+ * 2. 推荐直接使用SDK
+ * 3. 推荐使用API Explorer 生成代码
  */
 @Service
 @Slf4j
-public class TencentSmsScript {
+public class TencentSmsScript implements SmsScript {
 
     @Autowired
     private OkHttpUtils okHttpUtils;
 
-    private static final String URL = "https://sms.tencentcloudapi.com/";
-    private static final String ACTION = "SendSms";
-    private static final String VERSION = "2021-01-11";
-    private static final String SMS_SDK_APP_ID = "";
-    private static final String TEMPLATE_ID = "";
-    private static final String SIGN_NAME = "Tommy消息推送";
-    private static final List<String> REGION = Arrays.asList("ap-beijing", "ap-nanjing", "ap-guangzhou");
-
+    private static final Integer PHONE_NUM = 11;
 
     /**
-     * 加密签名相关
+     * api 相关
      */
-    private static final String AUTHORIZATION_SIGN = "TC3-HMAC_SHA256";
-    private static final String CREDENTIAL = "Credential=AKIDEXAMPLE";
-    private static final String service = "sms";
-    private static final String TC3_REQUEST = "tc3_request";
-    private static final String SIGNED_HEADERS = "SignedHeaders=content-type;host";
+    private static final String URL = "sms.tencentcloudapi.com";
+    private static final String REGION = "ap-nanjing";
+
+    /**
+     * 账号相关
+     */
+
+    @Value("${tencent.sms.account.secret-id}")
+    private String SECRET_ID;
+    @Value("${tencent.sms.account.secret-key}")
+    private String SECRET_KEY;
+    @Value("${tencent.sms.account.sms-sdk-app-id}")
+    private String SMS_SDK_APP_ID;
+    @Value("${tencent.sms.account.template-id}")
+    private String TEMPLATE_ID;
+    @Value("${tencent.sms.account.sign-name}")
+    private String SIGN_NAME;
 
 
-    public String send(SmsParam smsParam) {
-        Map<String, String> header = getHeader();
-        Map<String, Object> params = getParams(smsParam);
-        String jsonString = JSON.toJSONString(params);
+    @Override
+    public List<SmsRecordEntity> send(SmsParamDTO smsParam) {
 
-        return okHttpUtils.doPostJsonWithHeaders(URL, jsonString, header);
+        try {
+            SmsClient client = init();
+            SendSmsRequest sendSmsRequest = assembleReq(smsParam);
+
+            SendSmsResponse response = client.SendSms(sendSmsRequest);
+            return assembleSmsRecord(smsParam,response);
+        } catch (TencentCloudSDKException e) {
+            log.error("send tencent sms fail!{},params:{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(smsParam));
+            return null;
+        }
     }
 
-    private Map<String, Object> getParams(SmsParam smsParam) {
-        Map<String, Object> params = new HashMap<>();
-        int phoneSize = smsParam.getPhones().size() - 1;
-        int paramSize = Arrays.asList(smsParam.getContent()).size() - 1;
 
-        params.put("PhoneNumberSet." + phoneSize, JSON.toJSONString(smsParam.getPhones()));
-        params.put("SmsSdkAppId", SMS_SDK_APP_ID);
-        params.put("TemplateId", TEMPLATE_ID);
-        params.put("SignName", SIGN_NAME);
-        params.put("TemplateParamSet." + paramSize, JSON.toJSONString(Arrays.asList(smsParam.getContent())));
-        params.put("SessionContext", IdUtil.simpleUUID());
-        return params;
+    private List<SmsRecordEntity> assembleSmsRecord(SmsParamDTO smsParamDTO,SendSmsResponse sendSmsResponse){
+        if (sendSmsResponse==null || ArrayUtil.isEmpty(sendSmsResponse.getSendStatusSet())){
+            return null;
+        }
+        ArrayList<Object> smsRecordList = new ArrayList<>();
+
+        for (SendStatus sendStatus : sendSmsResponse.getSendStatusSet()) {
+            String phone = new StringBuilder(new StringBuilder(sendStatus.getPhoneNumber())
+                    .reverse().substring(0, PHONE_NUM)).reverse().toString();
+//SmsRecordEntity.builder().
+
+        }
+
+
+        return new ArrayList<>();
     }
 
-    private Map<String, String> getHeader() {
-        HashMap<String, String> headers = new HashMap<>();
-        headers.put("X-TC-Action", ACTION);
-        headers.put("X-TC-Version", VERSION);
-        headers.put("X-TC-Region", REGION.get(RandomUtil.randomInt(REGION.size())));
-        headers.put("X-TC-Timestamp", String.valueOf(DateUtil.currentSeconds()));
-        return headers;
+    /**
+     * 组装参数
+     * @param smsParamDTO
+     * @return
+     */
+    private SendSmsRequest assembleReq(SmsParamDTO smsParamDTO) {
+        SendSmsRequest smsRequest = new SendSmsRequest();
+        smsRequest.setPhoneNumberSet(smsParamDTO.getPhones().toArray(new String[smsParamDTO.getPhones().size() - 1]));
+        String[] templateParamSet1 = {smsParamDTO.getContent()};
+        smsRequest.setTemplateParamSet(templateParamSet1);
+        smsRequest.setSmsSdkAppId(SMS_SDK_APP_ID);
+        smsRequest.setTemplateId(TEMPLATE_ID);
+        smsRequest.setSignName(SIGN_NAME);
+        smsRequest.setSessionContext(IdUtil.fastSimpleUUID());
+        return smsRequest;
     }
 
+    /**
+     * 初始化client
+     * @return
+     */
+    private SmsClient init() {
+        Credential credential = new Credential(SECRET_ID, SECRET_KEY);
+        HttpProfile httpProfile = new HttpProfile();
+        httpProfile.setEndpoint(URL);
+        ClientProfile clientProfile = new ClientProfile();
+        clientProfile.setHttpProfile(httpProfile);
+        return new SmsClient(credential, REGION, clientProfile);
+    }
 }

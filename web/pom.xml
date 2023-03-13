@@ -31,6 +31,11 @@
             <artifactId>handler</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.zz.messagepush</groupId>
+            <artifactId>support</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
 
         <dependency>

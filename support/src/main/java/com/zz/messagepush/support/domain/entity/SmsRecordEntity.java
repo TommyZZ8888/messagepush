@@ -1,17 +1,33 @@
 package com.zz.messagepush.support.domain.entity;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 短信记录信息
+ * @author DELL
  * @TableName sms_record
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@TableName("sms_record")
 public class SmsRecordEntity implements Serializable {
     /**
      * 
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -62,17 +78,17 @@ public class SmsRecordEntity implements Serializable {
     /**
      * 发送日期：20211112
      */
-    private Integer sendDate;
+    private Date sendDate;
 
     /**
      * 创建时间
      */
-    private Integer created;
+    private Date created;
 
     /**
      * 更新时间
      */
-    private Integer updated;
+    private Date updated;
 
     private static final long serialVersionUID = 1L;
 }
