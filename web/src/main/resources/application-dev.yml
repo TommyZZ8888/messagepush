@@ -2,11 +2,6 @@ server:
     port: 10000
 
 austin:
-    database:
-        ip: 172.16.25.234
-        port: 6379
-        username: root
-        password: 123456
     redis:
         ip: 172.16.16.106
         port: 6379
@@ -14,4 +9,5 @@ austin:
     rabbitmq:
         ip: 172.16.25.234
         port: 15672
-
+    apollo:
+        enabled: true

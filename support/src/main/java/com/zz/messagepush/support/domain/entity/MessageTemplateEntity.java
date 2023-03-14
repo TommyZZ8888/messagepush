@@ -4,13 +4,19 @@ import java.io.Serializable;
 import java.util.Date;
 
 import cn.hutool.db.DaoTemplate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 消息模板信息
  * @TableName message_template
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageTemplateEntity implements Serializable {
     /**
      * 

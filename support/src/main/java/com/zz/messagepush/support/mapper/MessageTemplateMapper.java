@@ -2,6 +2,7 @@ package com.zz.messagepush.support.mapper;
 
 import com.github.yulichang.base.MPJBaseMapper;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author DELL
@@ -9,6 +10,7 @@ import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 * @createDate 2023-03-08 15:21:05
 * @Entity com.zz.messagepush.support.domain.entity.MessageTemplate
 */
+@Mapper
 public interface MessageTemplateMapper extends MPJBaseMapper<MessageTemplateEntity> {
 
 

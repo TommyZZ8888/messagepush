@@ -1,31 +1,74 @@
-
 spring:
     profiles:
         active: dev
     application:
         name: austin
     datasource:
-        url: jdbc:mysql://${austin.database.ip}:${austin.database.port}/austin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
-        username: ${austin.database.username}
-        password: ${austin.database.password}
-        driver-class-name: com.mysql.jdbc.Driver
+        druid:
+            #数据库地址   172.16.25.234 是mysql服务地址 newwms是数据库名称
+            username: root
+            password: 123456
+            url: jdbc:mysql://172.16.25.234/austin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+            driver-class-name: com.mysql.jdbc.Driver
+            max-active: 20
+            initial-size: 10
+            min-idle: 5
+            max-wait: 60000
+            pool-prepared-statements: true
+            validation-query: SELECT 1
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            max-pool-prepared-statement-per-connection-size: 20
+            use-global-data-source-stat: true
+            filters: stat
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 2000
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                reset-enable: true
+                login-username: root
+                login-password: root
     rabbitmq:
         host: 172.16.25.234
-        port: 15672
+#        port: 15672
         username: guest
         password: guest
         publisher-confirm-type: correlated
         publisher-returns: true
+        virtual-host: /
     redis:
         host: ${austin.redis.ip}
         port: 6379
         password: ${austin.redis.password}
+
+
 austin:
     rabbitmq:
         topic:
             name: austinRabbit
         exchange:
             name: austin.port
+    kafka:
+        bootstrap-servers:
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+        consumer:
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        auto:
+            offset:
+                reset: earliest
+app:
+    id: austin
+apollo:
+    bootstrap:
+    enabled: ${austin.apollo.enabled}
+    namespaces: boss.austin,dynamic-tp-apollo-dtp.yml
+    meta: http://localhost:8080
 server:
     port: 9955
 

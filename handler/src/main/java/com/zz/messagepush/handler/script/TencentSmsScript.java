@@ -13,6 +13,7 @@ import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.zz.messagepush.common.domain.dto.SmsParamDTO;
+import com.zz.messagepush.common.enums.SmsStatus;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.utils.OkHttpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +71,7 @@ public class TencentSmsScript implements SmsScript {
             SendSmsRequest sendSmsRequest = assembleReq(smsParam);
 
             SendSmsResponse response = client.SendSms(sendSmsRequest);
-            return assembleSmsRecord(smsParam,response);
+            return assembleSmsRecord(smsParam, response);
         } catch (TencentCloudSDKException e) {
             log.error("send tencent sms fail!{},params:{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(smsParam));
             return null;
@@ -77,25 +79,34 @@ public class TencentSmsScript implements SmsScript {
     }
 
 
-    private List<SmsRecordEntity> assembleSmsRecord(SmsParamDTO smsParamDTO,SendSmsResponse sendSmsResponse){
-        if (sendSmsResponse==null || ArrayUtil.isEmpty(sendSmsResponse.getSendStatusSet())){
+    private List<SmsRecordEntity> assembleSmsRecord(SmsParamDTO smsParamDTO, SendSmsResponse sendSmsResponse) {
+        if (sendSmsResponse == null || ArrayUtil.isEmpty(sendSmsResponse.getSendStatusSet())) {
             return null;
         }
-        ArrayList<Object> smsRecordList = new ArrayList<>();
+        List<SmsRecordEntity> smsRecordList = new ArrayList<>();
 
         for (SendStatus sendStatus : sendSmsResponse.getSendStatusSet()) {
             String phone = new StringBuilder(new StringBuilder(sendStatus.getPhoneNumber())
                     .reverse().substring(0, PHONE_NUM)).reverse().toString();
-//SmsRecordEntity.builder().
-
+            SmsRecordEntity build = SmsRecordEntity.builder()
+                    .sendDate(new Date())
+                    .messageTemplateId(smsParamDTO.getMessageTemplateId())
+                    .phone(Long.valueOf(phone))
+                    .supplierId(smsParamDTO.getSupplierId())
+                    .supplierName(smsParamDTO.getSupplierName())
+                    .seriesId(sendStatus.getSerialNo())
+                    .chargingNum(Math.toIntExact(sendStatus.getFee()))
+                    .status(SmsStatus.SEND_SUCCESS.getCode())
+                    .reportContent(sendStatus.getCode())
+                    .created(new Date()).build();
+            smsRecordList.add(build);
         }
-
-
-        return new ArrayList<>();
+        return smsRecordList;
     }
 
     /**
      * 组装参数
+     *
      * @param smsParamDTO
      * @return
      */
@@ -113,6 +124,7 @@ public class TencentSmsScript implements SmsScript {
 
     /**
      * 初始化client
+     *
      * @return
      */
     private SmsClient init() {

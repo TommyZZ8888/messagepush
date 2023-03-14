@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("sms_record")
-public class SmsRecordEntity implements Serializable {
+public class SmsRecordEntity  {
     /**
      * 
      */
@@ -90,5 +90,5 @@ public class SmsRecordEntity implements Serializable {
      */
     private Date updated;
 
-    private static final long serialVersionUID = 1L;
+
 }

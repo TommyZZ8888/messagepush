@@ -17,4 +17,5 @@ import java.util.List;
 public interface SmsRecordMapper extends MPJBaseMapper<SmsRecordEntity> {
 
     Integer insertBatchSomeColumn(List<SmsRecordEntity> entities);
+
 }
