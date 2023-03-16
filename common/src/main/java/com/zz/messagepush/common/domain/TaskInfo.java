@@ -1,8 +1,10 @@
-package com.zz.messagepush.common.domain.dto;
+package com.zz.messagepush.common.domain;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
@@ -13,11 +15,16 @@ import java.util.Set;
  */
 @Data
 @Builder
-public class TaskInfoDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class TaskInfo {
 
     @ApiModelProperty("消息模板id")
     private Long messageTemplateId;
 
+    /**
+     * 数据追踪使用
+     */
     @ApiModelProperty("业务id")
     private Long businessId;
 

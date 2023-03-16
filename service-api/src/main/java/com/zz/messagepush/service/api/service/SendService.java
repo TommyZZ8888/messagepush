@@ -1,5 +1,6 @@
 package com.zz.messagepush.service.api.service;
 
+import com.zz.messagepush.service.api.domain.SendResponse;
 import com.zz.messagepush.service.api.domain.dto.BatchSendRequest;
 import com.zz.messagepush.service.api.domain.dto.SendRequest;
 
@@ -12,13 +13,13 @@ public interface SendService {
      * @param sendRequest
      * @return
      */
-    boolean send(SendRequest sendRequest);
+    SendResponse send(SendRequest sendRequest);
 
     /**
      * 多条消息发送
      * @param sendRequest
      * @return
      */
-    boolean batchSend(BatchSendRequest sendRequest);
+    SendResponse batchSend(BatchSendRequest sendRequest);
 
 }

@@ -3,6 +3,9 @@ package com.zz.messagepush.common.domain;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import lombok.Data;
 
+/**
+ * @author DELL
+ */
 @Data
 public class ResponseResult<T> {
 
@@ -21,7 +24,9 @@ public class ResponseResult<T> {
         this.data = data;
         this.code = code;
     }
-
+    public static <T> ResponseResult<T> success() {
+        return new ResponseResult(RespStatusEnum.SUCCESS.getCode(), "ok", true);
+    }
 
     public static <T> ResponseResult<T> success(String msg) {
         return new ResponseResult(RespStatusEnum.SUCCESS.getCode(), msg, true);

@@ -5,5 +5,6 @@ package com.zz.messagepush.support.pipeline;
  * @Author 张卫刚
  * @Date Created on 2023/3/14
  */
-public class ProcessModel {
+public interface ProcessModel {
+
 }

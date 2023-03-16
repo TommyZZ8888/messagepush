@@ -1,5 +1,11 @@
 package com.zz.messagepush.support.pipeline;
 
+import com.zz.messagepush.common.domain.ResponseResult;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @Description 责任链上下文
  * @Author 张卫刚
@@ -7,6 +13,10 @@ package com.zz.messagepush.support.pipeline;
  */
 
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProcessContext {
 
     /**
@@ -24,5 +34,7 @@ public class ProcessContext {
      */
     private Boolean needBreak;
 
+
+    ResponseResult<Object> response = ResponseResult.success();
 
 }

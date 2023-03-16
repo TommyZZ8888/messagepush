@@ -18,15 +18,15 @@ import java.util.Optional;
 @Slf4j
 public class UserLogConsumer {
 
-@KafkaListener(topics = {"austin"},groupId = "austinGroup1")
-public void consumer(ConsumerRecord<?,?> consumerRecord){
-    Optional<?> kafkaMessage = Optional.ofNullable(consumerRecord.value());
-    log.info(">>>>>>>>>> record =" + kafkaMessage);
-    if(kafkaMessage.isPresent()){
-        //得到Optional实例中的值
-        Object message = kafkaMessage.get();
-        System.err.println("消费消息:"+message);
+    @KafkaListener(topics = {"austin"}, groupId = "austinGroup1")
+    public void consumer(ConsumerRecord<?, ?> consumerRecord) {
+        Optional<?> kafkaMessage = Optional.ofNullable(consumerRecord.value());
+        log.info(">>>>>>>>>> record =" + kafkaMessage);
+        if (kafkaMessage.isPresent()) {
+            //得到Optional实例中的值
+            Object message = kafkaMessage.get();
+            System.err.println("消费消息:" + message);
+        }
     }
-}
 
 }

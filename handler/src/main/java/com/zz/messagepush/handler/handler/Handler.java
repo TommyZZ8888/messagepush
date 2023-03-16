@@ -1,6 +1,6 @@
 package com.zz.messagepush.handler.handler;
 
-import com.zz.messagepush.common.domain.dto.TaskInfoDTO;
+import com.zz.messagepush.common.domain.TaskInfo;
 
 /**
  * @Description
@@ -13,5 +13,5 @@ public interface Handler {
      * @param taskInfoDTO
      * @return
      */
-    boolean doHandler(TaskInfoDTO taskInfoDTO);
+    boolean doHandler(TaskInfo taskInfoDTO);
 }

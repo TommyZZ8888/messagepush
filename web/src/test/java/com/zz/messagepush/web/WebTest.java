@@ -1,12 +1,17 @@
 package com.zz.messagepush.web;
 
+import com.zz.messagepush.common.domain.TaskInfo;
+import com.zz.messagepush.handler.handler.impl.SmsHandler;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.SmsRecordMapper;
 import com.zz.messagepush.web.messagequeue.kafaka.UserLogProducer;
-import com.zz.messagepush.web.messagequeue.rabbitmq.Productor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * @Description
@@ -24,10 +29,16 @@ public class WebTest {
     @Autowired
     private UserLogProducer productor;
 
+    @Resource
+    private SmsHandler smsHandler;
+
 
     @Test
     void context(){
-        productor.sendLog("topic");
+        TaskInfo build = TaskInfo.builder().receiver(new HashSet<>(Arrays.asList("15255926173")))
+                .content("3333").messageTemplateId(1728494L).build();
+        smsHandler.doHandler(build);
+//        productor.sendLog("topic");
     }
 
     @Test
@@ -45,6 +56,12 @@ public class WebTest {
 //        CREATE INDEX SPRING_SESSION_IX2 ON SPRING_SESSION (EXPIRY_TIME);
 //        CREATE INDEX SPRING_SESSION_IX3 ON SPRING_SESSION (PRINCIPAL_NAME);
     }
+
+
+
+
+
+
 
 
 }

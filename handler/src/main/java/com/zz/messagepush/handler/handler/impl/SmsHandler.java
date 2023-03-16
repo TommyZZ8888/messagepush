@@ -1,8 +1,8 @@
 package com.zz.messagepush.handler.handler.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.zz.messagepush.common.domain.dto.SmsParamDTO;
-import com.zz.messagepush.common.domain.dto.TaskInfoDTO;
+import com.zz.messagepush.common.domain.SmsParam;
+import com.zz.messagepush.common.domain.TaskInfo;
 import com.zz.messagepush.common.enums.MessageType;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.SmsScript;
@@ -28,8 +28,8 @@ public class SmsHandler implements Handler {
     private SmsScript smsScript;
 
     @Override
-    public boolean doHandler(TaskInfoDTO taskInfoDTO) {
-        SmsParamDTO build = SmsParamDTO.builder()
+    public boolean doHandler(TaskInfo taskInfoDTO) {
+        SmsParam build = SmsParam.builder()
                 .phones(taskInfoDTO.getReceiver())
                 .content(taskInfoDTO.getContent())
                 .messageTemplateId(taskInfoDTO.getMessageTemplateId())

@@ -3,6 +3,8 @@ package com.zz.messagepush.support.domain.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +22,7 @@ public class ChannelAccountEntity implements Serializable {
     /**
      * 
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**

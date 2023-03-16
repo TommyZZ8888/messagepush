@@ -12,7 +12,7 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-import com.zz.messagepush.common.domain.dto.SmsParamDTO;
+import com.zz.messagepush.common.domain.SmsParam;
 import com.zz.messagepush.common.enums.SmsStatus;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.utils.OkHttpUtils;
@@ -64,13 +64,14 @@ public class TencentSmsScript implements SmsScript {
 
 
     @Override
-    public List<SmsRecordEntity> send(SmsParamDTO smsParam) {
+    public List<SmsRecordEntity> send(SmsParam smsParam) {
 
         try {
             SmsClient client = init();
             SendSmsRequest sendSmsRequest = assembleReq(smsParam);
 
             SendSmsResponse response = client.SendSms(sendSmsRequest);
+
             return assembleSmsRecord(smsParam, response);
         } catch (TencentCloudSDKException e) {
             log.error("send tencent sms fail!{},params:{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(smsParam));
@@ -79,7 +80,7 @@ public class TencentSmsScript implements SmsScript {
     }
 
 
-    private List<SmsRecordEntity> assembleSmsRecord(SmsParamDTO smsParamDTO, SendSmsResponse sendSmsResponse) {
+    private List<SmsRecordEntity> assembleSmsRecord(SmsParam smsParamDTO, SendSmsResponse sendSmsResponse) {
         if (sendSmsResponse == null || ArrayUtil.isEmpty(sendSmsResponse.getSendStatusSet())) {
             return null;
         }
@@ -97,6 +98,7 @@ public class TencentSmsScript implements SmsScript {
                     .seriesId(sendStatus.getSerialNo())
                     .chargingNum(Math.toIntExact(sendStatus.getFee()))
                     .status(SmsStatus.SEND_SUCCESS.getCode())
+                    .msgContent(smsParamDTO.getContent())
                     .reportContent(sendStatus.getCode())
                     .created(new Date()).build();
             smsRecordList.add(build);
@@ -110,7 +112,7 @@ public class TencentSmsScript implements SmsScript {
      * @param smsParamDTO
      * @return
      */
-    private SendSmsRequest assembleReq(SmsParamDTO smsParamDTO) {
+    private SendSmsRequest assembleReq(SmsParam smsParamDTO) {
         SendSmsRequest smsRequest = new SendSmsRequest();
         smsRequest.setPhoneNumberSet(smsParamDTO.getPhones().toArray(new String[smsParamDTO.getPhones().size() - 1]));
         String[] templateParamSet1 = {smsParamDTO.getContent()};

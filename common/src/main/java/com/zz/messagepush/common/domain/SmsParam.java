@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain.dto;
+package com.zz.messagepush.common.domain;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 @Builder
-public class SmsParamDTO {
+public class SmsParam {
 
     /**
      * 业务id

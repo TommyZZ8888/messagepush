@@ -1,24 +1,19 @@
 package com.zz.messagepush.web.controller;
 
-import com.zz.messagepush.AustinWebApplication;
 import com.zz.messagepush.common.domain.ResponseResult;
-import com.zz.messagepush.common.domain.dto.TaskInfoDTO;
+import com.zz.messagepush.common.domain.TaskInfo;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.handler.handler.impl.SmsHandler;
 import com.zz.messagepush.service.api.domain.dto.SendRequest;
 import com.zz.messagepush.service.api.service.SendService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -42,9 +37,10 @@ public class SendController {
 
 
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST)
-    public boolean sendSms(String phone, String content, Long messageTemplateId) {
-        TaskInfoDTO build = TaskInfoDTO.builder().receiver(new HashSet<>(Arrays.asList(phone)))
+    public ResponseResult<Boolean> sendSms(String phone, String content, Long messageTemplateId) {
+        TaskInfo build = TaskInfo.builder().receiver(new HashSet<>(Arrays.asList(phone)))
                 .content(content).messageTemplateId(messageTemplateId).build();
-        return smsHandler.doHandler(build);
+        smsHandler.doHandler(build);
+        return ResponseResult.success(RespStatusEnum.SUCCESS.getMsg());
     }
 }

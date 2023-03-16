@@ -15,15 +15,14 @@ import org.springframework.stereotype.Component;
 public class UserLogProducer {
 
     @Autowired
-private KafkaTemplate kafkaTemplate;
+    private KafkaTemplate kafkaTemplate;
 
-    public void sendLog(String userId){
+    public void sendLog(String userId) {
         UserLog userLog = new UserLog();
         userLog.setUserName("jhp").setUserId(userId).setState("0");
-        System.err.println("发送用户日志数据:"+userLog);
+        System.err.println("发送用户日志数据:" + userLog);
         kafkaTemplate.send("austin", JSON.toJSONString(userLog));
     }
-
 
 
 }

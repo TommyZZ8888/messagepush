@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import cn.hutool.db.DaoTemplate;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class MessageTemplateEntity implements Serializable {
     /**
      * 
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
