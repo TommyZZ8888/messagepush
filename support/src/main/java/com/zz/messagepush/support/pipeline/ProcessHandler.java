@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
 /**
  * @Description
  * @Author 张卫刚
@@ -34,35 +32,13 @@ public class ProcessHandler {
      * @return
      */
     public ProcessContext process(ProcessContext context) {
-
-        //上下文
-        if (context == null) {
-            throw new ErrorException(RespStatusEnum.CONTEXT_IS_NULL.getMsg());
-        }
-
-        //业务代码
-        String businessCode = context.getCode();
-        if (StringUtils.isBlank(businessCode)) {
-            context.setResponse(ResponseResult.fail(RespStatusEnum.BUSINESS_CODE_IS_NULL.getMsg()));
+        if (!preCheck(context)) {
             return context;
         }
-
-        //执行模板
-        ProcessTemplate processTemplate = templateConfig.get(businessCode);
-        if (processTemplate == null) {
-            context.setResponse(ResponseResult.fail(RespStatusEnum.PROCESS_TEMPLATE_IS_NULL.getMsg()));
-            return context;
-        }
-
-        //执行模板列表
-        List<BusinessProcess> processList = processTemplate.getProcessList();
-        if (CollUtil.isEmpty(processList)) {
-            context.setResponse(ResponseResult.fail(RespStatusEnum.PROCESS_LIST_IS_NULL.getMsg()));
-            return context;
-        }
-
-
-        //遍历节点
+        /**
+         * 遍历流程节点
+         */
+        List<BusinessProcess> processList = templateConfig.get(context.getCode()).getProcessList();
         for (BusinessProcess businessProcess : processList) {
             businessProcess.process(context);
             if (context.getNeedBreak()) {
@@ -73,8 +49,32 @@ public class ProcessHandler {
     }
 
 
-    public void setTemplateConfig(Map<String, ProcessTemplate> map) {
-        this.templateConfig = map;
+    private Boolean preCheck(ProcessContext context) {
+        if (context == null) {
+            throw new ErrorException(RespStatusEnum.CONTEXT_IS_NULL.getDescription());
+        }
+
+        //业务代码
+        String businessCode = context.getCode();
+        if (StringUtils.isBlank(businessCode)) {
+            context.setResponse(ResponseResult.fail(RespStatusEnum.BUSINESS_CODE_IS_NULL.getDescription()));
+            return false;
+        }
+
+        //执行模板
+        ProcessTemplate processTemplate = templateConfig.get(businessCode);
+        if (processTemplate == null) {
+            context.setResponse(ResponseResult.fail(RespStatusEnum.PROCESS_TEMPLATE_IS_NULL.getDescription()));
+            return false;
+        }
+
+        //执行模板列表
+        List<BusinessProcess> processList = processTemplate.getProcessList();
+        if (CollUtil.isEmpty(processList)) {
+            context.setResponse(ResponseResult.fail(RespStatusEnum.PROCESS_LIST_IS_NULL.getDescription()));
+            return false;
+        }
+        return true;
     }
 
 
@@ -82,5 +82,8 @@ public class ProcessHandler {
         return templateConfig;
     }
 
+    public void setTemplateConfig(Map<String, ProcessTemplate> templateConfig) {
+        this.templateConfig = templateConfig;
+    }
 
 }

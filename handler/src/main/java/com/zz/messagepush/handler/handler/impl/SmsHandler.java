@@ -1,8 +1,10 @@
 package com.zz.messagepush.handler.handler.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.zz.messagepush.common.domain.SmsParam;
-import com.zz.messagepush.common.domain.TaskInfo;
+import cn.hutool.core.util.StrUtil;
+import com.zz.messagepush.common.domain.dto.SmsContentModel;
+import com.zz.messagepush.common.domain.dto.SmsParam;
+import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.MessageType;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.SmsScript;
@@ -28,11 +30,20 @@ public class SmsHandler implements Handler {
     private SmsScript smsScript;
 
     @Override
-    public boolean doHandler(TaskInfo taskInfoDTO) {
+    public boolean doHandler(TaskInfo taskInfo) {
+
+        SmsContentModel smsContentModel = (SmsContentModel) taskInfo.getContentModel();
+        String resultContent;
+        if (StrUtil.isNotBlank(smsContentModel.getUrl())){
+            resultContent = smsContentModel.getContent()+""+smsContentModel.getUrl();
+        }else {
+            resultContent = smsContentModel.getContent();
+        }
+
         SmsParam build = SmsParam.builder()
-                .phones(taskInfoDTO.getReceiver())
-                .content(taskInfoDTO.getContent())
-                .messageTemplateId(taskInfoDTO.getMessageTemplateId())
+                .phones(taskInfo.getReceiver())
+                .content(resultContent)
+                .messageTemplateId(taskInfo.getMessageTemplateId())
                 .supplierId(MessageType.NOTICE.getCode())
                 .supplierName(MessageType.NOTICE.getDescription()).build();
         List<SmsRecordEntity> recordEntityList = smsScript.send(build);

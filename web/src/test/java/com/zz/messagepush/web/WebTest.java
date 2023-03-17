@@ -1,6 +1,6 @@
 package com.zz.messagepush.web;
 
-import com.zz.messagepush.common.domain.TaskInfo;
+import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.handler.handler.impl.SmsHandler;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.SmsRecordMapper;

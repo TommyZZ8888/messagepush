@@ -1,6 +1,6 @@
 package com.zz.messagepush.handler.script;
 
-import com.zz.messagepush.common.domain.SmsParam;
+import com.zz.messagepush.common.domain.dto.SmsParam;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import org.springframework.stereotype.Service;
 

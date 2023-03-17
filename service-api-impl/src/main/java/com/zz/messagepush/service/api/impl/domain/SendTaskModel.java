@@ -1,6 +1,6 @@
 package com.zz.messagepush.service.api.impl.domain;
 
-import com.zz.messagepush.common.domain.TaskInfo;
+import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.service.api.domain.dto.MessageParam;
 import com.zz.messagepush.support.pipeline.ProcessModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,4 +34,6 @@ public class SendTaskModel implements ProcessModel {
 
     @ApiModelProperty("发送任务信息")
     private TaskInfo taskInfo;
+
+    private Long messageTemplateId;
 }

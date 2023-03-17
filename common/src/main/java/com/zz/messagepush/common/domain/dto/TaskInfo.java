@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain;
+package com.zz.messagepush.common.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -43,8 +43,14 @@ public class TaskInfo {
     @ApiModelProperty("消息类型")
     private Integer msgType;
 
+    /**
+     * 发送文案模型
+     * messageTemplate 表存储的content是JSON（所有的内容都会塞进去）
+     * 不同渠道要发送的内容不一样（push会有img，而短信没有）
+     * 所以会有ContentModel
+     */
     @ApiModelProperty("消息内容")
-    private String content;
+    private ContentModel contentModel;
 
     @ApiModelProperty("发送账号")
     private Integer sendAccount;

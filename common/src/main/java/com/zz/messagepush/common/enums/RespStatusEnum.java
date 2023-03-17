@@ -42,14 +42,14 @@ public enum RespStatusEnum {
 
     private final String code;
 
-    private final String msg;
+    private final String description;
 
     public String getCode() {
         return code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getDescription() {
+        return description;
     }
 
     @Override
@@ -57,9 +57,9 @@ public enum RespStatusEnum {
         return super.toString();
     }
 
-    RespStatusEnum(String code, String msg) {
+    RespStatusEnum(String code, String description) {
         this.code = code;
-        this.msg = msg;
+        this.description = description;
     }
 
 

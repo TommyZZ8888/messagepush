@@ -43,7 +43,8 @@ spring:
         host: ${austin.redis.ip}
         port: 6379
         password: ${austin.redis.password}
-
+    date:
+        format: yyyy-MM-dd HH:mm:ss
 
 austin:
     rabbitmq:

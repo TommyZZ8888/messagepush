@@ -12,7 +12,7 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-import com.zz.messagepush.common.domain.SmsParam;
+import com.zz.messagepush.common.domain.dto.SmsParam;
 import com.zz.messagepush.common.enums.SmsStatus;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.utils.OkHttpUtils;

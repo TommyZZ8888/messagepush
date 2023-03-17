@@ -1,6 +1,6 @@
 package com.zz.messagepush.handler.handler;
 
-import com.zz.messagepush.common.domain.TaskInfo;
+import com.zz.messagepush.common.domain.dto.TaskInfo;
 
 /**
  * @Description

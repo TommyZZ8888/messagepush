@@ -1,6 +1,6 @@
 package com.zz.messagepush.service.api.impl.service;
 
-import com.zz.messagepush.common.domain.TaskInfo;
+import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.service.api.domain.SendResponse;
 import com.zz.messagepush.service.api.domain.dto.BatchSendRequest;
 import com.zz.messagepush.service.api.domain.dto.SendRequest;

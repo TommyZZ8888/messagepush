@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain;
+package com.zz.messagepush.common.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
