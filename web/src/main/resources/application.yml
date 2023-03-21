@@ -85,8 +85,8 @@ ok:
 tencent:
     sms:
         account:
-            secret-id: AKIDHRNBnAKH3czCcnkXBdyFOUs6B9uZ2MUM
-            secret-key: L3byTwEIAzazEG6o9MP4Y8Xmu211ud9V
+            secret-id: llllllllllllllll
+            secret-key: lllllllllllllll
             sign-name: 失眠的你Zzz公众号
             sms-sdk-app-id: 1400801615
             template-id: 1728494
