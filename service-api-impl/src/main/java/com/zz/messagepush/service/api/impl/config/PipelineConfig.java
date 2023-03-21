@@ -1,8 +1,9 @@
 package com.zz.messagepush.service.api.impl.config;
 
 import com.zz.messagepush.service.api.enums.BusinessCode;
+import com.zz.messagepush.service.api.impl.action.AfterParamCheckAction;
 import com.zz.messagepush.service.api.impl.action.AssembleAction;
-import com.zz.messagepush.service.api.impl.action.ParamAction;
+import com.zz.messagepush.service.api.impl.action.PreParamCheckAction;
 import com.zz.messagepush.service.api.impl.action.SendMqAction;
 import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessHandler;
@@ -36,9 +37,10 @@ public class PipelineConfig {
         ProcessTemplate processTemplate = new ProcessTemplate();
         List<BusinessProcess> processList = new ArrayList<>();
 
-        processList.add(paramAction());
+        processList.add(preParamCheckAction());
         processList.add(assembleAction());
         processList.add(sendMqAction());
+        processList.add(afterParamCheckAction());
 
         processTemplate.setProcessList(processList);
         return processTemplate;
@@ -72,8 +74,8 @@ public class PipelineConfig {
      * 参数校验 action
      */
     @Bean
-    public ParamAction paramAction() {
-        return new ParamAction();
+    public PreParamCheckAction preParamCheckAction() {
+        return new PreParamCheckAction();
     }
 
     /**
@@ -82,6 +84,11 @@ public class PipelineConfig {
     @Bean
     public SendMqAction sendMqAction() {
         return new SendMqAction();
+    }
+
+    @Bean
+    public AfterParamCheckAction afterParamCheckAction() {
+        return new AfterParamCheckAction();
     }
 
 }

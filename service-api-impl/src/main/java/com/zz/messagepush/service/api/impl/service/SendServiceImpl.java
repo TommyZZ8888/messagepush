@@ -1,16 +1,18 @@
 package com.zz.messagepush.service.api.impl.service;
 
+import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.service.api.domain.SendResponse;
 import com.zz.messagepush.service.api.domain.dto.BatchSendRequest;
 import com.zz.messagepush.service.api.domain.dto.SendRequest;
 import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
-import com.zz.messagepush.service.api.impl.enums.RequestType;
 import com.zz.messagepush.service.api.service.SendService;
 import com.zz.messagepush.support.pipeline.ProcessContext;
 import com.zz.messagepush.support.pipeline.ProcessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 
 @Service
@@ -22,13 +24,14 @@ public class SendServiceImpl implements SendService {
     @Override
     public SendResponse send(SendRequest sendRequest) {
         SendTaskModel sendTaskModel = SendTaskModel.builder()
-                .requestType(RequestType.SINGLE.getCode())
-                .messageParam(sendRequest.getMessageParam())
-                .taskInfo(TaskInfo.builder().messageTemplateId(sendRequest.getMessageTemplateId()).build())
+                .messageTemplateId(sendRequest.getMessageTemplateId())
+                .messageParamList(Arrays.asList(sendRequest.getMessageParam()))
                 .build();
         ProcessContext context = ProcessContext.builder()
                 .code(sendRequest.getCode())
-                .processModel(sendTaskModel).build();
+                .processModel(sendTaskModel)
+                .needBreak(false)
+                .response(ResponseResult.success()).build();
         ProcessContext process = processHandler.process(context);
         return new SendResponse(process.getResponse().getCode(), process.getResponse().getMsg());
     }
@@ -36,13 +39,14 @@ public class SendServiceImpl implements SendService {
     @Override
     public SendResponse batchSend(BatchSendRequest sendRequest) {
         SendTaskModel sendTaskModel = SendTaskModel.builder()
-                .requestType(RequestType.BATCH.getCode())
-                .messageParamList(sendRequest.getMessageParamList())
-                .taskInfo(TaskInfo.builder().messageTemplateId(sendRequest.getMessageTemplateId()).build()).build();
+                .messageTemplateId(sendRequest.getMessageTemplateId())
+                .messageParamList(sendRequest.getMessageParamList()).build();
 
         ProcessContext processContext = ProcessContext.builder()
                 .code(sendRequest.getCode())
-                .processModel(sendTaskModel).build();
+                .processModel(sendTaskModel)
+                .needBreak(false)
+                .response(ResponseResult.success()).build();
 
         ProcessContext process = processHandler.process(processContext);
 

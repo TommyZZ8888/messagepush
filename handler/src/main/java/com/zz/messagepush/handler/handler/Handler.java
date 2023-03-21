@@ -10,8 +10,8 @@ import com.zz.messagepush.common.domain.dto.TaskInfo;
 public interface Handler {
     /**
      * 消息处理
-     * @param taskInfoDTO
+     * @param taskInfo
      * @return
      */
-    boolean doHandler(TaskInfo taskInfoDTO);
+    boolean doHandler(TaskInfo taskInfo);
 }

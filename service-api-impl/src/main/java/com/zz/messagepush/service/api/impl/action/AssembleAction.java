@@ -40,13 +40,13 @@ public class AssembleAction implements BusinessProcess {
         Long messageTemplateId = processModel.getMessageTemplateId();
 
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.selectById(messageTemplateId);
-        if (messageTemplateEntity==null || messageTemplateEntity.getIsDeleted().equals(AustinConstant.TRUE)){
+        if (messageTemplateEntity == null || messageTemplateEntity.getIsDeleted().equals(AustinConstant.TRUE)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.TEMPLATE_NOT_FOUND.getDescription()));
         }
     }
 
 
-    private List<TaskInfo> assembleTaskInfo(SendTaskModel sendTaskModel, MessageTemplateEntity messageTemplate){
+    private List<TaskInfo> assembleTaskInfo(SendTaskModel sendTaskModel, MessageTemplateEntity messageTemplate) {
         List<MessageParam> messageParamList = sendTaskModel.getMessageParamList();
         List<TaskInfo> taskInfoList = new ArrayList<>();
 
@@ -70,11 +70,12 @@ public class AssembleAction implements BusinessProcess {
     }
 
 
-    public static ContentModel getContentModelValue(MessageTemplateEntity messageTemplate,MessageParam messageParam){
+    public static ContentModel getContentModelValue(MessageTemplateEntity messageTemplate, MessageParam messageParam) {
         Integer sendChannel = messageTemplate.getSendChannel();
+        Class contentModelClass = ChannelType.getChanelModelClassByCode(sendChannel);
+
         Map<String, String> variables = messageParam.getVariables();
         JSONObject jsonObject = JSON.parseObject(messageTemplate.getMsgContent());
-        Class contentModelClass = ChannelType.getChanelModelClassByCode(sendChannel);
 
         //反射获取得到不同渠道对应的值
         Field[] fields = ReflectUtil.getFields(contentModelClass);
@@ -90,15 +91,5 @@ public class AssembleAction implements BusinessProcess {
 
         return contentModel;
     }
-    public static void main(String[] args) {
 
-        MessageTemplateEntity messageTemplate = MessageTemplateEntity.builder().sendChannel(ChannelType.SMS.getCode()).msgContent("{\"url\":\"www.baidu.com/{$urlParam}\",\"content\":\"{$contentValue}\"}").build();
-        HashMap<String, String> map = new HashMap<>();
-        map.put("urlParam", "2222");
-        map.put("contentValue", "3333");
-        MessageParam messageParam = new MessageParam().setVariables(map);
-
-        ContentModel contentModelValue = getContentModelValue(messageTemplate, messageParam);
-        System.out.println(JSON.toJSONString(contentModelValue));
-    }
 }

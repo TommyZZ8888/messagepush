@@ -33,7 +33,7 @@ public class SendTaskModel implements ProcessModel {
     private List<MessageParam> messageParamList;
 
     @ApiModelProperty("发送任务信息")
-    private TaskInfo taskInfo;
+    private List<TaskInfo> taskInfo;
 
     private Long messageTemplateId;
 }

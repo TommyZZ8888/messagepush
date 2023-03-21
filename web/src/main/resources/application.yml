@@ -63,6 +63,8 @@ austin:
         auto:
             offset:
                 reset: earliest
+        topic:
+            name: austinKafka
 app:
     id: austin
 apollo:

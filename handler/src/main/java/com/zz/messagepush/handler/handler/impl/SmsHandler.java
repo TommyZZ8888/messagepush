@@ -32,13 +32,7 @@ public class SmsHandler implements Handler {
     @Override
     public boolean doHandler(TaskInfo taskInfo) {
 
-        SmsContentModel smsContentModel = (SmsContentModel) taskInfo.getContentModel();
-        String resultContent;
-        if (StrUtil.isNotBlank(smsContentModel.getUrl())){
-            resultContent = smsContentModel.getContent()+""+smsContentModel.getUrl();
-        }else {
-            resultContent = smsContentModel.getContent();
-        }
+        String resultContent = getSmsContent(taskInfo);
 
         SmsParam build = SmsParam.builder()
                 .phones(taskInfo.getReceiver())
@@ -48,10 +42,26 @@ public class SmsHandler implements Handler {
                 .supplierName(MessageType.NOTICE.getDescription()).build();
         List<SmsRecordEntity> recordEntityList = smsScript.send(build);
 
-       if (CollUtil.isNotEmpty(recordEntityList)){
-           smsRecordMapper.insertBatchSomeColumn(recordEntityList);
-           return true;
-       }
+        if (CollUtil.isNotEmpty(recordEntityList)) {
+            smsRecordMapper.insertBatchSomeColumn(recordEntityList);
+            return true;
+        }
         return false;
+    }
+
+    /**
+     * 如果有输入链接，则把连接拼在文案后
+     * ps：这里可以考虑将链接 转短链
+     * ps：如果是营销类的短信，需考虑拼接 回TD退订 之类的文案
+     * @param taskInfo
+     * @return
+     */
+    private String getSmsContent(TaskInfo taskInfo) {
+        SmsContentModel smsContentModel = (SmsContentModel) taskInfo.getContentModel();
+        if (StrUtil.isNotBlank(smsContentModel.getUrl())) {
+            return smsContentModel.getContent() + "" + smsContentModel.getUrl();
+        } else {
+            return smsContentModel.getContent();
+        }
     }
 }

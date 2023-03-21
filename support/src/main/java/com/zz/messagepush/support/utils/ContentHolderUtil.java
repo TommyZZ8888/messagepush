@@ -21,13 +21,13 @@ public class ContentHolderUtil {
 
     private static final String PLACE_HOLDER_SUFFIX = "}";
 
-    private static final StandardEvaluationContext evaluationContext;
+    private static final StandardEvaluationContext EVALUATION_CONTEXT;
 
     private static PropertyPlaceholderHelper propertyPlaceholderHelper = new PropertyPlaceholderHelper(PLACE_HOLDER_PREFIX, PLACE_HOLDER_SUFFIX);
 
     static {
-        evaluationContext = new StandardEvaluationContext();
-        evaluationContext.addPropertyAccessor(new MapAccessor());
+        EVALUATION_CONTEXT = new StandardEvaluationContext();
+        EVALUATION_CONTEXT.addPropertyAccessor(new MapAccessor());
     }
 
     public static String replaceHolder(final String template, final Map<String, String> paramMap) {

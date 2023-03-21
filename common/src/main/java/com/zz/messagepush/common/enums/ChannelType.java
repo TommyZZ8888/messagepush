@@ -26,6 +26,9 @@ public enum ChannelType {
 
     private String description;
 
+    /**
+     * 内容模型class
+     */
     private Class contentModelClass;
 
     ChannelType(Integer code, String description, Class contentModelClass) {
