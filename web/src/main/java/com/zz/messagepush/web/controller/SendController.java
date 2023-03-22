@@ -41,15 +41,15 @@ public class SendController {
 
 
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST)
-    public ResponseResult<Boolean> sendSms(String phone) {
-        HashMap<String,String> map = new HashMap<>();
-        map.put("contentValue","6666");
+    public ResponseResult<Boolean> sendSms(String phone, Long messageTemplateId) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("contentValue", "6666");
         MessageParam messageParam = new MessageParam().setReceiver(phone).setVariables(map);
 
         SendRequest sendRequest = new SendRequest().setCode(BusinessCode.COMMON_SEND.getCode())
-                .setMessageTemplateId(1L)
+                .setMessageTemplateId(messageTemplateId)
                 .setMessageParam(messageParam);
-        SendResponse send = sendService.send(sendRequest);
+        sendService.send(sendRequest);
         return ResponseResult.success(RespStatusEnum.SUCCESS.getDescription());
     }
 }

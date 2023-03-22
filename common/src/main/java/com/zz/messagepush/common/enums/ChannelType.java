@@ -1,6 +1,7 @@
 package com.zz.messagepush.common.enums;
 
 import com.zz.messagepush.common.domain.dto.*;
+import org.apache.kafka.common.protocol.types.Field;
 
 /**
  * 发送渠道类型枚举
@@ -9,17 +10,17 @@ import com.zz.messagepush.common.domain.dto.*;
  * @Date Created on 2023/3/13
  */
 public enum ChannelType {
-    IM(10, "IM(站内信)", ImContentModel.class),
+    IM(10, "IM(站内信)", ImContentModel.class, "im"),
 
-    PUSH(20, "push(通知栏)", PushContentModel.class),
+    PUSH(20, "push(通知栏)", PushContentModel.class, "push"),
 
-    SMS(30, "sms(短信)", SmsContentModel.class),
+    SMS(30, "sms(短信)", SmsContentModel.class, "sms"),
 
-    EMAIL(40, "email(邮件)", EmailContentModel.class),
+    EMAIL(40, "email(邮件)", EmailContentModel.class, "email"),
 
-    OFFICIAL_ACCOUNT(50, "OfficialAccount(服务号)", OfficialAccountContentModel.class),
+    OFFICIAL_ACCOUNT(50, "OfficialAccount(服务号)", OfficialAccountContentModel.class, "official_accounts"),
 
-    MINI_PROGRAM(60, "miniProgram(小程序)",MiniProgramContentModel.class),
+    MINI_PROGRAM(60, "miniProgram(小程序)", MiniProgramContentModel.class, "mini_program"),
     ;
 
     private Integer code;
@@ -31,10 +32,16 @@ public enum ChannelType {
      */
     private Class contentModelClass;
 
-    ChannelType(Integer code, String description, Class contentModelClass) {
+    /**
+     * 英文标识
+     */
+    private String code_en;
+
+    ChannelType(Integer code, String description, Class contentModelClass, String code_en) {
         this.code = code;
         this.description = description;
         this.contentModelClass = contentModelClass;
+        this.code_en = code_en;
     }
 
     public Integer getCode() {
@@ -61,11 +68,41 @@ public enum ChannelType {
         this.contentModelClass = contentModelClass;
     }
 
+    public String getCode_en() {
+        return code_en;
+    }
+
+    public void setCode_en(String code_en) {
+        this.code_en = code_en;
+    }
+
+
+    /**
+     * 通过code获取class
+     * @param code
+     * @return
+     */
     public static Class getChanelModelClassByCode(Integer code) {
         ChannelType[] values = values();
         for (ChannelType value : values) {
             if (value.getCode().equals(code)) {
                 return value.getContentModelClass();
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 通过code获取enum
+     * @param code
+     * @return
+     */
+    public static ChannelType getEnumByCode(Integer code) {
+        ChannelType[] values = values();
+        for (ChannelType value : values) {
+            if (value.getCode().equals(code)) {
+                return value;
             }
         }
         return null;

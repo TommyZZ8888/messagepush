@@ -17,44 +17,23 @@ import java.util.concurrent.TimeUnit;
  */
 
 
-@Configuration
-@EnableAsync
 public class ThreadPoolConfig {
 
-
-    @Bean("smsThreadPool")
-    public static ThreadPoolExecutor getSmsThreadPool() {
+    /**
+     * 阻塞队列满了，也不会丢弃任务  CallerRunsPolicy
+     * @param coreSize
+     * @param maxSize
+     * @param queueSize
+     * @return
+     */
+    public static ThreadPoolExecutor getThreadPool(Integer coreSize,Integer maxSize,Integer queueSize) {
         return ExecutorBuilder.create()
-                .setCorePoolSize(5)
-                .setMaxPoolSize(50)
+                .setCorePoolSize(coreSize)
+                .setMaxPoolSize(maxSize)
                 .setKeepAliveTime(300L, TimeUnit.SECONDS)
-                .setWorkQueue(new LinkedBlockingQueue<>(1000))
-                .setThreadFactory(MyThreadFactory.create("getSmsThreadPool"))
-                .setHandler((r, executor) -> {
-                    try {
-                        executor.getQueue().put(r);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }).build();
-    }
-
-
-    @Bean("emailThreadPool")
-    public static ThreadPoolExecutor getEmailThreadPool() {
-        return ExecutorBuilder.create()
-                .setCorePoolSize(5)
-                .setMaxPoolSize(50)
-                .setKeepAliveTime(300L, TimeUnit.SECONDS)
-                .setWorkQueue(new LinkedBlockingQueue<>(1000))
-                .setThreadFactory(MyThreadFactory.create("getEmailThreadPool"))
-                .setHandler((r, executor) -> {
-                    try {
-                        executor.getQueue().put(r);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }).build();
+                .setWorkQueue(new LinkedBlockingQueue<>(queueSize))
+                .setThreadFactory(MyThreadFactory.create("getThreadPool"))
+                .setHandler(new ThreadPoolExecutor.CallerRunsPolicy()).build();
     }
 
 }

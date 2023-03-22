@@ -7,20 +7,23 @@ package com.zz.messagepush.common.enums;
  */
 public enum MessageType {
 
-    NOTICE(10,"通知类信息"),
+    NOTICE(10, "通知类信息","notice"),
 
-    MARKETING(20,"营销类信息"),
+    MARKETING(20, "营销类信息","marketing"),
 
-    AUTH_CODE(30,"验证码信息"),
+    AUTH_CODE(30, "验证码信息","auth_code"),
     ;
 
     private Integer code;
 
     private String description;
 
-    MessageType(Integer code, String description) {
+    private String code_en;
+
+    MessageType(Integer code, String description, String code_en) {
         this.code = code;
         this.description = description;
+        this.code_en = code_en;
     }
 
     public Integer getCode() {
@@ -37,5 +40,13 @@ public enum MessageType {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCode_en() {
+        return code_en;
+    }
+
+    public void setCode_en(String code_en) {
+        this.code_en = code_en;
     }
 }

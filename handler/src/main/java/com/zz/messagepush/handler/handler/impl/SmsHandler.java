@@ -21,7 +21,7 @@ import java.util.List;
  * @Date Created on 2023/3/13
  */
 @Component
-public class SmsHandler implements Handler {
+public class SmsHandler extends Handler {
 
     @Autowired
     private SmsRecordMapper smsRecordMapper;
@@ -30,7 +30,7 @@ public class SmsHandler implements Handler {
     private SmsScript smsScript;
 
     @Override
-    public boolean doHandler(TaskInfo taskInfo) {
+    public void doHandler(TaskInfo taskInfo) {
 
         String resultContent = getSmsContent(taskInfo);
 
@@ -44,9 +44,12 @@ public class SmsHandler implements Handler {
 
         if (CollUtil.isNotEmpty(recordEntityList)) {
             smsRecordMapper.insertBatchSomeColumn(recordEntityList);
-            return true;
         }
-        return false;
+    }
+
+    @Override
+    public void handler(TaskInfo taskInfo) {
+
     }
 
     /**
