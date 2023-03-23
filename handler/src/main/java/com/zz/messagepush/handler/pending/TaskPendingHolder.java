@@ -23,11 +23,6 @@ public class TaskPendingHolder {
 
     private List<String> groupIds = GroupIdMappingUtils.getAllGroupIds();
 
-    //线程池参数
-    private final Integer coreSize = 5;
-    private final Integer maxSize = 50;
-    private final Integer queueSize = 1000;
-
 
     /**
      * 给每个渠道，每种消息类型初始化一个线程池
@@ -36,6 +31,12 @@ public class TaskPendingHolder {
     @PostConstruct
     public void init() {
         for (String groupId : groupIds) {
+            /**
+             * 线程池参数
+             */
+            Integer coreSize = 5;
+            Integer queueSize = 1000;
+            Integer maxSize = 50;
             taskPendingGolder.put(groupId, ThreadPoolConfig.getThreadPool(coreSize, maxSize, queueSize));
         }
     }

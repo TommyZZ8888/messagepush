@@ -51,7 +51,9 @@ public class ProcessHandler {
 
     private Boolean preCheck(ProcessContext context) {
         if (context == null) {
-            throw new ErrorException(RespStatusEnum.CONTEXT_IS_NULL.getDescription());
+            context = new ProcessContext();
+            context.setResponse(ResponseResult.fail(RespStatusEnum.CONTEXT_IS_NULL.getDescription()));
+            return false;
         }
 
         //业务代码

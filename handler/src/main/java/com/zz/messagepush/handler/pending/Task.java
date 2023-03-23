@@ -25,10 +25,14 @@ public class Task implements Runnable {
 
     private TaskInfo taskInfo;
 
+
+    //TODO 丢弃信息
+
+    //TODO 通用去重
+
+
     @Override
     public void run() {
-        //通用去重
-
         //发送消息
         handlerHolder.route(taskInfo.getSendChannel()).doHandler(taskInfo);
     }

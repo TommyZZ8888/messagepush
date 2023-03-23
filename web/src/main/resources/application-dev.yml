@@ -3,9 +3,8 @@ server:
 
 austin:
     redis:
-        ip: 172.16.16.106
+        ip: 172.16.16.105
         port: 6379
-        password: 123456
     rabbitmq:
         ip: 172.16.25.234
         port: 15672

@@ -13,15 +13,21 @@ import javax.annotation.PostConstruct;
  */
 public abstract class Handler {
 
+    /**
+     * 标识渠道的code
+     * 子类初始化时指定
+     */
+    protected Integer channelCode;
 
     @Autowired
     private HandlerHolder handlerHolder;
 
+    /**
+     * 初始化渠道和handler的映射关系
+     */
     @PostConstruct
     private void init() {
-        for (ChannelType channelType : ChannelType.values()) {
-            handlerHolder.putHandler(channelType.getCode(), this);
-        }
+        handlerHolder.putHandler(channelCode, this);
     }
 
     /**
