@@ -5,5 +5,5 @@ package com.zz.messagepush.common.domain.dto;
  * @Author 张卫刚
  * @Date Created on 2023/3/16
  */
-public class PushContentModel extends ContentModel{
+public class PushContentModel extends ContentModel {
 }

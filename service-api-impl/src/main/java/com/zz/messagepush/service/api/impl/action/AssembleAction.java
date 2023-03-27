@@ -4,7 +4,6 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.domain.MessageTemplate;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.domain.dto.ContentModel;
@@ -87,6 +86,12 @@ public class AssembleAction implements BusinessProcess {
                 String resultValue = ContentHolderUtil.replaceHolder(originValue, variables);
                 ReflectUtil.setFieldValue(contentModel, field, resultValue);
             }
+        }
+
+        String url = (String) ReflectUtil.getFieldValue(contentModel, "url");
+        if (StrUtil.isNotBlank(url)) {
+            String resultUrl = TaskInfoUtils.generateUrl(url, messageTemplate.getId(), messageTemplate.getTemplateType());
+            ReflectUtil.setFieldValue(contentModel, "url", resultUrl);
         }
 
         return contentModel;

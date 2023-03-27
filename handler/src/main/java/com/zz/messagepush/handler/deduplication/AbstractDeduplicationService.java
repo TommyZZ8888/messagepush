@@ -2,8 +2,10 @@ package com.zz.messagepush.handler.deduplication;
 
 import cn.hutool.core.collection.CollUtil;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
+import com.zz.messagepush.support.utils.LogUtils;
 import com.zz.messagepush.support.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,7 +46,10 @@ public abstract class AbstractDeduplicationService {
         putRedis(readyPutRedisReceiver, inRedisValue, deduplicationParam);
 
         //剔除符合去重条件的用户
-        taskInfo.getReceiver().removeAll(filterReceiver);
+        if (CollUtil.isNotEmpty(filterReceiver)){
+            taskInfo.getReceiver().removeAll(filterReceiver);
+            LogUtils.print(AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(filterReceiver).state(deduplicationParam.getAnchorStateEnum().getCode()).build());
+        }
     }
 
 

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
  * @Date Created on 2023/3/23
  */
 @Service
-public class ContentAbstractDeduplicationService extends AbstractDeduplicationService {
+public class ContentDeduplicationService extends AbstractDeduplicationService {
 
 
     /**
      * 内容去重
-     * key: md5(templateId + templateId + content)
+     * key: md5(templateId + receiver + content)
      * 相同的内容相同的模板短时间内发给同一个人
      * @param taskInfo
      * @param receiver

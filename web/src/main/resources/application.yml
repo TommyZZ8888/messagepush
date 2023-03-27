@@ -70,11 +70,12 @@ app:
     id: austin
 apollo:
     bootstrap:
-    enabled: ${austin.apollo.enabled}
-    namespaces: boss.austin,dynamic-tp-apollo-dtp.yml
+        enabled: ${austin.apollo.enabled}
+        namespaces: boss.austin
     meta: http://localhost:8080
 server:
     port: 9955
+
 
 ok:
     http:
@@ -91,3 +92,21 @@ tencent:
             sign-name: 失眠的你Zzz公众号
             sms-sdk-app-id: 1400801615
             template-id: 1728494
+
+# 监控配置:
+management:
+    endpoint:
+        health:
+            show-details: always
+        metrics:
+            enabled: true
+        prometheus:
+            enabled: true
+    endpoints:
+      web:
+        exposure:
+            include: '*'
+    metrics:
+      export:
+        prometheus:
+            enabled: true

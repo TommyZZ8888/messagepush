@@ -1,6 +1,7 @@
 package com.zz.messagepush.handler.domain;
 
 import com.zz.messagepush.common.domain.dto.TaskInfo;
+import com.zz.messagepush.common.enums.AnchorStateEnum;
 import lombok.Builder;
 import lombok.Data;
 
@@ -29,4 +30,10 @@ public class DeduplicationParam {
      * 去重需要达到的次数
      */
     private Integer countNum;
+
+
+    /**
+     * 标识哪种方式去重
+     */
+    private AnchorStateEnum anchorStateEnum;
 }

@@ -1,5 +1,6 @@
 package com.zz.messagepush.service.api.impl.service;
 
+import cn.monitor4all.logRecord.annotation.OperationLog;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.service.api.domain.SendResponse;
@@ -22,6 +23,7 @@ public class SendServiceImpl implements SendService {
     private ProcessHandler processHandler;
 
     @Override
+    @OperationLog(bizType = "SendService#send", bizId = "#sendRequest.messageTemplateId", msg = "#sendRequest")
     public SendResponse send(SendRequest sendRequest) {
         SendTaskModel sendTaskModel = SendTaskModel.builder()
                 .messageTemplateId(sendRequest.getMessageTemplateId())
@@ -37,6 +39,7 @@ public class SendServiceImpl implements SendService {
     }
 
     @Override
+    @OperationLog(bizType = "SendService#batchSend", bizId = "#batchSendRequest.messageTemplateId", msg = "#batchSEndRequest")
     public SendResponse batchSend(BatchSendRequest sendRequest) {
         SendTaskModel sendTaskModel = SendTaskModel.builder()
                 .messageTemplateId(sendRequest.getMessageTemplateId())

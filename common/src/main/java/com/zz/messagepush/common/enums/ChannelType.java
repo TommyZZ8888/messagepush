@@ -1,7 +1,6 @@
 package com.zz.messagepush.common.enums;
 
 import com.zz.messagepush.common.domain.dto.*;
-import org.apache.kafka.common.protocol.types.Field;
 
 /**
  * 发送渠道类型枚举

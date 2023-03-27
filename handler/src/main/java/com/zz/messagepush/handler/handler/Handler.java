@@ -1,7 +1,10 @@
 package com.zz.messagepush.handler.handler;
 
+import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
+import com.zz.messagepush.common.enums.AnchorStateEnum;
 import com.zz.messagepush.common.enums.ChannelType;
+import com.zz.messagepush.support.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -37,13 +40,15 @@ public abstract class Handler {
      * @return
      */
     public void doHandler(TaskInfo taskInfo) {
-        handler(taskInfo);
-    }
+        if (!handler(taskInfo)) {
+            LogUtils.print(AnchorInfo.builder().state(AnchorStateEnum.SEND_FAIL.getCode()).businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).build());
+        }
+        LogUtils.print(AnchorInfo.builder().state(AnchorStateEnum.SEND_SUCCESS.getCode()).businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).build());    }
 
     /**
      * 统一处理的下发接口
      *
      * @param taskInfo
      */
-    public abstract void handler(TaskInfo taskInfo);
+    public abstract boolean handler(TaskInfo taskInfo);
 }

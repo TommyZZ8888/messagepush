@@ -34,9 +34,9 @@ public class WebTest {
 
 
     @Test
-    void context(){
+    void context() throws Exception {
         TaskInfo build = TaskInfo.builder().receiver(new HashSet<>(Arrays.asList("15255926173")))
-                .content("3333").messageTemplateId(1728494L).build();
+                .messageTemplateId(1728494L).build();
         smsHandler.doHandler(build);
 //        productor.sendLog("topic");
     }

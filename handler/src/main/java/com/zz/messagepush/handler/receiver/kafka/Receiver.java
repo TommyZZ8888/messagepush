@@ -1,12 +1,14 @@
 package com.zz.messagepush.handler.receiver.kafka;
 
 import com.alibaba.fastjson.JSON;
-import com.zz.messagepush.common.domain.dto.SmsContentModel;
+import com.zz.messagepush.common.domain.AnchorInfo;
+import com.zz.messagepush.common.domain.LogParam;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
-import com.zz.messagepush.handler.handler.impl.SmsHandler;
+import com.zz.messagepush.common.enums.AnchorStateEnum;
 import com.zz.messagepush.handler.pending.Task;
 import com.zz.messagepush.handler.pending.TaskPendingHolder;
 import com.zz.messagepush.handler.utils.GroupIdMappingUtils;
+import com.zz.messagepush.support.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.spec.OAEPParameterSpec;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,9 @@ import java.util.Optional;
 @Component
 @Slf4j
 public class Receiver {
+
+
+    private static final String LOG_BIZ_TYPE  = "Receiver#consumer";
 
     @Autowired
     private ApplicationContext context;
@@ -46,6 +50,7 @@ public class Receiver {
             //每个消费者只关心自身的信息
             if (groupId.equals(topicGroupId)){
                 for (TaskInfo taskInfo : taskInfos) {
+                    LogUtils.print(LogParam.builder().bizType(LOG_BIZ_TYPE).object(taskInfo).build(), AnchorInfo.builder().ids(taskInfo.getReceiver()).businessId(taskInfo.getBusinessId()).state(AnchorStateEnum.RECEIVE.getCode()).build());
                     Task task = context.getBean(Task.class).setTaskInfo(taskInfo);
                     taskPendingHolder.route(topicGroupId).execute(task);
                 }

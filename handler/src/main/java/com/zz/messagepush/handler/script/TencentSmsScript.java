@@ -64,19 +64,13 @@ public class TencentSmsScript implements SmsScript {
 
 
     @Override
-    public List<SmsRecordEntity> send(SmsParam smsParam) {
+    public List<SmsRecordEntity> send(SmsParam smsParam) throws TencentCloudSDKException {
 
-        try {
             SmsClient client = init();
             SendSmsRequest sendSmsRequest = assembleReq(smsParam);
 
             SendSmsResponse response = client.SendSms(sendSmsRequest);
-
             return assembleSmsRecord(smsParam, response);
-        } catch (TencentCloudSDKException e) {
-            log.error("send tencent sms fail!{},params:{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(smsParam));
-            return null;
-        }
     }
 
 

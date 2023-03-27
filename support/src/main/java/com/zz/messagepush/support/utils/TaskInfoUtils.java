@@ -25,4 +25,23 @@ public class TaskInfoUtils {
         Integer today = Integer.valueOf(DateUtil.format(new Date(), "yyyyMMdd"));
         return Long.valueOf(String.format("%d%s", (long) templateType * TYPE_FLAG + templateId, today));
     }
+
+
+    /**
+     * 对url添加参数（用于链路追踪数据）
+     * @param url
+     * @param templateId
+     * @param templateType
+     * @return
+     */
+    public static String generateUrl(String url, Long templateId, Integer templateType) {
+        url = url.trim();
+        Long businessId = generateBusinessId(templateId, templateType);
+        if (url.indexOf('?') == -1) {
+            url = url + "?track_code_bid=" + businessId;
+        } else {
+            url = url + "&track_code_bid=" + businessId;
+        }
+        return url;
+    }
 }
