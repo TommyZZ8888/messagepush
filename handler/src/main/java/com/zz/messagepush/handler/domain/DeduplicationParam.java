@@ -1,5 +1,6 @@
 package com.zz.messagepush.handler.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
 import lombok.Builder;
@@ -24,11 +25,13 @@ public class DeduplicationParam {
     /**
      * 去重时间 单位：s
      */
+    @JSONField(name = "time")
     private Long deduplicationTime;
 
     /**
      * 去重需要达到的次数
      */
+    @JSONField(name = "num")
     private Integer countNum;
 
 

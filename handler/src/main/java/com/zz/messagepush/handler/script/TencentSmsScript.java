@@ -14,6 +14,8 @@ import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.zz.messagepush.common.domain.dto.SmsParam;
 import com.zz.messagepush.common.enums.SmsStatus;
+import com.zz.messagepush.handler.domain.TencentSmsParam;
+import com.zz.messagepush.handler.utils.AccountUtils;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.utils.OkHttpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -36,45 +38,26 @@ import java.util.List;
 @Slf4j
 public class TencentSmsScript implements SmsScript {
 
-    @Autowired
-    private OkHttpUtils okHttpUtils;
-
     private static final Integer PHONE_NUM = 11;
+    private static final String SMS_ACCOUNT_KEY = "smsAccount";
+    private static final String PREFIX = "sms_";
 
-    /**
-     * api 相关
-     */
-    private static final String URL = "sms.tencentcloudapi.com";
-    private static final String REGION = "ap-nanjing";
 
-    /**
-     * 账号相关
-     */
-
-    @Value("${tencent.sms.account.secret-id}")
-    private String SECRET_ID;
-    @Value("${tencent.sms.account.secret-key}")
-    private String SECRET_KEY;
-    @Value("${tencent.sms.account.sms-sdk-app-id}")
-    private String SMS_SDK_APP_ID;
-    @Value("${tencent.sms.account.template-id}")
-    private String TEMPLATE_ID;
-    @Value("${tencent.sms.account.sign-name}")
-    private String SIGN_NAME;
+    @Autowired
+    private AccountUtils accountUtils;
 
 
     @Override
-    public List<SmsRecordEntity> send(SmsParam smsParam) throws TencentCloudSDKException {
-
-            SmsClient client = init();
-            SendSmsRequest sendSmsRequest = assembleReq(smsParam);
-
-            SendSmsResponse response = client.SendSms(sendSmsRequest);
-            return assembleSmsRecord(smsParam, response);
+    public List<SmsRecordEntity> send(SmsParam smsParam) throws Exception {
+        TencentSmsParam tencentSmsParam = accountUtils.getAccount(smsParam.getSendAccount(), SMS_ACCOUNT_KEY, PREFIX, TencentSmsParam.builder().build());
+        SmsClient client = init(tencentSmsParam);
+        SendSmsRequest request = assembleReq(smsParam, tencentSmsParam);
+        SendSmsResponse response = client.SendSms(request);
+        return assembleSmsRecord(smsParam, response, tencentSmsParam);
     }
 
 
-    private List<SmsRecordEntity> assembleSmsRecord(SmsParam smsParamDTO, SendSmsResponse sendSmsResponse) {
+    private List<SmsRecordEntity> assembleSmsRecord(SmsParam smsParamDTO, SendSmsResponse sendSmsResponse, TencentSmsParam tencentSmsParam) {
         if (sendSmsResponse == null || ArrayUtil.isEmpty(sendSmsResponse.getSendStatusSet())) {
             return null;
         }
@@ -87,8 +70,8 @@ public class TencentSmsScript implements SmsScript {
                     .sendDate(new Date())
                     .messageTemplateId(smsParamDTO.getMessageTemplateId())
                     .phone(Long.valueOf(phone))
-                    .supplierId(smsParamDTO.getSupplierId())
-                    .supplierName(smsParamDTO.getSupplierName())
+                    .supplierId(tencentSmsParam.getSupplierId())
+                    .supplierName(tencentSmsParam.getSupplierName())
                     .seriesId(sendStatus.getSerialNo())
                     .chargingNum(Math.toIntExact(sendStatus.getFee()))
                     .status(SmsStatus.SEND_SUCCESS.getCode())
@@ -103,17 +86,17 @@ public class TencentSmsScript implements SmsScript {
     /**
      * 组装参数
      *
-     * @param smsParamDTO
+     * @param
      * @return
      */
-    private SendSmsRequest assembleReq(SmsParam smsParamDTO) {
+    private SendSmsRequest assembleReq(SmsParam smsParam, TencentSmsParam account) {
         SendSmsRequest smsRequest = new SendSmsRequest();
-        smsRequest.setPhoneNumberSet(smsParamDTO.getPhones().toArray(new String[smsParamDTO.getPhones().size() - 1]));
-        String[] templateParamSet1 = {smsParamDTO.getContent()};
+        smsRequest.setPhoneNumberSet(smsParam.getPhones().toArray(new String[smsParam.getPhones().size() - 1]));
+        String[] templateParamSet1 = {smsParam.getContent()};
         smsRequest.setTemplateParamSet(templateParamSet1);
-        smsRequest.setSmsSdkAppId(SMS_SDK_APP_ID);
-        smsRequest.setTemplateId(TEMPLATE_ID);
-        smsRequest.setSignName(SIGN_NAME);
+        smsRequest.setSmsSdkAppId(account.getSmsSdkAppId());
+        smsRequest.setSignName(account.getSignName());
+        smsRequest.setTemplateId(account.getTemplateId());
         smsRequest.setSessionContext(IdUtil.fastSimpleUUID());
         return smsRequest;
     }
@@ -123,12 +106,13 @@ public class TencentSmsScript implements SmsScript {
      *
      * @return
      */
-    private SmsClient init() {
-        Credential credential = new Credential(SECRET_ID, SECRET_KEY);
+    private SmsClient init(TencentSmsParam account) {
+        Credential cred = new Credential(account.getSecretId(), account.getSecretKey());
         HttpProfile httpProfile = new HttpProfile();
-        httpProfile.setEndpoint(URL);
+        httpProfile.setEndpoint(account.getUrl());
         ClientProfile clientProfile = new ClientProfile();
         clientProfile.setHttpProfile(httpProfile);
-        return new SmsClient(credential, REGION, clientProfile);
+        return new SmsClient(cred, account.getUrl(), clientProfile);
     }
+
 }

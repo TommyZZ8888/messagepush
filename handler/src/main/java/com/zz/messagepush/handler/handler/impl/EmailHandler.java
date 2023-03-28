@@ -8,7 +8,9 @@ import com.zz.messagepush.common.domain.dto.EmailContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.Handler;
+import com.zz.messagepush.handler.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.security.GeneralSecurityException;
@@ -24,6 +26,13 @@ import java.security.GeneralSecurityException;
 public class EmailHandler extends Handler {
 
 
+    private static final String EMAIL_ACCOUNT_KEY = "emailAccount";
+    private static final String PREFIX = "email_";
+
+    @Autowired
+    private AccountUtils accountUtils;
+
+
     public EmailHandler() {
         channelCode = ChannelType.EMAIL.getCode();
     }
@@ -32,7 +41,7 @@ public class EmailHandler extends Handler {
     @Override
     public boolean handler(TaskInfo taskInfo) {
         EmailContentModel contentModel = (EmailContentModel) taskInfo.getContentModel();
-        MailAccount account = getAccount();
+        MailAccount account = getAccountConfig(taskInfo.getSendAccount());
 
         try {
             MailUtil.send(account, taskInfo.getReceiver(), contentModel.getTitle(), contentModel.getContent(), true, null);
@@ -43,17 +52,17 @@ public class EmailHandler extends Handler {
         return true;
     }
 
-    private MailAccount getAccount() {
-        MailAccount account = new MailAccount();
+    private MailAccount getAccountConfig(Integer sendAccount) {
+        MailAccount account = accountUtils.getAccount(sendAccount, EMAIL_ACCOUNT_KEY, PREFIX, new MailAccount());
 
         try {
             account.setHost("smtp.qq.com").setPort(465);
-            account.setUser("403686131@qq.com").setPass("cmnznhomnbtlbggi").setAuth(true);
+            account.setUser("403686131@qq.com").setPass("//TODO").setAuth(true);
             account.setFrom("403686131@qq.com");
 
             MailSSLSocketFactory sf = new MailSSLSocketFactory();
             sf.setTrustAllHosts(true);
-            account.setStarttlsEnable(true).setSslEnable(true).setCustomProperty("mail.smtp.ssl.socketFactory", sf);
+            account.setAuth(true).setStarttlsEnable(true).setSslEnable(true).setCustomProperty("mail.smtp.ssl.socketFactory", sf);
 
             account.setTimeout(25000).setConnectionTimeout(25000);
         } catch (GeneralSecurityException e) {

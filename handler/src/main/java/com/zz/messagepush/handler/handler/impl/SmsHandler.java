@@ -48,8 +48,8 @@ public class SmsHandler extends Handler {
                 .phones(taskInfo.getReceiver())
                 .content(resultContent)
                 .messageTemplateId(taskInfo.getMessageTemplateId())
-                .supplierId(MessageType.NOTICE.getCode())
-                .supplierName(MessageType.NOTICE.getDescription()).build();
+                .sendAccount(taskInfo.getSendAccount())
+                .build();
         try {
             List<SmsRecordEntity> recordEntityList = smsScript.send(build);
 

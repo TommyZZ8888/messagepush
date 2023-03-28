@@ -66,6 +66,7 @@ austin:
                 reset: earliest
         topic:
             name: austinKafka
+    grayLogIp:
 app:
     id: austin
 apollo:
@@ -84,14 +85,14 @@ ok:
         max-idle-connections: 200
         read-timeout: 30
         write-timeout: 30
-tencent:
-    sms:
-        account:
-            secret-id: llllllllllllllll
-            secret-key: lllllllllllllll
-            sign-name: 失眠的你Zzz公众号
-            sms-sdk-app-id: 1400801615
-            template-id: 1728494
+#tencent:
+#    sms:
+#        account:
+#            secret-id: llllllllllllllll
+#            secret-key: lllllllllllllll
+#            sign-name: 失眠的你Zzz公众号
+#            sms-sdk-app-id: 1400801615
+#            template-id: 1728494
 
 # 监控配置:
 management:

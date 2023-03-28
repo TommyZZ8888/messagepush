@@ -40,10 +40,11 @@ public abstract class Handler {
      * @return
      */
     public void doHandler(TaskInfo taskInfo) {
-        if (!handler(taskInfo)) {
-            LogUtils.print(AnchorInfo.builder().state(AnchorStateEnum.SEND_FAIL.getCode()).businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).build());
+        if (handler(taskInfo)) {
+            LogUtils.print(AnchorInfo.builder().state(AnchorStateEnum.SEND_SUCCESS.getCode()).businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).build());
+            return;
         }
-        LogUtils.print(AnchorInfo.builder().state(AnchorStateEnum.SEND_SUCCESS.getCode()).businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).build());    }
+        LogUtils.print(AnchorInfo.builder().state(AnchorStateEnum.SEND_FAIL.getCode()).businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).build());    }
 
     /**
      * 统一处理的下发接口
