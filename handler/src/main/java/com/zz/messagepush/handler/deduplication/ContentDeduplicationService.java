@@ -3,6 +3,7 @@ package com.zz.messagepush.handler.deduplication;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
+import com.zz.messagepush.common.enums.DeduplicationType;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,10 +15,15 @@ import org.springframework.stereotype.Service;
 public class ContentDeduplicationService extends AbstractDeduplicationService {
 
 
+    public ContentDeduplicationService() {
+        deduplicationType = DeduplicationType.CONTENT.getCode();
+    }
+
     /**
      * 内容去重
      * key: md5(templateId + receiver + content)
      * 相同的内容相同的模板短时间内发给同一个人
+     *
      * @param taskInfo
      * @param receiver
      * @return

@@ -2,7 +2,9 @@ package com.zz.messagepush.handler.deduplication.handler;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
+import com.zz.messagepush.common.enums.DeduplicationType;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +16,15 @@ import java.util.Date;
  * @Date Created on 2023/3/28
  */
 @Service
-public class FrequencyDeduplicationBuilder implements Builder {
+public class FrequencyDeduplicationBuilder extends AbstractDeduplicationBuilder implements Builder {
+
+    public FrequencyDeduplicationBuilder() {
+        deduplicationType = DeduplicationType.FREQUENCY.getCode();
+    }
 
     @Override
-    public DeduplicationParam build(String deduplication, String key) {
-        JSONObject object = JSONObject.parseObject(deduplication);
-        if (object == null) {
-            return null;
-        }
-        DeduplicationParam deduplicationParam = JSONObject.parseObject(object.getString(key), DeduplicationParam.class);
+    public DeduplicationParam build(String deduplication, TaskInfo taskInfo) {
+        DeduplicationParam deduplicationParam = getParamsFromConfig(deduplicationType, deduplication, taskInfo);
         if (deduplicationParam == null) {
             return null;
         }

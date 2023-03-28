@@ -2,6 +2,7 @@ package com.zz.messagepush.handler.deduplication;
 
 import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
+import com.zz.messagepush.common.enums.DeduplicationType;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,10 +17,15 @@ public class FrequencyDeduplicationService extends AbstractDeduplicationService 
 
     private static final String PREFIX = "FRE";
 
+    public FrequencyDeduplicationService() {
+        deduplicationType = DeduplicationType.FREQUENCY.getCode();
+    }
+
     /**
      * 业务规则去重 构建key
      * key：receiver + templateId + sendChannel
      * 一天内一个用户只能收到某个渠道的消息N次
+     *
      * @param taskInfo
      * @param receiver
      * @return

@@ -10,6 +10,7 @@ import com.zz.messagepush.support.utils.LogUtils;
 import com.zz.messagepush.support.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -21,9 +22,23 @@ import java.util.*;
 
 public abstract class AbstractDeduplicationService implements DeduplicationService {
 
+
+    protected Integer deduplicationType;
+
+    @Autowired
+    private DeduplicationHolder deduplicationHolder;
+
+
+    @PostConstruct
+    public void init() {
+        deduplicationHolder.putService(deduplicationType, this);
+    }
+
     @Autowired
     private RedisUtil redisUtil;
 
+
+    @Override
     public void deduplication(DeduplicationParam deduplicationParam) {
         TaskInfo taskInfo = deduplicationParam.getTaskInfo();
         Set<String> filterReceiver = new HashSet<>(taskInfo.getReceiver().size());
@@ -47,7 +62,7 @@ public abstract class AbstractDeduplicationService implements DeduplicationServi
         putRedis(readyPutRedisReceiver, inRedisValue, deduplicationParam);
 
         //剔除符合去重条件的用户
-        if (CollUtil.isNotEmpty(filterReceiver)){
+        if (CollUtil.isNotEmpty(filterReceiver)) {
             taskInfo.getReceiver().removeAll(filterReceiver);
             LogUtils.print(AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(filterReceiver).state(deduplicationParam.getAnchorStateEnum().getCode()).build());
         }

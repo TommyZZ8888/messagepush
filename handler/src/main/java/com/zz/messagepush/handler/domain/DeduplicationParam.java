@@ -36,7 +36,7 @@ public class DeduplicationParam {
 
 
     /**
-     * 标识哪种方式去重
+     * 标识哪种方式去重(数据埋点)
      */
     private AnchorStateEnum anchorStateEnum;
 }
