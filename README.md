@@ -3,22 +3,9 @@ java3y Austin 从零搭建
 
 
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1992e010510f4930923869be65fb8241~tplv-k3u1fbpfcp-zoom-1.image)
+
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Author-3y-orange.svg" alt="作者"></a>
-  <a href="#项目交流"><img src="https://img.shields.io/badge/项目群-交流-red.svg" alt="项目群交流"></a>
-  <a href="https://space.bilibili.com/198434865/channel/collectiondetail?sid=435119"><img src="https://img.shields.io/badge/免费项目-视频-green.svg" alt="Bilibili"></a>
-  <a href="#项目交流"><img src="https://img.shields.io/badge/如何准备-面试-yellow.svg" alt="对线面试官"></a>
-  <a href="https://gitee.com/zhongfucheng/austin"><img src="https://gitee.com/zhongfucheng/austin/badge/star.svg?theme=dark" alt="Gitee Starts"></a>
-  <a href="https://gitee.com/zhongfucheng/austin"><img src="https://gitee.com/zhongfucheng/austin/badge/fork.svg?theme=dark" alt="Gitee Starts"></a>
-  <a href="https://github.com/ZhongFuCheng3y/austin"><img src="https://img.shields.io/github/forks/ZhongFuCheng3y/austin.svg?style=flat&label=GithubFork"></a> 
-  <a href="https://github.com/ZhongFuCheng3y/austin"><img src="https://img.shields.io/github/stars/ZhongFuCheng3y/austin.svg?style=flat&label=GithubStars"></a>
-  <a href="#项目交流"><img src="https://img.shields.io/github/issues/ZhongFuCheng3y/austin" alt="issue-open"></a>
-  <a href="#项目交流"><img src="https://img.shields.io/github/issues-closed/ZhongFuCheng3y/austin" alt="issue-close"></a>
-  <a href="#项目交流"><img src="https://img.shields.io/github/issues-pr/ZhongFuCheng3y/austin" alt="issue-close"></a>
-  <a href="#项目交流"><img src="https://img.shields.io/github/issues-pr-closed/ZhongFuCheng3y/austin" alt="issue-close"></a>
-  <a href="#项目交流"><img src="https://img.shields.io/github/license/ZhongFuCheng3y/austin" alt="issue-close"></a>
   <a href="#项目交流"><img src="https://img.shields.io/badge/JDK-8-red.svg" alt="jdk版本"></a>
   <a href="#项目交流"><img src="https://img.shields.io/badge/SpringBoot-2.5.6-green.svg" alt="SpringBoot版本"></a>
   <a href="#项目交流"><img src="https://img.shields.io/badge/Centos-7.6-blue.svg" alt="Centos版本"></a>
@@ -155,8 +142,6 @@ austin项目**强依赖**`MySQL`/`Redis`/(**大概需要2G内存**)，**弱依�
 ## 里程碑
 
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7a5a59681a404ac1a9e92f651ba9a39c~tplv-k3u1fbpfcp-watermark.image?)
-
 - [x] Maven+SpringBoot项目搭建
 - [x] logback日志记录项目运行时信息，引入common/guava/Hutool/Lombok/fastjson/OkHttp工具包
 - [x] 接入腾讯云渠道发送一条短信
@@ -196,7 +181,3 @@ austin项目**强依赖**`MySQL`/`Redis`/(**大概需要2G内存**)，**弱依�
 - [x] 在线演示第一版发布
 - [x] 数据仓库模块完成
 - [ ] 总体架构已完成，持续做基础建设和优化代码
-
-**近期更新时间**：2023年1月29号
-
-**近期更新功能**：数据仓库模块`austin-data-house`调试成功
