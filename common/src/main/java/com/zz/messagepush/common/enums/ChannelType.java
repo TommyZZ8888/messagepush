@@ -34,13 +34,13 @@ public enum ChannelType {
     /**
      * 英文标识
      */
-    private String code_en;
+    private String codeEn;
 
-    ChannelType(Integer code, String description, Class contentModelClass, String code_en) {
+    ChannelType(Integer code, String description, Class contentModelClass, String codeEn) {
         this.code = code;
         this.description = description;
         this.contentModelClass = contentModelClass;
-        this.code_en = code_en;
+        this.codeEn = codeEn;
     }
 
     public Integer getCode() {
@@ -67,12 +67,12 @@ public enum ChannelType {
         this.contentModelClass = contentModelClass;
     }
 
-    public String getCode_en() {
-        return code_en;
+    public String getCodeEn() {
+        return codeEn;
     }
 
-    public void setCode_en(String code_en) {
-        this.code_en = code_en;
+    public void setCodeEn(String codeEn) {
+        this.codeEn = codeEn;
     }
 
 

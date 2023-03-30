@@ -1,4 +1,4 @@
-package com.zz.messagepush.handler.deduplication.handler;
+package com.zz.messagepush.handler.deduplication.builder;
 
 import com.zz.messagepush.handler.domain.DeduplicationParam;
 

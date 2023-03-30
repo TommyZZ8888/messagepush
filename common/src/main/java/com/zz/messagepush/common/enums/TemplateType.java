@@ -7,9 +7,9 @@ package com.zz.messagepush.common.enums;
  */
 public enum TemplateType {
 
-    OPERATION(10,"运营类的模板"),
+    CLOCKING(10,"实时类的模板(后台定时调用)"),
 
-    TECHNOLOGY(20,"技术类的模板"),
+    REALTIME(20,"实时类的模板(接口实时调用)"),
 
     ;
 

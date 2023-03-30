@@ -9,6 +9,7 @@ import com.zz.messagepush.common.domain.dto.SmsParam;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.enums.MessageType;
+import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.SmsScript;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class SmsHandler extends Handler {
+public class SmsHandler extends BaseHandler implements Handler {
 
     @Autowired
     private SmsRecordMapper smsRecordMapper;

@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
-import com.zz.messagepush.handler.deduplication.handler.DeduplicationService;
+import com.zz.messagepush.handler.deduplication.builder.DeduplicationService;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
 import com.zz.messagepush.support.utils.LogUtils;
 import com.zz.messagepush.support.utils.RedisUtil;

@@ -18,12 +18,12 @@ public enum MessageType {
 
     private String description;
 
-    private String code_en;
+    private String codeEn;
 
-    MessageType(Integer code, String description, String code_en) {
+    MessageType(Integer code, String description, String codeEn) {
         this.code = code;
         this.description = description;
-        this.code_en = code_en;
+        this.codeEn = codeEn;
     }
 
     public Integer getCode() {
@@ -42,11 +42,11 @@ public enum MessageType {
         this.description = description;
     }
 
-    public String getCode_en() {
-        return code_en;
+    public String getCodeEn() {
+        return codeEn;
     }
 
-    public void setCode_en(String code_en) {
-        this.code_en = code_en;
+    public void setCodeEn(String codeEn) {
+        this.codeEn = codeEn;
     }
 }

@@ -27,7 +27,7 @@ public class GroupIdMappingUtils {
         List<String> groupIds = new ArrayList<>();
         for (ChannelType channelType : ChannelType.values()) {
             for (MessageType messageType : MessageType.values()) {
-                groupIds.add(channelType.getCode_en() + "." + messageType.getCode_en());
+                groupIds.add(channelType.getCodeEn() + "." + messageType.getCodeEn());
             }
         }
         return groupIds;
@@ -41,8 +41,8 @@ public class GroupIdMappingUtils {
      * @return
      */
     public static String getGroupIdByTaskInfo(TaskInfo taskInfo) {
-        String channelCodeEn = EnumUtil.getEnumByCode(ChannelType.class, taskInfo.getSendChannel()).getCode_en();
-        String messageCodeEn = EnumUtil.getEnumByCode(MessageType.class, taskInfo.getMsgType()).getCode_en();
+        String channelCodeEn = EnumUtil.getEnumByCode(ChannelType.class, taskInfo.getSendChannel()).getCodeEn();
+        String messageCodeEn = EnumUtil.getEnumByCode(MessageType.class, taskInfo.getMsgType()).getCodeEn();
         return channelCodeEn + "." + messageCodeEn;
     }
 

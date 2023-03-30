@@ -9,6 +9,7 @@
     <contextName>logback</contextName>
     <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量-->
     <property name="log.path" value="./runtime/logs/${appName}"/>
+    <springProperty scope="context" name="grayLogIp" source="austin.grayLog.ip"/>
 
     <property name="CONSOLE_LOG_PATTERN"
               value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
@@ -209,7 +210,7 @@
 <!--            </fullPatternLayout>-->
 
 <!--            &lt;!&ndash; 配置应用名称（服务名称），通过staticField标签可以自定义一些固定的日志字段 &ndash;&gt;-->
-<!--            <staticField>app_name:austin</staticField>-->
+<!--            <staticField>app_name:messagepush</staticField>-->
 <!--        </encoder>-->
 <!--    </appender>-->
 
@@ -233,6 +234,7 @@
     <logger name="com.pikaiqu.logbackdemo.LogbackdemoApplicationTests" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="INFO_FILE"/>
+
     </logger>
 
     <!--配置多环境日志输出  可以在application.properties中配置选择哪个profiles : spring.profiles.active=dev-->

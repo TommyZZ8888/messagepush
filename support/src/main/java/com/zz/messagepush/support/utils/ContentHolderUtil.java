@@ -1,5 +1,6 @@
 package com.zz.messagepush.support.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -23,7 +24,7 @@ public class ContentHolderUtil {
 
     private static final StandardEvaluationContext EVALUATION_CONTEXT;
 
-    private static PropertyPlaceholderHelper propertyPlaceholderHelper = new PropertyPlaceholderHelper(PLACE_HOLDER_PREFIX, PLACE_HOLDER_SUFFIX);
+    private static final PropertyPlaceholderHelper PROPERTY_PLACEHOLDER_HELPER = new PropertyPlaceholderHelper(PLACE_HOLDER_PREFIX, PLACE_HOLDER_SUFFIX);
 
     static {
         EVALUATION_CONTEXT = new StandardEvaluationContext();
@@ -31,12 +32,11 @@ public class ContentHolderUtil {
     }
 
     public static String replaceHolder(final String template, final Map<String, String> paramMap) {
-        String replacePlaceholders = propertyPlaceholderHelper.replacePlaceholders(template, new CustomPlaceholderResolver(paramMap));
-        return replacePlaceholders;
+        return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(template, new CustomPlaceholderResolver(paramMap));
     }
 
     private static class CustomPlaceholderResolver implements PropertyPlaceholderHelper.PlaceholderResolver {
-        private Map<String, String> paramMap;
+        private final Map<String, String> paramMap;
 
         public CustomPlaceholderResolver(Map<String, String> paramMap) {
             super();
@@ -45,7 +45,7 @@ public class ContentHolderUtil {
 
 
         @Override
-        public String resolvePlaceholder(String placeholderName) {
+        public String resolvePlaceholder(@NotNull String placeholderName) {
             String value = paramMap.get(placeholderName);
             if (null == value) {
                 String errorStr = MessageFormat.format("template:{} require param:{},but not exist! paramMap:{}",

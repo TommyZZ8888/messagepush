@@ -13,6 +13,8 @@ public class TaskInfoUtils {
 
     private static final int TYPE_FLAG = 1000000;
 
+    private static final char PARAM = '?';
+
     /**
      * 生成businessId
      * 模板类型+模板id+当天日期
@@ -29,6 +31,7 @@ public class TaskInfoUtils {
 
     /**
      * 对url添加参数（用于链路追踪数据）
+     *
      * @param url
      * @param templateId
      * @param templateType
@@ -37,7 +40,7 @@ public class TaskInfoUtils {
     public static String generateUrl(String url, Long templateId, Integer templateType) {
         url = url.trim();
         Long businessId = generateBusinessId(templateId, templateType);
-        if (url.indexOf('?') == -1) {
+        if (url.indexOf(PARAM) == -1) {
             url = url + "?track_code_bid=" + businessId;
         } else {
             url = url + "&track_code_bid=" + businessId;

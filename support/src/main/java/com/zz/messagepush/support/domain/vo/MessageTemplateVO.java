@@ -1,10 +1,13 @@
-package com.zz.messagepush.web.domain.vo;
+package com.zz.messagepush.support.domain.vo;
 
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -22,7 +25,7 @@ public class MessageTemplateVO {
     /**
      * 消息模板
      */
-    private Iterable<MessageTemplateEntity> rows;
+    private List<Map<String,Object>> rows;
 
     /**
      * 总条数

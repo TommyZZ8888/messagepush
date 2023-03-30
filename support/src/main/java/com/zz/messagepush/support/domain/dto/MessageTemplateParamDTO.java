@@ -1,32 +1,25 @@
-package com.zz.messagepush.support.domain.entity;
+package com.zz.messagepush.support.domain.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import cn.hutool.db.DaoTemplate;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.zz.messagepush.common.domain.PageParam;
+import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
- * 消息模板信息
- * @author DELL
- * @TableName message_template
+ * @Description 消息模板管理 请求参数
+ * @Author 张卫刚
+ * @Date Created on 2023/3/30
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
-public class MessageTemplateEntity implements Serializable {
-    /**
-     * 
-     */
-    @TableId(type = IdType.AUTO)
+public class MessageTemplateParamDTO extends PageParam {
+
     private Long id;
 
     /**
@@ -70,7 +63,7 @@ public class MessageTemplateEntity implements Serializable {
     private Integer idType;
 
     /**
-     * 消息发送渠道：10.IM 20.Push 30.短信 40.Email 50.公众号 60.小程序 70.企业微信 80.钉钉机器人 90.钉钉工作通知 100.企业微信机器人 110.飞书机器人 110. 飞书应用消息 
+     * 消息发送渠道：10.IM 20.Push 30.短信 40.Email 50.公众号 60.小程序 70.企业微信 80.钉钉机器人 90.钉钉工作通知 100.企业微信机器人 110.飞书机器人 110. 飞书应用消息
      */
     private Integer sendChannel;
 
@@ -138,10 +131,4 @@ public class MessageTemplateEntity implements Serializable {
      * 更新时间
      */
     private Date updated;
-
-    private Integer deduplicationTime;
-
-    private Integer isNightShield;
-
-    private static final long serialVersionUID = 1L;
 }

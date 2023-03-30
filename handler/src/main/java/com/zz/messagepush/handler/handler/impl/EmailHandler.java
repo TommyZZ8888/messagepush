@@ -7,6 +7,7 @@ import com.sun.mail.util.MailSSLSocketFactory;
 import com.zz.messagepush.common.domain.dto.EmailContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
+import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.security.GeneralSecurityException;
 
 @Configuration
 @Slf4j
-public class EmailHandler extends Handler {
+public class EmailHandler extends BaseHandler implements Handler {
 
 
     private static final String EMAIL_ACCOUNT_KEY = "emailAccount";

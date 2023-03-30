@@ -1,7 +1,7 @@
 package com.zz.messagepush.handler.deduplication;
 
-import com.zz.messagepush.handler.deduplication.handler.Builder;
-import com.zz.messagepush.handler.deduplication.handler.DeduplicationService;
+import com.zz.messagepush.handler.deduplication.builder.Builder;
+import com.zz.messagepush.handler.deduplication.builder.DeduplicationService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

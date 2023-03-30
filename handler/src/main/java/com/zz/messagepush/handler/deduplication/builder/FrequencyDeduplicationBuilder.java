@@ -1,7 +1,6 @@
-package com.zz.messagepush.handler.deduplication.handler;
+package com.zz.messagepush.handler.deduplication.builder;
 
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
 import com.zz.messagepush.common.enums.DeduplicationType;

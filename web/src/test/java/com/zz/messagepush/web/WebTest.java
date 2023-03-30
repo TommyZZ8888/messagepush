@@ -1,6 +1,7 @@
 package com.zz.messagepush.web;
 
 import com.zz.messagepush.common.domain.dto.TaskInfo;
+import com.zz.messagepush.handler.deduplication.DeduplicationRuleService;
 import com.zz.messagepush.handler.handler.impl.SmsHandler;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.SmsRecordMapper;
@@ -33,12 +34,13 @@ public class WebTest {
     private SmsHandler smsHandler;
 
 
+    @Resource
+    private DeduplicationRuleService deduplicationRuleService;
+
+
     @Test
-    void context() throws Exception {
-        TaskInfo build = TaskInfo.builder().receiver(new HashSet<>(Arrays.asList("15255926173")))
-                .messageTemplateId(1728494L).build();
-        smsHandler.doHandler(build);
-//        productor.sendLog("topic");
+    void context() {
+        deduplicationRuleService.duplication(new TaskInfo());
     }
 
     @Test

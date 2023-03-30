@@ -1,6 +1,5 @@
-package com.zz.messagepush.handler.deduplication.handler;
+package com.zz.messagepush.handler.deduplication.builder;
 
-import com.alibaba.fastjson.JSONObject;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
 import com.zz.messagepush.common.enums.DeduplicationType;

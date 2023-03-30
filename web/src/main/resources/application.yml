@@ -66,7 +66,8 @@ austin:
                 reset: earliest
         topic:
             name: austinKafka
-    grayLogIp:
+#    grayLog:
+#        ip: 122.112.239.250
 app:
     id: austin
 apollo:
