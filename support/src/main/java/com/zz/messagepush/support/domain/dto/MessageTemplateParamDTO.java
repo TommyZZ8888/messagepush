@@ -20,6 +20,9 @@ import java.util.Date;
 @Accessors(chain = true)
 public class MessageTemplateParamDTO extends PageParam {
 
+    /**
+     * 模板id
+     */
     private Long id;
 
     /**
@@ -131,4 +134,10 @@ public class MessageTemplateParamDTO extends PageParam {
      * 更新时间
      */
     private Date updated;
+
+    /**
+     * 消息接收者
+     */
+    private String receiver;
+
 }

@@ -1,6 +1,7 @@
 package com.zz.messagepush.support.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.zz.messagepush.common.constant.AustinConstant;
@@ -85,4 +86,32 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
                 .setIsDeleted(AustinConstant.FALSE);
         return copy;
     }
+
+//    @Override
+//    public BasicResultVO startCronTask(Long id) {
+//        // 1.修改模板状态
+//        MessageTemplate messageTemplate = messageTemplateDao.findById(id).get();
+//
+//        // 2.动态创建定时任务并启动
+//        XxlJobInfo xxlJobInfo = XxlJobUtils.buildXxlJobInfo(messageTemplate);
+//
+//        BasicResultVO basicResultVO = cronTaskService.saveCronTask(xxlJobInfo);
+//        // basicResultVO.getData()
+//        //cronTaskService.startCronTask()
+//
+//        MessageTemplate clone = ObjectUtil.clone(messageTemplate).setMsgStatus(MessageStatus.RUN.getCode()).setUpdated(Math.toIntExact(DateUtil.currentSeconds()));
+//        messageTemplateDao.save(clone);
+//        return BasicResultVO.success();
+//    }
+//
+//    @Override
+//    public void stopCronTask(Long id) {
+//        // 1.修改模板状态
+//        MessageTemplateEntity messageTemplate = messageTemplateDao.findById(id).get();
+//        MessageTemplateEntity clone = ObjectUtil.clone(messageTemplate).setMsgStatus(MessageStatus.STOP.getCode()).setUpdated(Math.toIntExact(DateUtil.currentSeconds()));
+//        messageTemplateDao.save(clone);
+//
+//        // 2.暂停定时任务
+//        return cronTaskService.stopCronTask(clone.getCronTaskId());
+//    }
 }

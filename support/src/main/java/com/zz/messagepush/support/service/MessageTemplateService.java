@@ -58,4 +58,14 @@ public interface MessageTemplateService {
      * 复制配置
      */
     void copy(Long id);
+
+    /**
+     * 启动模板的定时任务
+     */
+    void startCronTask(Long id);
+
+    /**
+     * 暂停模板的定时任务
+     */
+    void stopCronTask(Long id);
 }

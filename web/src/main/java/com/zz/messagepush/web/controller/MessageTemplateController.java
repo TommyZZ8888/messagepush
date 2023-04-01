@@ -1,8 +1,15 @@
 package com.zz.messagepush.web.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.domain.PageResult;
 import com.zz.messagepush.common.domain.ResponseResult;
+import com.zz.messagepush.common.enums.RespStatusEnum;
+import com.zz.messagepush.service.api.domain.SendResponse;
+import com.zz.messagepush.service.api.domain.dto.MessageParam;
+import com.zz.messagepush.service.api.domain.dto.SendRequest;
+import com.zz.messagepush.service.api.enums.BusinessCode;
+import com.zz.messagepush.service.api.service.SendService;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.mapper.MessageTemplateMapper;
@@ -16,9 +23,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 /**
  * @Description
@@ -31,9 +39,13 @@ import java.util.stream.Collectors;
 @Validated
 public class MessageTemplateController {
 
-    private static final List<String> flatFieldName = Arrays.asList("msgContent");
+    private static final List<String> FLAT_FIELD_NAME = Collections.singletonList("msgContent");
     @Autowired
     private MessageTemplateService messageTemplateService;
+
+
+    @Autowired
+    private SendService sendService;
 
 
     @RequestMapping(value = "/save", method = RequestMethod.GET)
@@ -46,7 +58,7 @@ public class MessageTemplateController {
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public ResponseResult<MessageTemplateVO> queryList(@RequestBody MessageTemplateParamDTO dto) throws IllegalAccessException {
         PageResult<MessageTemplateEntity> messageTemplateEntities = messageTemplateService.queryNotDeletedList(dto);
-        MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities.getList(),flatFieldName)).count((long) messageTemplateEntities.getList().size()).build();
+        MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities.getList(),FLAT_FIELD_NAME)).count((long) messageTemplateEntities.getList().size()).build();
         return ResponseResult.success("query ok", build);
     }
 
@@ -76,5 +88,19 @@ public class MessageTemplateController {
         List<Long> idList = Arrays.stream(id.split(StrUtil.COMMA)).map(Long::valueOf).collect(Collectors.toList());
         messageTemplateService.delete(idList);
         return ResponseResult.success();
+    }
+
+
+
+    @RequestMapping(value = "/sendTest",method = RequestMethod.POST)
+    public ResponseResult<Boolean> test(@RequestBody MessageTemplateParamDTO dto){
+        Map<String, String> variables = JSON.parseObject(dto.getMsgContent(), Map.class);
+        MessageParam messageParam = MessageParam.builder().receiver(dto.getReceiver()).variables(variables).build();
+        SendRequest sendRequest = SendRequest.builder().messageTemplateId(dto.getId()).messageParam(messageParam).code(BusinessCode.COMMON_SEND.getCode()).build();
+        SendResponse sendResponse = sendService.send(sendRequest);
+        if (!Objects.equals(sendResponse.getCode(), RespStatusEnum.SUCCESS.getCode())){
+            return ResponseResult.fail(RespStatusEnum.FAIL.getDescription());
+        }
+        return ResponseResult.fail(RespStatusEnum.SUCCESS.getDescription());
     }
 }

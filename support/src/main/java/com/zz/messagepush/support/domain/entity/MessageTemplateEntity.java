@@ -52,7 +52,7 @@ public class MessageTemplateEntity implements Serializable {
     /**
      * 定时任务Id (xxl-job-admin返回)
      */
-    private Long cronTaskId;
+    private Integer cronTaskId;
 
     /**
      * 定时发送人群的文件路径
