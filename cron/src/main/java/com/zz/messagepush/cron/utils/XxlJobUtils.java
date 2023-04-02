@@ -19,7 +19,7 @@ public class XxlJobUtils {
      * 构建xxlJobInfo信息
      *
      * @param messageTemplate
-     * @param triggerStatus 是否启动定时任务
+     *  是否启动定时任务
      * @return
      */
     public static XxlJobInfo buildXxlJobInfo(MessageTemplateEntity messageTemplate) {
@@ -37,7 +37,7 @@ public class XxlJobUtils {
                 .scheduleConf(scheduleConf)
                 .scheduleType(scheduleType)
                 .misfireStrategy(MisFireStrategyEnum.DO_NOTHING.name())
-                .executorBlockStrategy(ExecutorRouteStrategyEnum.CONSISTENT_HASH.name())
+                .executorRouteStrategy(ExecutorRouteStrategyEnum.CONSISTENT_HASH.name())
                 .executorHandler(XxlJobConstant.HANDLER_NAME)
                 .executorParam(JSON.toJSONString(messageTemplate))
                 .executorBlockStrategy(ExecutorBlockStrategyEnum.SERIAL_EXECUTION.name())

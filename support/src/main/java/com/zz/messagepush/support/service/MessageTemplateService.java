@@ -20,7 +20,7 @@ public interface MessageTemplateService {
      * @param paramDTO
      * @return
      */
-    PageResult<MessageTemplateEntity> queryNotDeletedList(MessageTemplateParamDTO paramDTO);
+    List<MessageTemplateEntity> queryNotDeletedList(MessageTemplateParamDTO paramDTO);
 
 
     /**
@@ -44,7 +44,7 @@ public interface MessageTemplateService {
      *
      * @param ids
      */
-    void delete(List<Long> ids);
+    void deleteByIds(List<Long> ids);
 
     /**
      * 根据id查询模板信息

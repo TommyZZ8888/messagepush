@@ -1,7 +1,7 @@
 package com.zz.messagepush.support.mapper;
 
-import com.github.yulichang.base.MPJBaseMapper;
 import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
 * @author DELL
@@ -9,7 +9,7 @@ import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
 * @createDate 2023-03-08 15:17:51
 * @Entity com.zz.messagepush.support.domain.entity.ChannelAccount
 */
-public interface ChannelAccountMapper extends MPJBaseMapper<ChannelAccountEntity> {
+public interface ChannelAccountMapper extends JpaRepository<ChannelAccountEntity,Long> {
 
 
 }

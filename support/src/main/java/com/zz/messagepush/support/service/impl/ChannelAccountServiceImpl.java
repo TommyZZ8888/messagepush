@@ -1,6 +1,8 @@
 package com.zz.messagepush.support.service.impl;
 
+import com.zz.messagepush.support.mapper.ChannelAccountMapper;
 import com.zz.messagepush.support.service.ChannelAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,5 +12,9 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class ChannelAccountServiceImpl implements ChannelAccountService {
+
+    @Autowired
+    private ChannelAccountMapper channelAccountMapper;
+
 
 }

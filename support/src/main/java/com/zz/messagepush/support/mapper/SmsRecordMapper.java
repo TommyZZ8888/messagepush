@@ -1,8 +1,7 @@
 package com.zz.messagepush.support.mapper;
 
-import com.github.yulichang.base.MPJBaseMapper;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
@@ -13,8 +12,8 @@ import java.util.List;
 * @Entity com.zz.messagepush.support.domain.entity.SmsRecord
 */
 
-@Mapper
-public interface SmsRecordMapper extends MPJBaseMapper<SmsRecordEntity> {
+
+public interface SmsRecordMapper extends JpaRepository<SmsRecordEntity,Long> {
 
     Integer insertBatchSomeColumn(List<SmsRecordEntity> entities);
 

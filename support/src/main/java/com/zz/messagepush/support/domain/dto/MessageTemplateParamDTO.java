@@ -140,4 +140,8 @@ public class MessageTemplateParamDTO extends PageParam {
      */
     private String receiver;
 
+    private Integer deduplicationTime;
+
+    private Integer isNightShield;
+
 }

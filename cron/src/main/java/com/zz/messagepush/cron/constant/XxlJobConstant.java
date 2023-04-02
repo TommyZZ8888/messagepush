@@ -10,7 +10,7 @@ public class XxlJobConstant {
     /**
      * 接口路径信息
      */
-    public static final String LOGIN_URL = "/xxl-job-admin/login";
+    public static final String LOGIN_URL = "/login";
     public static final String INSERT_URL = "/jobinfo/add";
     public static final String UPDATE_URL = "/jobinfo/update";
     public static final String DELETE_URL = "/jobinfo/delete";

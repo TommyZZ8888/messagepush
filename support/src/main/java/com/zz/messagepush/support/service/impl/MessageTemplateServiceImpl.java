@@ -2,19 +2,21 @@ package com.zz.messagepush.support.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
+import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.constant.AustinConstant;
-import com.zz.messagepush.common.domain.PageResult;
 import com.zz.messagepush.common.enums.AuditStatus;
 import com.zz.messagepush.common.enums.MessageStatus;
 import com.zz.messagepush.common.utils.BeanUtil;
-import com.zz.messagepush.common.utils.PageUtil;
+import com.zz.messagepush.cron.domain.dto.XxlJobInfoDTO;
+import com.zz.messagepush.cron.domain.entity.XxlJobInfo;
+import com.zz.messagepush.cron.service.CronTaskService;
+import com.zz.messagepush.cron.utils.XxlJobUtils;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.mapper.MessageTemplateMapper;
 import com.zz.messagepush.support.service.MessageTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -32,86 +34,92 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Autowired
     private MessageTemplateMapper messageTemplateMapper;
 
+    @Autowired
+    private CronTaskService cronTaskService;
+
     @Override
-    public PageResult<MessageTemplateEntity> queryNotDeletedList(MessageTemplateParamDTO paramDTO) {
-        Page<MessageTemplateEntity> page = PageUtil.convert2QueryPage(paramDTO);
-        MPJLambdaWrapper<MessageTemplateEntity> wrapper = new MPJLambdaWrapper<>();
-        wrapper.selectAll(MessageTemplateEntity.class).eq(MessageTemplateEntity::getIsDeleted, AustinConstant.FALSE);
-        Page<MessageTemplateEntity> messageTemplateEntityPage = messageTemplateMapper.selectPage(page, wrapper);
-        return PageUtil.convert2PageResult(messageTemplateEntityPage);
+    public List<MessageTemplateEntity> queryNotDeletedList(MessageTemplateParamDTO paramDTO) {
+        PageRequest pageRequest = PageRequest.of(paramDTO.getPageIndex() - 1, paramDTO.getPageSize());
+        return messageTemplateMapper.findAllByIsDeletedEquals(AustinConstant.FALSE, pageRequest);
     }
 
     @Override
     public Long notDeletedCount() {
-        MPJLambdaWrapper<MessageTemplateEntity> lambdaWrapper = new MPJLambdaWrapper<>();
-        lambdaWrapper.select(MessageTemplateEntity::getId).eq(MessageTemplateEntity::getIsDeleted, AustinConstant.FALSE);
-        return messageTemplateMapper.selectCount(lambdaWrapper);
+        return messageTemplateMapper.countByIdDeletedEquals(AustinConstant.FALSE);
     }
 
     @Override
     public void saveOrUpdate(MessageTemplateParamDTO messageTemplateParamDTO) {
         MessageTemplateEntity copy = BeanUtil.copy(messageTemplateParamDTO, MessageTemplateEntity.class);
         if (messageTemplateParamDTO.getId() == null) {
-            MessageTemplateEntity messageTemplateEntity = initStatus(copy);
-            messageTemplateMapper.insert(messageTemplateEntity);
+            initStatus(copy);
+            messageTemplateMapper.save(copy);
             return;
         }
-        messageTemplateMapper.updateById(copy);
+        messageTemplateMapper.save(copy);
     }
 
     @Override
-    public void delete(List<Long> ids) {
-        ids.forEach(item -> messageTemplateMapper.deleteById(item));
+    public void deleteByIds(List<Long> ids) {
+        Iterable<MessageTemplateEntity> entities = messageTemplateMapper.findAllById(ids);
+        entities.forEach(messageTemplate -> messageTemplate.setIsDeleted(AustinConstant.TRUE));
+        messageTemplateMapper.saveAll(entities);
     }
 
     @Override
     public MessageTemplateEntity queryById(Long id) {
-        return messageTemplateMapper.selectById(id);
+        return messageTemplateMapper.findById(id).orElse(null);
     }
 
     @Override
     public void copy(Long id) {
-        MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.selectById(id);
-        MessageTemplateEntity targetEntity = new MessageTemplateEntity();
-        BeanUtil.copyProperties(messageTemplateEntity, targetEntity);
-        targetEntity.setId(null);
-        messageTemplateMapper.insert(targetEntity);
+        MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(id).orElse(new MessageTemplateEntity());
+        MessageTemplateEntity entity = BeanUtil.copy(messageTemplateEntity, MessageTemplateEntity.class);
+        entity.setId(null);
+        messageTemplateMapper.save(entity);
     }
 
-    public MessageTemplateEntity initStatus(MessageTemplateEntity copy) {
-        copy.setMsgStatus(MessageStatus.INIT.getCode()).setAuditStatus(AuditStatus.WAIT_AUDIT.getCode())
+
+    /**
+     * 初始化状态信息
+     * TODO 创建者 修改者 团队
+     *
+     * @param messageTemplate
+     */
+    private void initStatus(MessageTemplateEntity messageTemplate) {
+        messageTemplate.setFlowId(StrUtil.EMPTY)
+                .setMsgStatus(MessageStatus.INIT.getCode()).setAuditStatus(AuditStatus.WAIT_AUDIT.getCode())
                 .setCreator("Java3y").setUpdator("Java3y").setTeam("公众号Java3y").setAuditor("3y")
                 .setDeduplicationTime(AustinConstant.FALSE).setIsNightShield(AustinConstant.FALSE)
                 .setCreated(new Date()).setUpdated(new Date())
                 .setIsDeleted(AustinConstant.FALSE);
-        return copy;
     }
 
-//    @Override
-//    public BasicResultVO startCronTask(Long id) {
-//        // 1.修改模板状态
-//        MessageTemplate messageTemplate = messageTemplateDao.findById(id).get();
-//
-//        // 2.动态创建定时任务并启动
-//        XxlJobInfo xxlJobInfo = XxlJobUtils.buildXxlJobInfo(messageTemplate);
-//
-//        BasicResultVO basicResultVO = cronTaskService.saveCronTask(xxlJobInfo);
-//        // basicResultVO.getData()
-//        //cronTaskService.startCronTask()
-//
-//        MessageTemplate clone = ObjectUtil.clone(messageTemplate).setMsgStatus(MessageStatus.RUN.getCode()).setUpdated(Math.toIntExact(DateUtil.currentSeconds()));
-//        messageTemplateDao.save(clone);
-//        return BasicResultVO.success();
-//    }
-//
-//    @Override
-//    public void stopCronTask(Long id) {
-//        // 1.修改模板状态
-//        MessageTemplateEntity messageTemplate = messageTemplateDao.findById(id).get();
-//        MessageTemplateEntity clone = ObjectUtil.clone(messageTemplate).setMsgStatus(MessageStatus.STOP.getCode()).setUpdated(Math.toIntExact(DateUtil.currentSeconds()));
-//        messageTemplateDao.save(clone);
-//
-//        // 2.暂停定时任务
-//        return cronTaskService.stopCronTask(clone.getCronTaskId());
-//    }
+    @Override
+    public void startCronTask(Long id) {
+//         1.修改模板状态
+        MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(id).orElse(new MessageTemplateEntity());
+
+        // 2.动态创建定时任务并启动
+        XxlJobInfo xxlJobInfo = XxlJobUtils.buildXxlJobInfo(messageTemplateEntity);
+
+        cronTaskService.saveCronTask(BeanUtil.copy(xxlJobInfo, XxlJobInfoDTO.class));
+        // basicResultVO.getData()
+        //cronTaskService.startCronTask()
+
+        MessageTemplateEntity clone = BeanUtil.copy(messageTemplateEntity, MessageTemplateEntity.class).setMsgStatus(MessageStatus.RUN.getCode()).setUpdated(new Date());
+        messageTemplateMapper.save(clone);
+    }
+
+    //
+    @Override
+    public void stopCronTask(Long id) {
+        // 1.修改模板状态
+        MessageTemplateEntity messageTemplate = messageTemplateMapper.findById(id).orElse(new MessageTemplateEntity());
+        MessageTemplateEntity clone = ObjectUtil.clone(messageTemplate).setMsgStatus(MessageStatus.STOP.getCode()).setUpdated(new Date());
+        messageTemplateMapper.save(clone);
+
+        // 2.暂停定时任务
+        cronTaskService.stopCronTask(clone.getCronTaskId());
+    }
 }

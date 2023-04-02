@@ -1,5 +1,6 @@
 package com.zz.messagepush.cron.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
@@ -53,7 +54,7 @@ public class CronTaskServiceImpl implements CronTaskService {
     @Override
     public void deleteCronTask(Integer taskId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id",taskId);
+        map.put("id", taskId);
         String path = xxlAddress + XxlJobConstant.DELETE_URL;
 
         HttpResponse response = HttpRequest.post(path).form(map).execute();
@@ -65,7 +66,7 @@ public class CronTaskServiceImpl implements CronTaskService {
     @Override
     public void startCronTask(Integer taskId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id",taskId);
+        map.put("id", taskId);
         String path = xxlAddress + XxlJobConstant.RUN_URL;
 
         HttpResponse response = HttpRequest.post(path).form(map).execute();
@@ -77,7 +78,7 @@ public class CronTaskServiceImpl implements CronTaskService {
     @Override
     public void stopCronTask(Integer taskId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id",taskId);
+        map.put("id", taskId);
         String path = xxlAddress + XxlJobConstant.STOP_URL;
 
         HttpResponse response = HttpRequest.post(path).form(map).execute();
@@ -97,13 +98,13 @@ public class CronTaskServiceImpl implements CronTaskService {
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("username", xxlUserName);
         paramsMap.put("password", xxlPassword);
-
+        paramsMap.put("randomCode", IdUtil.fastSimpleUUID());
         HttpResponse response = HttpRequest.post(path).form(paramsMap).execute();
         if (response.isOk()) {
             List<HttpCookie> cookies = response.getCookies();
             StringBuilder sb = new StringBuilder();
             for (HttpCookie cookie : cookies) {
-                sb.append(cookies);
+                sb.append(cookie);
             }
             return sb.toString();
         }

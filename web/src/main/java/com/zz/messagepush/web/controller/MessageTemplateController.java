@@ -2,7 +2,6 @@ package com.zz.messagepush.web.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.zz.messagepush.common.domain.PageResult;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.service.api.domain.SendResponse;
@@ -12,7 +11,6 @@ import com.zz.messagepush.service.api.enums.BusinessCode;
 import com.zz.messagepush.service.api.service.SendService;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
-import com.zz.messagepush.support.mapper.MessageTemplateMapper;
 import com.zz.messagepush.support.domain.vo.MessageTemplateVO;
 import com.zz.messagepush.support.service.MessageTemplateService;
 import com.zz.messagepush.support.utils.ConvertMap;
@@ -21,12 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 /**
  * @Description
@@ -57,8 +53,8 @@ public class MessageTemplateController {
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public ResponseResult<MessageTemplateVO> queryList(@RequestBody MessageTemplateParamDTO dto) throws IllegalAccessException {
-        PageResult<MessageTemplateEntity> messageTemplateEntities = messageTemplateService.queryNotDeletedList(dto);
-        MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities.getList(),FLAT_FIELD_NAME)).count((long) messageTemplateEntities.getList().size()).build();
+        List<MessageTemplateEntity> messageTemplateEntities = messageTemplateService.queryNotDeletedList(dto);
+        MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities,FLAT_FIELD_NAME)).count((long) messageTemplateEntities.size()).build();
         return ResponseResult.success("query ok", build);
     }
 
@@ -86,21 +82,21 @@ public class MessageTemplateController {
     @RequestMapping(value = "/deleteById", method = RequestMethod.POST)
     public ResponseResult<Boolean> deleteByIds(@RequestParam(value = "id", required = false) @NotBlank(message = "id不能为空") String id) {
         List<Long> idList = Arrays.stream(id.split(StrUtil.COMMA)).map(Long::valueOf).collect(Collectors.toList());
-        messageTemplateService.delete(idList);
+        messageTemplateService.deleteByIds(idList);
         return ResponseResult.success();
     }
 
 
 
-    @RequestMapping(value = "/sendTest",method = RequestMethod.POST)
-    public ResponseResult<Boolean> test(@RequestBody MessageTemplateParamDTO dto){
-        Map<String, String> variables = JSON.parseObject(dto.getMsgContent(), Map.class);
-        MessageParam messageParam = MessageParam.builder().receiver(dto.getReceiver()).variables(variables).build();
-        SendRequest sendRequest = SendRequest.builder().messageTemplateId(dto.getId()).messageParam(messageParam).code(BusinessCode.COMMON_SEND.getCode()).build();
-        SendResponse sendResponse = sendService.send(sendRequest);
-        if (!Objects.equals(sendResponse.getCode(), RespStatusEnum.SUCCESS.getCode())){
-            return ResponseResult.fail(RespStatusEnum.FAIL.getDescription());
-        }
-        return ResponseResult.fail(RespStatusEnum.SUCCESS.getDescription());
+    @RequestMapping(value = "/start",method = RequestMethod.POST)
+    public ResponseResult<Boolean> stsrt(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
+        messageTemplateService.startCronTask(id);
+        return ResponseResult.success();
+    }
+
+    @RequestMapping(value = "/stop",method = RequestMethod.POST)
+    public ResponseResult<Boolean> stop(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
+        messageTemplateService.stopCronTask(id);
+        return ResponseResult.success();
     }
 }
