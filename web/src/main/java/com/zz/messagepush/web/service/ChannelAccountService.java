@@ -1,4 +1,4 @@
-package com.zz.messagepush.support.service;
+package com.zz.messagepush.web.service;
 
 /**
 * @author DELL

@@ -1,7 +1,5 @@
 package com.zz.messagepush.support.domain.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.zz.messagepush.common.domain.PageParam;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -54,6 +52,12 @@ public class MessageTemplateParamDTO extends PageParam {
      * 定时发送人群的文件路径
      */
     private String cronCrowdPath;
+
+    /**
+     * 定时发送的人群id
+     * 正常需要通过id获取文件 遍历每个id
+     */
+    private String cronCrowdId;
 
     /**
      * 期望发送时间：0:立即发送 定时任务以及周期任务:cron表达式
@@ -143,5 +147,7 @@ public class MessageTemplateParamDTO extends PageParam {
     private Integer deduplicationTime;
 
     private Integer isNightShield;
+
+
 
 }

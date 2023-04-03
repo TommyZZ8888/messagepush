@@ -2,6 +2,7 @@ package com.zz.messagepush.cron.service;
 
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.cron.domain.dto.XxlJobInfoDTO;
+import com.zz.messagepush.cron.domain.entity.XxlJobGroup;
 
 /**
  * @Description 定时任务服务
@@ -19,7 +20,7 @@ public interface CronTaskService {
      * @param xxlJobInfoDTO
      * @return
      */
-    void saveCronTask(XxlJobInfoDTO xxlJobInfoDTO);
+    ResponseResult saveCronTask(XxlJobInfoDTO xxlJobInfoDTO);
 
     /**
      * 根据定时任务id删除定时任务
@@ -41,4 +42,18 @@ public interface CronTaskService {
      * @param taskId
      */
     void stopCronTask(Integer taskId);
+
+    /**
+     * 得到groupId
+     * @param appName
+     * @param title
+     */
+    ResponseResult getGroupId(String appName,String title);
+
+
+    /**
+     * 创建group
+     * @param xxlJobGroup
+     */
+    ResponseResult createGroup(XxlJobGroup xxlJobGroup);
 }

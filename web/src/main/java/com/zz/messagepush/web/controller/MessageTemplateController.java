@@ -1,18 +1,12 @@
 package com.zz.messagepush.web.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.domain.ResponseResult;
-import com.zz.messagepush.common.enums.RespStatusEnum;
-import com.zz.messagepush.service.api.domain.SendResponse;
-import com.zz.messagepush.service.api.domain.dto.MessageParam;
-import com.zz.messagepush.service.api.domain.dto.SendRequest;
-import com.zz.messagepush.service.api.enums.BusinessCode;
 import com.zz.messagepush.service.api.service.SendService;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.domain.vo.MessageTemplateVO;
-import com.zz.messagepush.support.service.MessageTemplateService;
+import com.zz.messagepush.web.service.MessageTemplateService;
 import com.zz.messagepush.support.utils.ConvertMap;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,9 +83,8 @@ public class MessageTemplateController {
 
 
     @RequestMapping(value = "/start",method = RequestMethod.POST)
-    public ResponseResult<Boolean> stsrt(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
-        messageTemplateService.startCronTask(id);
-        return ResponseResult.success();
+    public ResponseResult start(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
+        return messageTemplateService.startCronTask(id);
     }
 
     @RequestMapping(value = "/stop",method = RequestMethod.POST)

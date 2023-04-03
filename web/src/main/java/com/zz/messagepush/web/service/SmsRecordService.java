@@ -1,7 +1,6 @@
-package com.zz.messagepush.support.service;
+package com.zz.messagepush.web.service;
 
-import com.github.yulichang.base.MPJBaseMapper;
-import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
+
 
 /**
 * @author DELL

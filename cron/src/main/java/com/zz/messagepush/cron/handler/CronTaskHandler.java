@@ -1,6 +1,9 @@
 package com.zz.messagepush.cron.handler;
 
+import com.alibaba.fastjson.JSONObject;
+import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +17,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CronTaskHandler {
 
-    @XxlJob("austinJobHandler")
+    @XxlJob("austinJob")
     public void execute() {
-        log.info("xxl-job hello");
+        MessageTemplateEntity messageTemplateEntity = JSONObject.parseObject(XxlJobHelper.getJobParam(), MessageTemplateEntity.class);
     }
 
 }

@@ -6,9 +6,11 @@ import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.messagepush.common.domain.ResponseResult;
+import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.common.exception.ErrorException;
 import com.zz.messagepush.cron.constant.XxlJobConstant;
 import com.zz.messagepush.cron.domain.dto.XxlJobInfoDTO;
+import com.zz.messagepush.cron.domain.entity.XxlJobGroup;
 import com.zz.messagepush.cron.service.CronTaskService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,29 +28,35 @@ import java.util.Map;
 @Service
 public class CronTaskServiceImpl implements CronTaskService {
 
-    @Value("${xxl.admin.username}")
+    @Value("${xxl.job.admin.username}")
     private String xxlUserName;
 
-    @Value("${ssl.admin.password}")
+    @Value("${xxl.job.admin.password}")
     private String xxlPassword;
 
-    @Value("${xxl.admin.address}")
+    @Value("${xxl.job.admin.addresses}")
     private String xxlAddress;
 
 
     @Override
-    public void saveCronTask(XxlJobInfoDTO xxlJobInfoDTO) {
+    public ResponseResult saveCronTask(XxlJobInfoDTO xxlJobInfoDTO) {
         Map<String, Object> map = JSONObject.parseObject(JSON.toJSONString(xxlJobInfoDTO), Map.class);
         String path;
-        if (xxlJobInfoDTO.getId() == null) {
-            path = xxlAddress + XxlJobConstant.INSERT_URL;
-        } else {
-            path = xxlAddress + XxlJobConstant.UPDATE_URL;
+        path = xxlJobInfoDTO.getId() == null ? xxlAddress + XxlJobConstant.INSERT_URL : xxlAddress + XxlJobConstant.UPDATE_URL;
+        HttpResponse response = null;
+        try {
+            response = HttpRequest.post(path).form(map).execute();
+            if (path.contains(XxlJobConstant.INSERT_URL) && response.isOk()) {
+                int taskId = Integer.parseInt(String.valueOf(JSON.parseObject(response.body()).get("content")));
+                return ResponseResult.success("success", taskId);
+            } else if (response.isOk()) {
+                return ResponseResult.success("success");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
         }
-        HttpResponse response = HttpRequest.post(path).form(map).execute();
-        if (!response.isOk()) {
-            throw new ErrorException("保存失败");
-        }
+        return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
     }
 
     @Override
@@ -85,6 +93,38 @@ public class CronTaskServiceImpl implements CronTaskService {
         if (!response.isOk()) {
             throw new ErrorException("保存失败");
         }
+    }
+
+    @Override
+    public ResponseResult getGroupId(String appName, String title) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("appname", appName);
+        params.put("title", title);
+
+        String path = xxlAddress + XxlJobConstant.JOB_GROUP_PAGE_LIST;
+        HttpResponse response;
+        try {
+            response = HttpRequest.post(path).form(params).cookie(getCookie()).execute();
+            if (response.isOk()) {
+                Integer id = JSON.parseObject(response.body()).getJSONArray("data").getJSONObject(0).getInteger("id");
+                return ResponseResult.success("success", id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
+        }
+        return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
+    }
+
+    @Override
+    public ResponseResult createGroup(XxlJobGroup xxlJobGroup) {
+        Map<String, Object> map = JSONObject.parseObject(JSON.toJSONString(xxlJobGroup), Map.class);
+        String path = xxlAddress + XxlJobConstant.JOB_GROUP_INSERT_URL;
+        HttpResponse response = HttpRequest.post(path).form(map).cookie(getCookie()).execute();
+        if (response.isOk()) {
+            return ResponseResult.success();
+        }
+        return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
     }
 
 

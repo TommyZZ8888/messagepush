@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * @Description
@@ -16,7 +15,7 @@ import org.springframework.validation.annotation.Validated;
 @Configuration
 public class XxlJobConfig {
 
-    @Value("${xxl.job.admin.address}")
+    @Value("${xxl.job.admin.addresses}")
     private String address;
 
     @Value("${xxl.job.admin.username}")
@@ -40,7 +39,7 @@ public class XxlJobConfig {
     @Value("${xxl.job.executor.logretentiondays}")
     private int logRetentionDays;
 
-    @Value("${xxl.job.executor.accessToken}")
+    @Value("${xxl.job.accessToken}")
     private String accessToken;
 
 

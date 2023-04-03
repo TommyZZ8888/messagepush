@@ -8,7 +8,6 @@ import com.zz.messagepush.common.domain.dto.SmsContentModel;
 import com.zz.messagepush.common.domain.dto.SmsParam;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
-import com.zz.messagepush.common.enums.MessageType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.SmsScript;
@@ -55,7 +54,7 @@ public class SmsHandler extends BaseHandler implements Handler {
             List<SmsRecordEntity> recordEntityList = smsScript.send(build);
 
             if (CollUtil.isNotEmpty(recordEntityList)) {
-                smsRecordMapper.insertBatchSomeColumn(recordEntityList);
+                smsRecordMapper.saveAll(recordEntityList);
             }
         } catch (Exception e) {
             log.error("SmsHandler#handler fail:{},params:{}",

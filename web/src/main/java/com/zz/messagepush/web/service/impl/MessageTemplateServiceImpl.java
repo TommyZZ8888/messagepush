@@ -1,11 +1,12 @@
-package com.zz.messagepush.support.service.impl;
+package com.zz.messagepush.web.service.impl;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.AuditStatus;
 import com.zz.messagepush.common.enums.MessageStatus;
+import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.common.utils.BeanUtil;
 import com.zz.messagepush.cron.domain.dto.XxlJobInfoDTO;
 import com.zz.messagepush.cron.domain.entity.XxlJobInfo;
@@ -14,7 +15,7 @@ import com.zz.messagepush.cron.utils.XxlJobUtils;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.mapper.MessageTemplateMapper;
-import com.zz.messagepush.support.service.MessageTemplateService;
+import com.zz.messagepush.web.service.MessageTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Autowired
     private CronTaskService cronTaskService;
 
+    @Autowired
+    private XxlJobUtils xxlJobUtils;
+
     @Override
     public List<MessageTemplateEntity> queryNotDeletedList(MessageTemplateParamDTO paramDTO) {
         PageRequest pageRequest = PageRequest.of(paramDTO.getPageIndex() - 1, paramDTO.getPageSize());
@@ -45,7 +49,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
 
     @Override
     public Long notDeletedCount() {
-        return messageTemplateMapper.countByIdDeletedEquals(AustinConstant.FALSE);
+        return messageTemplateMapper.countByIsDeletedEquals(AustinConstant.FALSE);
     }
 
     @Override
@@ -96,19 +100,26 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     }
 
     @Override
-    public void startCronTask(Long id) {
+    public ResponseResult startCronTask(Long id) {
 //         1.修改模板状态
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(id).orElse(new MessageTemplateEntity());
 
         // 2.动态创建定时任务并启动
-        XxlJobInfo xxlJobInfo = XxlJobUtils.buildXxlJobInfo(messageTemplateEntity);
+        XxlJobInfo xxlJobInfo = xxlJobUtils.buildXxlJobInfo(messageTemplateEntity);
+// 3.获取taskId（如果本身存在则复用原有id，不存在则得到新建后任务id）
+        Integer cronTaskId = messageTemplateEntity.getCronTaskId();
+        ResponseResult responseResult = cronTaskService.saveCronTask(BeanUtil.copy(xxlJobInfo, XxlJobInfoDTO.class));
 
-        cronTaskService.saveCronTask(BeanUtil.copy(xxlJobInfo, XxlJobInfoDTO.class));
-        // basicResultVO.getData()
-        //cronTaskService.startCronTask()
-
-        MessageTemplateEntity clone = BeanUtil.copy(messageTemplateEntity, MessageTemplateEntity.class).setMsgStatus(MessageStatus.RUN.getCode()).setUpdated(new Date());
-        messageTemplateMapper.save(clone);
+        if (cronTaskId == null && RespStatusEnum.SUCCESS.getCode().equals(responseResult.getCode()) && responseResult.getData() != null) {
+            cronTaskId = Integer.valueOf(String.valueOf(responseResult.getData()));
+        }
+        if (cronTaskId != null) {
+            cronTaskService.startCronTask(cronTaskId);
+            MessageTemplateEntity clone = BeanUtil.copy(messageTemplateEntity, MessageTemplateEntity.class).setMsgStatus(MessageStatus.RUN.getCode()).setUpdated(new Date());
+            messageTemplateMapper.save(clone);
+            return ResponseResult.success();
+        }
+        return ResponseResult.fail("fail");
     }
 
     //

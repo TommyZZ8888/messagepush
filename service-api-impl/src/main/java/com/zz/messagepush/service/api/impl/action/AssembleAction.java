@@ -38,7 +38,7 @@ public class AssembleAction implements BusinessProcess {
         SendTaskModel processModel = (SendTaskModel) context.getProcessModel();
         Long messageTemplateId = processModel.getMessageTemplateId();
 
-        MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.selectById(messageTemplateId);
+        MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(messageTemplateId).orElse(null);
         if (messageTemplateEntity == null || messageTemplateEntity.getIsDeleted().equals(AustinConstant.TRUE)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.TEMPLATE_NOT_FOUND.getDescription()));
         }

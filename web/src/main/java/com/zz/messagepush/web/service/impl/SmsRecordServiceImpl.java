@@ -1,6 +1,6 @@
-package com.zz.messagepush.support.service.impl;
+package com.zz.messagepush.web.service.impl;
 
-import com.zz.messagepush.support.service.SmsRecordService;
+import com.zz.messagepush.web.service.SmsRecordService;
 import org.springframework.stereotype.Service;
 
 /**

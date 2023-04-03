@@ -15,6 +15,6 @@ import java.util.List;
 
 public interface SmsRecordMapper extends JpaRepository<SmsRecordEntity,Long> {
 
-    Integer insertBatchSomeColumn(List<SmsRecordEntity> entities);
+
 
 }

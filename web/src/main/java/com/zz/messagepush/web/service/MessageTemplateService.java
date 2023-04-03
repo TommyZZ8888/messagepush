@@ -1,7 +1,6 @@
-package com.zz.messagepush.support.service;
+package com.zz.messagepush.web.service;
 
-import com.github.yulichang.base.MPJBaseMapper;
-import com.zz.messagepush.common.domain.PageResult;
+import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 
@@ -62,7 +61,7 @@ public interface MessageTemplateService {
     /**
      * 启动模板的定时任务
      */
-    void startCronTask(Long id);
+    ResponseResult startCronTask(Long id);
 
     /**
      * 暂停模板的定时任务

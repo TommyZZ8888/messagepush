@@ -28,5 +28,5 @@ public interface MessageTemplateMapper extends JpaRepository<MessageTemplateEnti
      * @param deleted
      * @return
      */
-    Long countByIdDeletedEquals(Integer deleted);
+    Long countByIsDeletedEquals(Integer deleted);
 }

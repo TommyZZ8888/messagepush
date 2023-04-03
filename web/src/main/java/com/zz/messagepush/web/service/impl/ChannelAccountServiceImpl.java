@@ -1,7 +1,7 @@
-package com.zz.messagepush.support.service.impl;
+package com.zz.messagepush.web.service.impl;
 
 import com.zz.messagepush.support.mapper.ChannelAccountMapper;
-import com.zz.messagepush.support.service.ChannelAccountService;
+import com.zz.messagepush.web.service.ChannelAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

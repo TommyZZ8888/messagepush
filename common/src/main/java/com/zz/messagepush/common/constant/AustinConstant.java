@@ -26,4 +26,9 @@ public class AustinConstant {
     public final static String APOLLO_DEFAULT_VALUE_JSON_OBJECT = "{}";
     public final static String APOLLO_DEFAULT_VALUE_JSON_ARRAY = "[]";
 
+    /**
+     * cron时间格式
+     */
+    public final static String CRON_FORMAT = "ss mm HH dd MM ? yyyy";
+
 }
