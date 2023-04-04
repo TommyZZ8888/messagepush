@@ -27,21 +27,21 @@ public interface CronTaskService {
      * @param taskId
      * @return
      */
-    void deleteCronTask(Integer taskId);
+    ResponseResult deleteCronTask(Integer taskId);
 
 
     /**
      * 启动定时任务
      * @param taskId
      */
-    void startCronTask(Integer taskId);
+    ResponseResult startCronTask(Integer taskId);
 
 
     /**
      * 停止定时任务
      * @param taskId
      */
-    void stopCronTask(Integer taskId);
+    ResponseResult stopCronTask(Integer taskId);
 
     /**
      * 得到groupId

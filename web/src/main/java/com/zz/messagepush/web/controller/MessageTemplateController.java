@@ -1,5 +1,6 @@
 package com.zz.messagepush.web.controller;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.service.api.service.SendService;
@@ -8,12 +9,18 @@ import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.domain.vo.MessageTemplateVO;
 import com.zz.messagepush.web.service.MessageTemplateService;
 import com.zz.messagepush.support.utils.ConvertMap;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +37,9 @@ import java.util.stream.Collectors;
 public class MessageTemplateController {
 
     private static final List<String> FLAT_FIELD_NAME = Collections.singletonList("msgContent");
+
+    @Value("${austin.business.upload.crowd.path}")
+    private String dataPath;
     @Autowired
     private MessageTemplateService messageTemplateService;
 
@@ -73,6 +83,7 @@ public class MessageTemplateController {
      * 根据Id删除
      * id多个用逗号分隔开
      */
+    @ApiOperation("根据Id删除")
     @RequestMapping(value = "/deleteById", method = RequestMethod.POST)
     public ResponseResult<Boolean> deleteByIds(@RequestParam(value = "id", required = false) @NotBlank(message = "id不能为空") String id) {
         List<Long> idList = Arrays.stream(id.split(StrUtil.COMMA)).map(Long::valueOf).collect(Collectors.toList());
@@ -82,14 +93,35 @@ public class MessageTemplateController {
 
 
 
+    @ApiOperation("启动模板的定时任务")
     @RequestMapping(value = "/start",method = RequestMethod.POST)
     public ResponseResult start(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
         return messageTemplateService.startCronTask(id);
     }
 
+
+    @ApiOperation("暂停模板的定时任务")
     @RequestMapping(value = "/stop",method = RequestMethod.POST)
     public ResponseResult<Boolean> stop(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
         messageTemplateService.stopCronTask(id);
+        return ResponseResult.success();
+    }
+
+
+    @ApiOperation("上传人群文件")
+    @RequestMapping(value = "/upload",method = RequestMethod.POST)
+    public ResponseResult<Boolean> upload(@RequestParam("file") MultipartFile file){
+        String path = dataPath + IdUtil.fastSimpleUUID() + file.getOriginalFilename();
+
+        try {
+            File localFile = new File(path);
+            if (!localFile.exists()){
+                boolean mkdir = localFile.mkdir();
+            }
+            file.transferTo(localFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return ResponseResult.success();
     }
 }

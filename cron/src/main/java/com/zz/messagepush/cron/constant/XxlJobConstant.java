@@ -37,11 +37,11 @@ public class XxlJobConstant {
     /**
      * 重试次数
      */
-    public static final Integer RETRY_TIME = 2;
+    public static final Integer RETRY_TIME = 0;
 
     /**
      * 立即执行的任务延迟时间 （秒数）
      */
-    public static final Integer DELAY_TIME = 5;
+    public static final Integer DELAY_TIME = 10;
 
 }

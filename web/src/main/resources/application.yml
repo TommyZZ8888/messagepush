@@ -66,8 +66,12 @@ austin:
                 reset: earliest
         topic:
             name: austinKafka
-#    grayLog:
-#        ip: 122.112.239.250
+    grayLog:
+        ip: 122.112.239.250
+    business:
+        upload:
+            crowd:
+                path=/Users/3y/temp
 app:
     id: austin
 apollo:

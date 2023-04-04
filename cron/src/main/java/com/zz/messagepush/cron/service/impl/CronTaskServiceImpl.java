@@ -5,6 +5,8 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
+import com.xxl.job.core.biz.model.ReturnT;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.common.exception.ErrorException;
@@ -12,6 +14,7 @@ import com.zz.messagepush.cron.constant.XxlJobConstant;
 import com.zz.messagepush.cron.domain.dto.XxlJobInfoDTO;
 import com.zz.messagepush.cron.domain.entity.XxlJobGroup;
 import com.zz.messagepush.cron.service.CronTaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,7 @@ import java.util.Map;
  * @Date Created on 2023/3/31
  */
 @Service
+@Slf4j
 public class CronTaskServiceImpl implements CronTaskService {
 
     @Value("${xxl.job.admin.username}")
@@ -43,56 +47,78 @@ public class CronTaskServiceImpl implements CronTaskService {
         Map<String, Object> map = JSONObject.parseObject(JSON.toJSONString(xxlJobInfoDTO), Map.class);
         String path;
         path = xxlJobInfoDTO.getId() == null ? xxlAddress + XxlJobConstant.INSERT_URL : xxlAddress + XxlJobConstant.UPDATE_URL;
-        HttpResponse response = null;
+        HttpResponse response;
+        ReturnT returnT = null;
         try {
             response = HttpRequest.post(path).form(map).execute();
-            if (path.contains(XxlJobConstant.INSERT_URL) && response.isOk()) {
-                int taskId = Integer.parseInt(String.valueOf(JSON.parseObject(response.body()).get("content")));
-                return ResponseResult.success("success", taskId);
-            } else if (response.isOk()) {
-                return ResponseResult.success("success");
+            returnT = JSONObject.parseObject(response.body(), ReturnT.class);
+            if (response.isOk() && ReturnT.SUCCESS_CODE == returnT.getCode()) {
+                if (path.contains(XxlJobConstant.INSERT_URL)) {
+                    int taskId = Integer.parseInt(String.valueOf(JSON.parseObject(response.body()).get("content")));
+                    return ResponseResult.success("success", taskId);
+                } else if (path.contains(XxlJobConstant.UPDATE_URL)) {
+                    return ResponseResult.success("success");
+                }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
+            log.error("CronTaskService#saveTask fail,e:{},param:{},response:{}", Throwables.getStackTraceAsString(e)
+                    , JSON.toJSONString(xxlJobInfoDTO), JSON.toJSONString(returnT));
         }
         return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
     }
 
     @Override
-    public void deleteCronTask(Integer taskId) {
+    public ResponseResult deleteCronTask(Integer taskId) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", taskId);
         String path = xxlAddress + XxlJobConstant.DELETE_URL;
 
-        HttpResponse response = HttpRequest.post(path).form(map).execute();
-        if (!response.isOk()) {
-            throw new ErrorException("保存失败");
+        HttpResponse response;
+        ReturnT returnT;
+
+        response = HttpRequest.post(path).form(map).execute();
+        returnT = JSONObject.parseObject(response.body(), ReturnT.class);
+
+        if (response.isOk() && ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return ResponseResult.success();
         }
+        return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
     }
 
     @Override
-    public void startCronTask(Integer taskId) {
+    public ResponseResult startCronTask(Integer taskId) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", taskId);
         String path = xxlAddress + XxlJobConstant.RUN_URL;
 
-        HttpResponse response = HttpRequest.post(path).form(map).execute();
-        if (!response.isOk()) {
-            throw new ErrorException("保存失败");
+        HttpResponse response;
+        ReturnT returnT;
+
+        response = HttpRequest.post(path).form(map).execute();
+        returnT = JSONObject.parseObject(response.body(), ReturnT.class);
+
+        if (response.isOk() && ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return ResponseResult.success();
         }
+        return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
     }
 
     @Override
-    public void stopCronTask(Integer taskId) {
+    public ResponseResult stopCronTask(Integer taskId) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", taskId);
         String path = xxlAddress + XxlJobConstant.STOP_URL;
 
-        HttpResponse response = HttpRequest.post(path).form(map).execute();
-        if (!response.isOk()) {
-            throw new ErrorException("保存失败");
+        HttpResponse response;
+        ReturnT returnT;
+
+        response = HttpRequest.post(path).form(map).cookie(getCookie()).execute();
+        returnT = JSONObject.parseObject(response.body(), ReturnT.class);
+
+        if (response.isOk() && ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return ResponseResult.success();
         }
+        return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
     }
 
     @Override
@@ -111,7 +137,6 @@ public class CronTaskServiceImpl implements CronTaskService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
         }
         return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());
     }
@@ -120,8 +145,13 @@ public class CronTaskServiceImpl implements CronTaskService {
     public ResponseResult createGroup(XxlJobGroup xxlJobGroup) {
         Map<String, Object> map = JSONObject.parseObject(JSON.toJSONString(xxlJobGroup), Map.class);
         String path = xxlAddress + XxlJobConstant.JOB_GROUP_INSERT_URL;
-        HttpResponse response = HttpRequest.post(path).form(map).cookie(getCookie()).execute();
-        if (response.isOk()) {
+        HttpResponse response;
+        ReturnT returnT;
+
+        response = HttpRequest.post(path).form(map).cookie(getCookie()).execute();
+        returnT = JSONObject.parseObject(response.body(), ReturnT.class);
+
+        if (response.isOk() && ReturnT.SUCCESS_CODE == returnT.getCode()) {
             return ResponseResult.success();
         }
         return ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription());

@@ -67,6 +67,11 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     public void deleteByIds(List<Long> ids) {
         Iterable<MessageTemplateEntity> entities = messageTemplateMapper.findAllById(ids);
         entities.forEach(messageTemplate -> messageTemplate.setIsDeleted(AustinConstant.TRUE));
+        for (MessageTemplateEntity entity : entities) {
+            if (entity.getCronTaskId() > 0) {
+                cronTaskService.deleteCronTask(entity.getCronTaskId());
+            }
+        }
         messageTemplateMapper.saveAll(entities);
     }
 
@@ -78,7 +83,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Override
     public void copy(Long id) {
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(id).orElse(new MessageTemplateEntity());
-        MessageTemplateEntity entity = BeanUtil.copy(messageTemplateEntity, MessageTemplateEntity.class);
+        MessageTemplateEntity entity = BeanUtil.copy(messageTemplateEntity, MessageTemplateEntity.class).setId(null).setCronTaskId(null);
         entity.setId(null);
         messageTemplateMapper.save(entity);
     }
@@ -101,12 +106,12 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
 
     @Override
     public ResponseResult startCronTask(Long id) {
-//         1.修改模板状态
+        //1.修改模板状态
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(id).orElse(new MessageTemplateEntity());
 
         // 2.动态创建定时任务并启动
         XxlJobInfo xxlJobInfo = xxlJobUtils.buildXxlJobInfo(messageTemplateEntity);
-// 3.获取taskId（如果本身存在则复用原有id，不存在则得到新建后任务id）
+        // 3.获取taskId（如果本身存在则复用原有id，不存在则得到新建后任务id）
         Integer cronTaskId = messageTemplateEntity.getCronTaskId();
         ResponseResult responseResult = cronTaskService.saveCronTask(BeanUtil.copy(xxlJobInfo, XxlJobInfoDTO.class));
 
