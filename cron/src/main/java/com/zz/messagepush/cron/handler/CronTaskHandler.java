@@ -25,6 +25,7 @@ public class CronTaskHandler {
     @XxlJob("austinJob")
     public void execute() {
         Long messageTemplateId = Long.valueOf(XxlJobHelper.getJobParam());
+        log.info("CronTaskHandler#execute messageTemplateId:{} cron exec!", XxlJobHelper.getJobParam());
         taskHandler.handler(messageTemplateId);
     }
 

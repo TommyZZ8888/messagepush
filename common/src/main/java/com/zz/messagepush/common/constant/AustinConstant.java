@@ -1,6 +1,5 @@
 package com.zz.messagepush.common.constant;
 
-import com.alipay.api.domain.ScheduleTripItem;
 
 /**
  * @Author 张卫刚

@@ -22,7 +22,7 @@ public class CrowdInfoVO {
     /**
      * 接收者
      */
-    private String id;
+    private String receiver;
 
     /**
      * 参数
