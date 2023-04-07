@@ -30,4 +30,7 @@ public class CrowdInfoVO {
     private Map<String, String> params;
 
 
+    private Long messageTemplateId;
+
+
 }

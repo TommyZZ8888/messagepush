@@ -17,6 +17,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 
+/**
+ * @author DELL
+ */
 @Service
 public class SendServiceImpl implements SendService {
 

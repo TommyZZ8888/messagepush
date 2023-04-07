@@ -1,7 +1,10 @@
 package com.zz.messagepush.cron.constant;
 
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
+
 /**
- * @Description 缓冲pending常量
+ * @Description 延迟缓冲 pending 常量信息
  * @Author 张卫刚
  * @Date Created on 2023/4/6
  */
@@ -25,6 +28,10 @@ public class PendingConstant {
     /**
      * 消费线程数
      */
-    public final static Integer THREAD_NUM = 2;
+    public final static Integer CORE_POOL_SIZE = 5;
+
+    public final static Integer MAX_POOL_SIZE = 5;
+
+    public final static BlockingDeque BLOCKING_QUEUE = new LinkedBlockingDeque(5);
 
 }

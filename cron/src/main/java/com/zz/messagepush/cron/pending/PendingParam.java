@@ -3,6 +3,8 @@ package com.zz.messagepush.cron.pending;
 import lombok.Data;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +29,8 @@ public class PendingParam<T> {
 
     private Long thresholdTime;
 
-    private Integer threadNum;
-
-    private Pending<T> pending;
+    /**
+     * 消费线程池实例
+     */
+    private ExecutorService executorService;
 }
