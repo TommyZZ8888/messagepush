@@ -106,7 +106,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
 
     @Override
     public ResponseResult startCronTask(Long id) {
-        //1.修改模板状态
+        //1.获取消息模板的信息
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(id).orElse(new MessageTemplateEntity());
 
         // 2.动态创建定时任务并启动

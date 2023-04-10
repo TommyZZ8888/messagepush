@@ -32,6 +32,7 @@ public class ReadFileUtils {
      * @param path
      * @return
      */
+    @Deprecated
     public static List<CrowdInfoVO> getCsvRowList(String path) {
         List<CrowdInfoVO> result = new ArrayList<>();
 

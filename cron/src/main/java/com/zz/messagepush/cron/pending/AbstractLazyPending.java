@@ -3,14 +3,12 @@ package com.zz.messagepush.cron.pending;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
-import com.zz.messagepush.cron.constant.PendingConstant;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**

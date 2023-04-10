@@ -16,7 +16,7 @@ public class AustinSource extends RichSourceFunction<AnchorInfo> {
 
 
     @Override
-    public void run(SourceContext<AnchorInfo> sourceContext) throws Exception {
+    public void run(SourceContext<AnchorInfo> sourceContext) {
         List<AnchorInfo> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             AnchorInfo anchorInfo = AnchorInfo.builder().state(AnchorStateEnum.RECEIVE.getCode())

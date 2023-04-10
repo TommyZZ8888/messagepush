@@ -131,4 +131,11 @@ xxl:
             jobHandlerName: austinJob
         accessToken:  # 执行器通讯TOKEN [选填]：非空时启用；
 
-
+##################### wx mp config #####################
+wx:
+    mp:
+        account:
+            appid: appid
+            secret: secret
+            token: token
+            aesKey: aesKey
