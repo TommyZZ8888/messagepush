@@ -30,4 +30,10 @@ public class AustinConstant {
      */
     public final static String CRON_FORMAT = "ss mm HH dd MM ? yyyy-yyyy";
 
+
+    /**
+     * businessId默认长度
+     */
+    public final static Integer BUSINESS_ID_LENGTH = 16;
+
 }

@@ -1,6 +1,5 @@
 package com.zz.messagepush.handler.script;
 
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.zz.messagepush.common.domain.dto.SmsParam;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import org.springframework.stereotype.Service;

@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AustinWebApplication {
     public static void main(String[] args) {
         // TODO apollo的ip/port【must】
-        System.setProperty("apollo.config-service", "http://ip:7000");
+//        System.setProperty("apollo.config-service", "http://ip:7000");
         SpringApplication.run(AustinWebApplication.class, args);
     }
 
