@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TimeLineItemVO {
+public class UserTimeLineVO {
 
     private List<ItemVO> itemVOList;
 
@@ -28,15 +28,30 @@ public class TimeLineItemVO {
     @Builder
     public static class ItemVO {
 
-        private String time;
+        /**
+         * 业务id
+         */
+        private String businessId;
 
+        /**
+         * 模板名称
+         */
         private String title;
 
+        /**
+         * 发送细节
+         */
         private String detail;
 
-        private String icon;
+        /**
+         * 模板创建者
+         */
+        private String creator;
 
-        private String color;
+        /**
+         * 发送类型
+         */
+        private String sendType;
     }
 
 }

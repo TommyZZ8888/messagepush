@@ -5,7 +5,7 @@ import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.support.utils.RedisUtil;
 import com.zz.messagepush.web.domain.vo.DataParamVO;
 import com.zz.messagepush.web.domain.vo.amis.EchartsVO;
-import com.zz.messagepush.web.domain.vo.amis.TimeLineItemVO;
+import com.zz.messagepush.web.domain.vo.amis.UserTimeLineVO;
 import com.zz.messagepush.web.service.DataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,23 +41,22 @@ public class DataController {
      */
     @RequestMapping(value = "/getData", method = RequestMethod.POST)
     public ResponseResult<Boolean> getData(@RequestBody DataParamVO dataParamVO) {
-        Long businessId = dataParamVO.getBusinessId();
-        Map<Object, Object> objectObjectMap = redisUtil.hGetAll(String.valueOf(businessId));
+        String businessId = dataParamVO.getBusinessId();
+        Map<Object, Object> objectObjectMap = redisUtil.hGetAll(businessId);
         log.info("data get:{}", JSON.toJSONString(objectObjectMap));
         return ResponseResult.success();
     }
 
-    @RequestMapping(value = "/getUserData",method = RequestMethod.POST)
-    public ResponseResult<TimeLineItemVO> getUserData(@RequestParam("receiver") @NotBlank(message = "receiver不能为空") String receiver){
-        TimeLineItemVO traceUserInfo = dataService.getTraceUserInfo(receiver);
-        return ResponseResult.success("getUserData",traceUserInfo);
+    @RequestMapping(value = "/getUserData", method = RequestMethod.POST)
+    public ResponseResult<UserTimeLineVO> getUserData(@RequestParam("receiver") @NotBlank(message = "receiver不能为空") String receiver) {
+        UserTimeLineVO traceUserInfo = dataService.getTraceUserInfo(receiver);
+        return ResponseResult.success("getUserData", traceUserInfo);
     }
 
 
-
-    @RequestMapping(value = "/getMessageTemplateInfo",method = RequestMethod.POST)
-    public ResponseResult<EchartsVO> getMessageTemplateInfo(@RequestParam("businessId") @NotBlank(message = "businessId不能为空") String businessId){
+    @RequestMapping(value = "/getMessageTemplateInfo", method = RequestMethod.POST)
+    public ResponseResult<EchartsVO> getMessageTemplateInfo(@RequestParam("businessId") @NotBlank(message = "businessId不能为空") String businessId) {
         EchartsVO echartsVO = dataService.getTraceMessageTemplateInfo(businessId);
-        return ResponseResult.success("getMessageTemplateInfo",echartsVO);
+        return ResponseResult.success("getMessageTemplateInfo", echartsVO);
     }
 }

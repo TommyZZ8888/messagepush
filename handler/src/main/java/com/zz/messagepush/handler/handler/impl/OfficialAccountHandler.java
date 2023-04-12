@@ -9,7 +9,6 @@ import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.OfficialAccountScript;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @Description
+ * @Description 微信服务号推送处理
  * @Author 张卫刚
  * @Date Created on 2023/4/10
  */

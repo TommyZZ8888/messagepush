@@ -1,7 +1,7 @@
 package com.zz.messagepush.web.service;
 
 import com.zz.messagepush.web.domain.vo.amis.EchartsVO;
-import com.zz.messagepush.web.domain.vo.amis.TimeLineItemVO;
+import com.zz.messagepush.web.domain.vo.amis.UserTimeLineVO;
 
 /**
  * @Description
@@ -16,7 +16,7 @@ public interface DataService {
      * @param receiver
      * @return
      */
-    TimeLineItemVO getTraceUserInfo(String receiver);
+    UserTimeLineVO getTraceUserInfo(String receiver);
 
 
     /**

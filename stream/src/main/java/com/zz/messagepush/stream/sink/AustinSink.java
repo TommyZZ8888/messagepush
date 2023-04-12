@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.zz.messagepush.common.domain.AnchorInfo;
-import com.zz.messagepush.stream.domain.SimpleAnchorInfo;
+import com.zz.messagepush.common.enums.SimpleAnchorInfo;
 import com.zz.messagepush.stream.utils.LettuceRedisUtils;
 import io.lettuce.core.RedisFuture;
 import lombok.extern.slf4j.Slf4j;

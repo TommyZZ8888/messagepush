@@ -1,13 +1,6 @@
 package com.zz.messagepush.handler.handler;
 
-import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
-import com.zz.messagepush.common.enums.AnchorStateEnum;
-import com.zz.messagepush.common.enums.ChannelType;
-import com.zz.messagepush.support.utils.LogUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
 
 /**
  * @Description

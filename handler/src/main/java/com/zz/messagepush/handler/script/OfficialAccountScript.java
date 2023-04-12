@@ -1,8 +1,5 @@
 package com.zz.messagepush.handler.script;
 
-
-
-
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 

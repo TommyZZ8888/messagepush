@@ -2,10 +2,7 @@ package com.zz.messagepush.handler.script;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.IdUtil;
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Throwables;
 import com.tencentcloudapi.common.Credential;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
@@ -17,10 +14,8 @@ import com.zz.messagepush.common.enums.SmsStatus;
 import com.zz.messagepush.handler.domain.TencentSmsParam;
 import com.zz.messagepush.handler.utils.AccountUtils;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
-import com.zz.messagepush.support.utils.OkHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

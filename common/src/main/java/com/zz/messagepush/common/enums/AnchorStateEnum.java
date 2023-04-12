@@ -8,7 +8,7 @@ package com.zz.messagepush.common.enums;
 public enum AnchorStateEnum {
 
 
-    RECEIVE(10, "成功消费"),
+    RECEIVE(10, "消息接收成功"),
     DISCARD(20, "消息丢弃"),
     CONTENT_DEDUPLICATION(30, "消息内容去重"),
     RULE_DEDUPLICATION(40, "消息频次去重"),
@@ -44,5 +44,21 @@ public enum AnchorStateEnum {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    /**
+     * 通过code获取描述
+     * @param code
+     * @return
+     */
+    public static String getDescriptionByCode(Integer code){
+        for (AnchorStateEnum anchorStateEnum : AnchorStateEnum.values()) {
+            if (anchorStateEnum.getCode().equals(code)){
+                return anchorStateEnum.getDescription();
+            }
+        }
+
+        return "未知点位";
     }
 }

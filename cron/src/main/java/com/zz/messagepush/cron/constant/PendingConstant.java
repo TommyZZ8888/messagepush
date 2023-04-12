@@ -1,5 +1,8 @@
 package com.zz.messagepush.cron.constant;
 
+import org.apache.flink.client.program.PackagedProgramUtils;
+import org.checkerframework.checker.index.qual.PolyUpperBound;
+
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -31,6 +34,8 @@ public class PendingConstant {
     public final static Integer CORE_POOL_SIZE = 5;
 
     public final static Integer MAX_POOL_SIZE = 5;
+
+    public final static Integer KEEP_LIVE_TIME = 20;
 
     public final static BlockingDeque BLOCKING_QUEUE = new LinkedBlockingDeque(5);
 

@@ -68,7 +68,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
         Iterable<MessageTemplateEntity> entities = messageTemplateMapper.findAllById(ids);
         entities.forEach(messageTemplate -> messageTemplate.setIsDeleted(AustinConstant.TRUE));
         for (MessageTemplateEntity entity : entities) {
-            if (entity.getCronTaskId() > 0) {
+            if (entity.getCronTaskId() != null && entity.getCronTaskId() > 0) {
                 cronTaskService.deleteCronTask(entity.getCronTaskId());
             }
         }

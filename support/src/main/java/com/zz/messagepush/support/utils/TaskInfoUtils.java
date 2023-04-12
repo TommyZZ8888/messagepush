@@ -1,5 +1,6 @@
 package com.zz.messagepush.support.utils;
 
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 
 import java.util.Date;
@@ -18,15 +19,37 @@ public class TaskInfoUtils {
     /**
      * 生成businessId
      * 模板类型+模板id+当天日期
-     *
+     * 固定16位
      * @param templateId
      * @param templateType
      * @return
      */
     public static Long generateBusinessId(Long templateId, Integer templateType) {
-        Integer today = Integer.valueOf(DateUtil.format(new Date(), "yyyyMMdd"));
+        Integer today = Integer.valueOf(DateUtil.format(new Date(), DatePattern.PURE_DATE_PATTERN));
         return Long.valueOf(String.format("%d%s", (long) templateType * TYPE_FLAG + templateId, today));
     }
+
+
+
+    /**
+     * 从切割出templateId 第二位到第八位
+     */
+    public static Long getMessageTemplateIdFromBusinessId(Long businessId){
+        return Long.parseLong(String.valueOf(businessId).substring(1,8));
+    }
+
+
+    /**
+     * 从businessId中切割出时间
+     * @param businessId
+     * @return
+     */
+    public static Long getDateFromBusinessId(String businessId){
+        return Long.parseLong(businessId.substring(8));
+    }
+
+
+
 
 
     /**

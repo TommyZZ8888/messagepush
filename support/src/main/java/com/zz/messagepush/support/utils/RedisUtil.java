@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import scala.reflect.internal.Trees;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +70,7 @@ public class RedisUtil {
      * @param end
      * @return
      */
-    public List<String> iRange(String key,Long start,Long end){
+    public List<String> lRange(String key,Long start,Long end){
         try {
             return redisTemplate.opsForList().range(key, start, end);
         } catch (Exception e) {

@@ -1,4 +1,6 @@
-package com.zz.messagepush.stream.domain;
+package com.zz.messagepush.common.enums;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

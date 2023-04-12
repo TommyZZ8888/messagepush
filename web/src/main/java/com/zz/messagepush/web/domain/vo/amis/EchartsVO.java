@@ -1,5 +1,6 @@
 package com.zz.messagepush.web.domain.vo.amis;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -23,44 +24,50 @@ public class EchartsVO {
     /**
      * 标题
      */
-    private TitleVO titleVO;
+    @JsonProperty
+    private TitleVO title;
 
     /**
      * 提示
      */
-    private ToolTipVO toolTipVO;
+    @JsonProperty
+    private ToolTipVO tooltip;
 
     /**
      * 图例
      */
-    private LegendVO legendVO;
+    @JsonProperty
+    private LegendVO legend;
 
     /**
      * x轴
      */
-    private XAixsVO xAixsVO;
+    @JsonProperty
+    private XAxisVO xAxis;
 
     /**
      * y轴
      */
-    private YAixsVO yAxisVO;
+    @JsonProperty
+    private YAxisVO yAxis;
 
     /**
      * 系统列表
      */
-    private List<SeriesVO> seriesVOList;
+    @JsonProperty
+    private List<SeriesVO> series;
 
     @Data
     @Builder
     public static class TitleVO {
 
-        private String title;
+        private String text;
     }
 
     @Data
     @Builder
     public static class ToolTipVO {
-
+        private String color;
     }
 
     @Data
@@ -71,14 +78,14 @@ public class EchartsVO {
 
     @Data
     @Builder
-    public static class XAixsVO {
+    public static class XAxisVO {
         private List<String> data;
     }
 
     @Data
     @Builder
-    public static class YAixsVO {
-
+    public static class YAxisVO {
+        private String type;
     }
 
     @Data
