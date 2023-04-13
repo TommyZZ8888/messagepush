@@ -3,12 +3,14 @@ package com.zz.messagepush.cron.pending;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
+import com.zz.messagepush.support.config.SupportThreadPoolConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,9 +37,12 @@ public abstract class AbstractLazyPending<T> {
      */
     private Long lastHoldTime = System.currentTimeMillis();
 
+    private boolean stop = false;
+
     @PostConstruct
     public void initConsumePending() {
-        ThreadUtil.newSingleExecutor().execute(() -> {
+        ExecutorService executorService = SupportThreadPoolConfig.getPendingSingleThreadPool();
+        executorService.execute(() -> {
             while (true) {
                 try {
                     T poll = pendingParam.getBlockingQueue().poll(pendingParam.getThresholdTime(), TimeUnit.MILLISECONDS);
@@ -52,11 +57,16 @@ public abstract class AbstractLazyPending<T> {
 
                         pendingParam.getExecutorService().execute(() -> this.handle(taskList));
                     }
+                    // 判断是否停止当前线程
+                    if (stop && CollUtil.isEmpty(tasks)) {
+                        break;
+                    }
                 } catch (Exception e) {
                     log.error("BatchPendingThread#pending fail:{}", Throwables.getStackTraceAsString(e));
                 }
             }
         });
+        executorService.shutdown();
     }
 
 

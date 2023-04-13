@@ -3,9 +3,11 @@ package com.zz.messagepush.cron.utils;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.csv.*;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
+import com.zz.messagepush.cron.csv.CountFileRowHandler;
 import com.zz.messagepush.cron.domain.vo.CrowdInfoVO;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +62,7 @@ public class ReadFileUtils {
 
     /**
      * 读取csv文件，每读取一行都会调用CsvRowHandler对应的方法
+     *
      * @param path
      * @param csvRowHandler
      */
@@ -75,6 +78,7 @@ public class ReadFileUtils {
 
     /**
      * 从文件的每一行数据获取param信息
+     *
      * @param fieldMap
      * @return
      */
@@ -86,5 +90,25 @@ public class ReadFileUtils {
             }
         }
         return map;
+    }
+
+
+    /**
+     * 读取csv文件，获取文件中的行数
+     *
+     * @param path
+     * @param countFileRowHandler
+     * @return
+     */
+    public static Long countCsvRow(String path, CountFileRowHandler countFileRowHandler) {
+        try {
+            CsvReader reader = CsvUtil.getReader(new FileReader(path), new CsvReadConfig().setContainsHeader(true));
+
+            reader.read(countFileRowHandler);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return countFileRowHandler.getCsvRowCount();
     }
 }

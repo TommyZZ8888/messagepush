@@ -2,8 +2,8 @@ package com.zz.messagepush.cron.pending;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.thread.ExecutorBuilder;
 import cn.hutool.core.util.StrUtil;
+import com.zz.messagepush.cron.config.CronAsyncThreadPoolConfig;
 import com.zz.messagepush.cron.constant.PendingConstant;
 import com.zz.messagepush.cron.domain.vo.CrowdInfoVO;
 import com.zz.messagepush.service.api.domain.dto.BatchSendRequest;
@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Description
@@ -38,14 +36,7 @@ public class CrowdBatchTaskPending extends AbstractLazyPending<CrowdInfoVO> {
         pendingParam.setThresholdNum(PendingConstant.NUM_THRESHOLD)
                 .setBlockingQueue(new LinkedBlockingQueue(PendingConstant.QUEUE_SIZE))
                 .setThresholdTime(PendingConstant.TIME_THRESHOLD)
-                .setExecutorService(ExecutorBuilder.create()
-                        .setCorePoolSize(PendingConstant.CORE_POOL_SIZE)
-                        .setMaxPoolSize(PendingConstant.MAX_POOL_SIZE)
-                        .setWorkQueue(PendingConstant.BLOCKING_QUEUE)
-                        .setHandler(new ThreadPoolExecutor.CallerRunsPolicy())
-                        .setAllowCoreThreadTimeOut(true)
-                        .setKeepAliveTime(PendingConstant.KEEP_LIVE_TIME, TimeUnit.SECONDS)
-                        .build());
+                .setExecutorService(CronAsyncThreadPoolConfig.getConsumePendingThreadPool());
         this.pendingParam = pendingParam;
     }
 
