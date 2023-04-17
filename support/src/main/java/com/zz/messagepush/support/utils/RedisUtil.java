@@ -50,10 +50,11 @@ public class RedisUtil {
 
     /**
      * hGetAll
+     *
      * @param key
      * @return
      */
-    public Map<Object,Object> hGetAll(String key){
+    public Map<Object, Object> hGetAll(String key) {
         try {
             Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
             return entries;
@@ -65,18 +66,58 @@ public class RedisUtil {
 
     /**
      * range
+     *
      * @param key
      * @param start
      * @param end
      * @return
      */
-    public List<String> lRange(String key,Long start,Long end){
+    public List<String> lRange(String key, Long start, Long end) {
         try {
             return redisTemplate.opsForList().range(key, start, end);
         } catch (Exception e) {
             log.error("RedisUtils#lRange fail! e:{}", Throwables.getStackTraceAsString(e));
         }
-        return null;    }
+        return null;
+    }
+
+
+    /**
+     * lpush并设置过期时间
+     * @param key
+     * @param value
+     * @param second
+     */
+    public void lPush(String key, String value, Long second) {
+        try {
+            redisTemplate.executePipelined((RedisCallback<?>) connection -> {
+                connection.lPush(key.getBytes(), value.getBytes());
+                connection.expire(key.getBytes(), second);
+                return null;
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public Long lLen(String key) {
+        try {
+            return redisTemplate.opsForList().size(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0L;
+    }
+
+    public String lPop(String key) {
+        try {
+            return redisTemplate.opsForList().leftPop(key);
+        } catch (Exception e) {
+            log.error("RedisUtils#pipelineSetEx fail! e:{}", Throwables.getStackTraceAsString(e));
+        }
+        return "";
+    }
 
 
     /**

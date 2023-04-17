@@ -1,5 +1,6 @@
 package com.zz.messagepush.cron.utils;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.csv.*;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
@@ -42,6 +43,7 @@ public class ReadFileUtils {
             CsvData csvData = CsvUtil.getReader().read(FileUtil.file(path));
             if (csvData == null || csvData.getRow(0) == null || csvData.getRow(1) == null) {
                 log.error("no data");
+                return new ArrayList<>();
             }
             CsvRow header = csvData.getRow(0);
             //第一行默认为头信息，第一列默认为接收者id
@@ -51,7 +53,7 @@ public class ReadFileUtils {
                 for (int j = 1; j < header.size(); j++) {
                     params.put(header.get(j), row.get(j));
                 }
-                result.add(CrowdInfoVO.builder().receiver(row.get(0)).params(params).build());
+                result.add(CrowdInfoVO.builder().receiver(CollUtil.getFirst(row.iterator())).params(params).build());
             }
         } catch (Exception e) {
             e.printStackTrace();

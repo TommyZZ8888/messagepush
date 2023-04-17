@@ -61,5 +61,8 @@ public class TaskInfo {
     @ApiModelProperty("消息模板id")
     private Integer isNightShield;
 
+    @ApiModelProperty("屏蔽类型")
+    private Integer shieldType;
+
 
 }

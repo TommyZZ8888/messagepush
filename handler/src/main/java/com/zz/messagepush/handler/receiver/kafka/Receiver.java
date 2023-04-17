@@ -1,5 +1,6 @@
 package com.zz.messagepush.handler.receiver.kafka;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.LogParam;
@@ -45,7 +46,7 @@ public class Receiver {
         Optional<String> kafkaMessage = Optional.ofNullable(consumerRecord.value());
         if (kafkaMessage.isPresent()) {
             List<TaskInfo> taskInfos = JSON.parseArray(kafkaMessage.get(), TaskInfo.class);
-            String groupId = GroupIdMappingUtils.getGroupIdByTaskInfo(taskInfos.get(0));
+            String groupId = GroupIdMappingUtils.getGroupIdByTaskInfo(CollUtil.getFirst(taskInfos.iterator()));
 
             //每个消费者只关心自身的信息
             if (groupId.equals(topicGroupId)){

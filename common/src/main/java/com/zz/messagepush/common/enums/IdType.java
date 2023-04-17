@@ -15,7 +15,10 @@ public enum IdType {
 
     OPEN_ID(40,"openid"),
 
-    EMAIL(50,"email"),;
+    EMAIL(50,"email"),
+
+    ENTERPRISE_USER_ID(60,"userid"),
+    ;
 
     private Integer code;
 

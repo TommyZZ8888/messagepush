@@ -5,6 +5,7 @@ import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
 import com.zz.messagepush.support.utils.LogUtils;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -53,5 +54,5 @@ public abstract class BaseHandler implements Handler {
      *
      * @param taskInfo
      */
-    public abstract boolean handler(TaskInfo taskInfo);
+    public abstract boolean handler(TaskInfo taskInfo) throws WxErrorException;
 }

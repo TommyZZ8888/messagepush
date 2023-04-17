@@ -17,7 +17,7 @@ public class ThreadPoolConstant {
     public static final Integer COMMON_CORE_POOL_SIZE = 5;
     public static final Integer COMMON_MAX_POOL_SIZE = 5;
     public static final Integer COMMON_KEEP_LIVE_TIME = 50;
-    public static final Integer COMMON_QUEUE_SIZE = 20;
+    public static final Integer COMMON_QUEUE_SIZE = 128;
 
     public static final Integer BIG_QUEUE_SIZE = 1024;
     public static final BlockingQueue BIG_BLOCKING_QUEUE = new LinkedBlockingQueue(BIG_QUEUE_SIZE);

@@ -12,7 +12,7 @@ import java.util.List;
  * @Date Created on 2023/3/13
  */
 @Service
-public interface SmsScript {
+public interface SmsService {
 
     /**
      * 发送短信

@@ -10,7 +10,7 @@ import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
-import com.zz.messagepush.handler.script.SmsScript;
+import com.zz.messagepush.handler.script.SmsService;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.SmsRecordMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class SmsHandler extends BaseHandler implements Handler {
     private SmsRecordMapper smsRecordMapper;
 
     @Autowired
-    private SmsScript smsScript;
+    private SmsService smsScript;
 
 
     public SmsHandler() {

@@ -1,9 +1,11 @@
 package com.zz.messagepush.handler.pending;
 
+import cn.hutool.core.collection.CollUtil;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.handler.deduplication.DeduplicationRuleService;
 import com.zz.messagepush.handler.discard.DiscardMessageService;
 import com.zz.messagepush.handler.handler.HandlerHolder;
+import com.zz.messagepush.handler.shield.ShieldService;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ public class Task implements Runnable {
 
     private TaskInfo taskInfo;
 
+    @Autowired
+    private ShieldService shieldService;
+
 
     @Override
     public void run() {
@@ -38,10 +43,13 @@ public class Task implements Runnable {
             return;
         }
 
-        //TODO 通用去重
-        deduplicationRuleService.duplication(taskInfo);
+        shieldService.shield(taskInfo);
 
-        //发送消息
-        handlerHolder.route(taskInfo.getSendChannel()).doHandler(taskInfo);
+        //TODO 通用去重
+        if (CollUtil.isNotEmpty(taskInfo.getReceiver())) {
+            deduplicationRuleService.duplication(taskInfo);
+            //发送消息
+            handlerHolder.route(taskInfo.getSendChannel()).doHandler(taskInfo);
+        }
     }
 }

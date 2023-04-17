@@ -7,7 +7,7 @@ import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
-import com.zz.messagepush.handler.script.OfficialAccountScript;
+import com.zz.messagepush.handler.script.OfficialAccountService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
@@ -31,7 +31,7 @@ public class OfficialAccountHandler extends BaseHandler implements Handler {
 
 
     @Autowired
-    private OfficialAccountScript officialAccountScript;
+    private OfficialAccountService officialAccountScript;
 
     public OfficialAccountHandler() {
         channelCode = ChannelType.OFFICIAL_ACCOUNT.getCode();

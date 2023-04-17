@@ -18,7 +18,7 @@ import java.util.List;
  * @Date Created on 2023/4/10
  */
 @Service
-public class WxMpTemplateScript implements OfficialAccountScript {
+public class WxMpTemplateServiceImpl implements OfficialAccountService {
 
 
     @Value("${wx.mp.account.appid}")

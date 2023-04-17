@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class TencentSmsScript implements SmsScript {
+public class TencentSmsServiceImpl implements SmsService {
 
     private static final Integer PHONE_NUM = 11;
     private static final String SMS_ACCOUNT_KEY = "smsAccount";

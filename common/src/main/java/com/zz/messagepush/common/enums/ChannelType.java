@@ -20,6 +20,8 @@ public enum ChannelType {
     OFFICIAL_ACCOUNT(50, "OfficialAccount(服务号)", OfficialAccountContentModel.class, "official_accounts"),
 
     MINI_PROGRAM(60, "miniProgram(小程序)", MiniProgramContentModel.class, "mini_program"),
+
+    ENTERPRISE_WE_CHAT(70, "enterpriseWeChat(企业微信)", EnterpriseWeChatContentModel.class, "enterprise_we_chat"),
     ;
 
     private Integer code;
@@ -78,6 +80,7 @@ public enum ChannelType {
 
     /**
      * 通过code获取class
+     *
      * @param code
      * @return
      */
@@ -94,6 +97,7 @@ public enum ChannelType {
 
     /**
      * 通过code获取enum
+     *
      * @param code
      * @return
      */
