@@ -33,7 +33,7 @@ public class SendMqAction implements BusinessProcess {
         SendTaskModel processModel = (SendTaskModel) context.getProcessModel();
 
         try {
-            kafkaTemplate.send(topicName, JSON.toJSONString(processModel.getTaskInfo(), new SerializerFeature[]{SerializerFeature.WriteClassName}));
+            kafkaTemplate.send(topicName, JSON.toJSONString(processModel.getTaskInfo(), SerializerFeature.WriteClassName));
         } catch (Exception e) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription()));
             log.error("send kafka fail! e:{}", Throwables.getStackTraceAsString(e));

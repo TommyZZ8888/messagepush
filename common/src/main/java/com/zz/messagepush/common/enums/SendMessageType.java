@@ -5,7 +5,7 @@ package com.zz.messagepush.common.enums;
  * @Author 张卫刚
  * @Date Created on 2023/4/14
  */
-public enum WeChatMessageType {
+public enum SendMessageType {
 
     TEXT(10, "文本"),
 
@@ -32,7 +32,7 @@ public enum WeChatMessageType {
 
     public String description;
 
-    WeChatMessageType(Integer code, String description) {
+    SendMessageType(Integer code, String description) {
         this.code = code;
         this.description = description;
     }

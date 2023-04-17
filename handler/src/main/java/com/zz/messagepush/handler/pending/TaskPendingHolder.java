@@ -22,9 +22,9 @@ import java.util.concurrent.ExecutorService;
 @Component
 public class TaskPendingHolder {
 
-    private Map<String, ExecutorService> taskPendingHolder = new HashMap<>();
+    private final Map<String, ExecutorService> taskPendingHolder = new HashMap<>();
 
-    private List<String> groupIds = GroupIdMappingUtils.getAllGroupIds();
+    private final List<String> groupIds = GroupIdMappingUtils.getAllGroupIds();
 
     @Autowired
     private ThreadPoolUtils threadPoolUtils;

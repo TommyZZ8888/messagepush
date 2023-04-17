@@ -54,5 +54,5 @@ public abstract class BaseHandler implements Handler {
      *
      * @param taskInfo
      */
-    public abstract boolean handler(TaskInfo taskInfo) throws WxErrorException;
+    public abstract boolean handler(TaskInfo taskInfo);
 }

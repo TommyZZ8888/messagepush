@@ -46,10 +46,15 @@ public class EnterpriseWeChatHandler extends BaseHandler implements Handler {
 
 
     @Override
-    public boolean handler(TaskInfo taskInfo) throws WxErrorException {
+    public boolean handler(TaskInfo taskInfo)  {
         WxCpDefaultConfigImpl account = accountUtils.getAccount(taskInfo.getSendAccount(), ENTERPRISE_WECHAT_ACCOUNT_KEY, PREFIX, new WxCpDefaultConfigImpl());
-        WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(initService(account));
-        WxCpMessageSendResult result = wxCpMessageService.send(buildWxCpMessage(taskInfo, account.getAgentId()));
+        WxCpMessageSendResult result = null;
+        try {
+            WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(initService(account));
+            result = wxCpMessageService.send(buildWxCpMessage(taskInfo, account.getAgentId()));
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        }
         buildAnchorState(result);
         return true;
     }

@@ -32,7 +32,7 @@ public class SmsHandler extends BaseHandler implements Handler {
     private SmsRecordMapper smsRecordMapper;
 
     @Autowired
-    private SmsService smsScript;
+    private SmsService smsService;
 
 
     public SmsHandler() {
@@ -51,7 +51,7 @@ public class SmsHandler extends BaseHandler implements Handler {
                 .sendAccount(taskInfo.getSendAccount())
                 .build();
         try {
-            List<SmsRecordEntity> recordEntityList = smsScript.send(build);
+            List<SmsRecordEntity> recordEntityList = smsService.send(build);
 
             if (CollUtil.isNotEmpty(recordEntityList)) {
                 smsRecordMapper.saveAll(recordEntityList);

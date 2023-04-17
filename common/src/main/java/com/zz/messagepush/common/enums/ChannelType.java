@@ -22,6 +22,8 @@ public enum ChannelType {
     MINI_PROGRAM(60, "miniProgram(小程序)", MiniProgramContentModel.class, "mini_program"),
 
     ENTERPRISE_WE_CHAT(70, "enterpriseWeChat(企业微信)", EnterpriseWeChatContentModel.class, "enterprise_we_chat"),
+
+    DING_DING_ROBOT(80,"ding_dingRobot(钉钉机器人)",DingDingContentModel.class,"ding_ding_robot")
     ;
 
     private Integer code;
