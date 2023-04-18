@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
 /**
  * @Description 参数校验
@@ -20,7 +21,8 @@ import org.springframework.kafka.core.KafkaTemplate;
  */
 
 @Slf4j
-public class SendMqAction implements BusinessProcess {
+@Service
+public class SendMqAction implements BusinessProcess<SendTaskModel> {
 
     @Autowired
     private KafkaTemplate kafkaTemplate;
@@ -29,8 +31,8 @@ public class SendMqAction implements BusinessProcess {
     private String topicName;
 
     @Override
-    public void process(ProcessContext context) {
-        SendTaskModel processModel = (SendTaskModel) context.getProcessModel();
+    public void process(ProcessContext<SendTaskModel> context) {
+        SendTaskModel processModel = context.getProcessModel();
 
         try {
             kafkaTemplate.send(topicName, JSON.toJSONString(processModel.getTaskInfo(), SerializerFeature.WriteClassName));

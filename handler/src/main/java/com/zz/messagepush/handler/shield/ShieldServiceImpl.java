@@ -10,6 +10,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -64,6 +65,6 @@ public class ShieldServiceImpl implements ShieldService {
      * @return
      */
     private boolean isNight() {
-        return Integer.parseInt(DateFormatUtils.format(new Date(), "HH")) < 8;
+        return LocalDateTime.now().getHour() < 8;
     }
 }

@@ -3,10 +3,13 @@ package com.zz.messagepush.handler.handler.impl;
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
+import com.google.common.util.concurrent.RateLimiter;
 import com.sun.mail.util.MailSSLSocketFactory;
 import com.zz.messagepush.common.domain.dto.model.EmailContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
+import com.zz.messagepush.handler.enums.RateLimitStrategy;
+import com.zz.messagepush.handler.flowcontrol.FlowControlParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.support.utils.AccountUtils;
@@ -36,6 +39,12 @@ public class EmailHandler extends BaseHandler implements Handler {
 
     public EmailHandler() {
         channelCode = ChannelType.EMAIL.getCode();
+
+        double rateInitValue = 3;
+        flowControlParam = FlowControlParam.builder().rateInitValue(rateInitValue)
+                .rateLimitStrategy(RateLimitStrategy.REQUEST_RATE_LIMIT)
+                .rateLimiter(RateLimiter.create(rateInitValue)).build();
+
     }
 
 

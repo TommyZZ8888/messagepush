@@ -14,6 +14,7 @@ import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
 import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,13 +27,14 @@ import java.util.stream.Collectors;
  * @Date Created on 2023/3/21
  */
 @Slf4j
-public class AfterParamCheckAction implements BusinessProcess {
+@Service
+public class AfterParamCheckAction implements BusinessProcess<SendTaskModel> {
 
     public static final String PHONE_REGEX_EXP = "^((13[0-9])|(14[5,7,9])|(15[0-3,5-9])|(166)|(17[0-9])|(18[0-9])|(19[1,8,9]))\\d{8}$";
 
     @Override
-    public void process(ProcessContext context) {
-        SendTaskModel processModel = (SendTaskModel) context.getProcessModel();
+    public void process(ProcessContext<SendTaskModel> context) {
+        SendTaskModel processModel = context.getProcessModel();
         List<TaskInfo> taskInfo = processModel.getTaskInfo();
 
         filterIllegalPhoneNum(taskInfo);

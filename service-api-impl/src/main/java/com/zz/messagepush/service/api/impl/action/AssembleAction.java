@@ -18,7 +18,9 @@ import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessContext;
 import com.zz.messagepush.support.utils.ContentHolderUtil;
 import com.zz.messagepush.support.utils.TaskInfoUtils;
+import org.apache.kafka.common.network.Send;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -28,14 +30,16 @@ import java.util.*;
  * @Author 张卫刚
  * @Date Created on 2023/3/16
  */
-public class AssembleAction implements BusinessProcess {
+
+@Service
+public class AssembleAction implements BusinessProcess<SendTaskModel> {
 
     @Autowired
     private MessageTemplateMapper messageTemplateMapper;
 
     @Override
-    public void process(ProcessContext context) {
-        SendTaskModel processModel = (SendTaskModel) context.getProcessModel();
+    public void process(ProcessContext<SendTaskModel> context) {
+        SendTaskModel processModel =  context.getProcessModel();
         Long messageTemplateId = processModel.getMessageTemplateId();
 
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(messageTemplateId).orElse(null);

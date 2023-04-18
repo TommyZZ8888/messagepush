@@ -8,6 +8,7 @@ import com.zz.messagepush.service.api.domain.dto.MessageParam;
 import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
 import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessContext;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
  * @Author 张卫刚
  * @Date Created on 2023/3/16
  */
-public class PreParamCheckAction implements BusinessProcess {
+
+@Service
+public class PreParamCheckAction implements BusinessProcess<SendTaskModel> {
     @Override
-    public void process(ProcessContext context) {
-        SendTaskModel processModel = (SendTaskModel) context.getProcessModel();
+    public void process(ProcessContext<SendTaskModel> context) {
+        SendTaskModel processModel =  context.getProcessModel();
 
         Long messageTemplateId = processModel.getMessageTemplateId();
         List<MessageParam> messageParamList = processModel.getMessageParamList();

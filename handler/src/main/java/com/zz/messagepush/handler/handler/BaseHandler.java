@@ -4,6 +4,8 @@ package com.zz.messagepush.handler.handler;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
+import com.zz.messagepush.handler.flowcontrol.FlowControlParam;
+import com.zz.messagepush.handler.flowcontrol.FlowControlService;
 import com.zz.messagepush.support.utils.LogUtils;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,11 @@ public abstract class BaseHandler implements Handler {
     @Autowired
     private HandlerHolder handlerHolder;
 
+    protected FlowControlParam flowControlParam;
+
+    @Autowired
+    private FlowControlService flowControlService;
+
     /**
      * 初始化渠道和handler的映射关系
      */
@@ -47,6 +54,12 @@ public abstract class BaseHandler implements Handler {
             return;
         }
         LogUtils.print(AnchorInfo.builder().state(AnchorStateEnum.SEND_FAIL.getCode()).businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).build());
+    }
+
+    public void flowControl(TaskInfo taskInfo){
+        if (flowControlParam!=null){
+            flowControlService.flowControl(taskInfo,flowControlParam);
+        }
     }
 
     /**

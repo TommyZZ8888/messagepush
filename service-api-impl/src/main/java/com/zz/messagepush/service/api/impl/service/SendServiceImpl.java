@@ -2,7 +2,6 @@ package com.zz.messagepush.service.api.impl.service;
 
 import cn.monitor4all.logRecord.annotation.OperationLog;
 import com.zz.messagepush.common.domain.ResponseResult;
-import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.service.api.domain.SendResponse;
 import com.zz.messagepush.service.api.domain.dto.BatchSendRequest;
 import com.zz.messagepush.service.api.domain.dto.SendRequest;
@@ -10,10 +9,10 @@ import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
 import com.zz.messagepush.service.api.service.SendService;
 import com.zz.messagepush.support.pipeline.ProcessContext;
 import com.zz.messagepush.support.pipeline.ProcessHandler;
+import com.zz.messagepush.support.pipeline.ProcessModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 

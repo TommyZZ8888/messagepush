@@ -2,6 +2,7 @@ package com.zz.messagepush.support.exception;
 
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.support.pipeline.ProcessContext;
+import com.zz.messagepush.support.pipeline.ProcessModel;
 
 /**
  * @Description 流程处理异常
@@ -12,14 +13,14 @@ public class ProcessException extends RuntimeException {
 
 
     private static final long serialVersionUID = -7560562065369525659L;
-    private final ProcessContext processContext;
+    private final ProcessContext<ProcessModel> processContext;
 
-    public ProcessException(ProcessContext processContext) {
+    public ProcessException(ProcessContext<ProcessModel> processContext) {
         super();
         this.processContext = processContext;
     }
 
-    public ProcessException(ProcessContext processContext, Throwable cause) {
+    public ProcessException(ProcessContext<ProcessModel> processContext, Throwable cause) {
         super(cause);
         this.processContext = processContext;
     }
@@ -33,7 +34,7 @@ public class ProcessException extends RuntimeException {
         }
     }
 
-    public ProcessContext getProcessContext() {
+    public ProcessContext<ProcessModel> getProcessContext() {
         return processContext;
     }
 }

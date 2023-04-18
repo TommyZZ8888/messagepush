@@ -8,13 +8,12 @@ import com.zz.messagepush.service.api.impl.action.SendMqAction;
 import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessHandler;
 import com.zz.messagepush.support.pipeline.ProcessTemplate;
+import org.apache.kafka.common.network.Send;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description
@@ -26,6 +25,18 @@ import java.util.Map;
 public class PipelineConfig {
 
 
+    @Autowired
+    private PreParamCheckAction preParamCheckAction;
+
+    @Autowired
+    private AssembleAction assembleAction;
+
+    @Autowired
+    private SendMqAction sendMqAction;
+
+    @Autowired
+    private AfterParamCheckAction afterParamCheckAction;
+
     /**
      * 普通发送执行流程
      * 1.参数校验
@@ -35,14 +46,8 @@ public class PipelineConfig {
     @Bean("commonSendTemplate")
     public ProcessTemplate commonSendTemplate() {
         ProcessTemplate processTemplate = new ProcessTemplate();
-        List<BusinessProcess> processList = new ArrayList<>();
 
-        processList.add(preParamCheckAction());
-        processList.add(assembleAction());
-        processList.add(sendMqAction());
-        processList.add(afterParamCheckAction());
-
-        processTemplate.setProcessList(processList);
+        processTemplate.setProcessList(Arrays.asList(preParamCheckAction, assembleAction, sendMqAction, afterParamCheckAction));
         return processTemplate;
     }
 
@@ -60,35 +65,4 @@ public class PipelineConfig {
         processHandler.setTemplateConfig(map);
         return processHandler;
     }
-
-
-    /**
-     * 组装参数的action
-     */
-    @Bean
-    public AssembleAction assembleAction() {
-        return new AssembleAction();
-    }
-
-    /**
-     * 参数校验 action
-     */
-    @Bean
-    public PreParamCheckAction preParamCheckAction() {
-        return new PreParamCheckAction();
-    }
-
-    /**
-     * 发送消息至MQ的action
-     */
-    @Bean
-    public SendMqAction sendMqAction() {
-        return new SendMqAction();
-    }
-
-    @Bean
-    public AfterParamCheckAction afterParamCheckAction() {
-        return new AfterParamCheckAction();
-    }
-
 }
