@@ -1,5 +1,6 @@
 package com.zz.messagepush.common.domain.dto;
 
+import com.zz.messagepush.common.domain.dto.model.ContentModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

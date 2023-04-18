@@ -8,19 +8,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.twitter.chill.Base64;
 import com.zz.messagepush.common.constant.AustinConstant;
-import com.zz.messagepush.common.domain.dto.DingDingContentModel;
+import com.zz.messagepush.common.domain.dto.model.DingDingContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
-import com.zz.messagepush.handler.domain.dingding.DingDingRobotAccount;
+import com.zz.messagepush.common.domain.dto.account.DingDingRobotAccount;
 import com.zz.messagepush.handler.domain.dingding.DingDingRobotResult;
 import com.zz.messagepush.handler.domain.dto.DingDingRobotParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
-import com.zz.messagepush.handler.utils.AccountUtils;
+import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -28,7 +27,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.text.CollationElementIterator;
 import java.util.ArrayList;
 
 /**

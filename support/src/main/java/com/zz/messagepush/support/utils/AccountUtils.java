@@ -1,4 +1,4 @@
-package com.zz.messagepush.handler.utils;
+package com.zz.messagepush.support.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

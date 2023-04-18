@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
-import com.zz.messagepush.common.domain.dto.SmsContentModel;
+import com.zz.messagepush.common.domain.dto.model.SmsContentModel;
 import com.zz.messagepush.common.domain.dto.SmsParam;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;

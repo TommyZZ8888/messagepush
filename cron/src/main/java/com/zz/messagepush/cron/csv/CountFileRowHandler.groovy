@@ -11,17 +11,17 @@ import lombok.Data
  */
 
 @Data
-public class CountFileRowHandler implements CsvRowHandler {
+class CountFileRowHandler implements CsvRowHandler {
 
-    private Long rowSize;
+    private Long rowSize
 
     @Override
-    public void handle(CsvRow csvRow) {
-        rowSize++;
+    void handle(CsvRow csvRow) {
+        rowSize++
     }
 
-    public Long getCsvRowCount() {
-        return rowSize;
+    Long getCsvRowCount() {
+        return rowSize
     }
 
 }

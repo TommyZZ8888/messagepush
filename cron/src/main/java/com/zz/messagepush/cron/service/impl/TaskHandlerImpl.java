@@ -4,12 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.utils.ApplicationContextUtil;
-import com.zz.messagepush.cron.constant.PendingConstant;
 import com.zz.messagepush.cron.csv.CountFileRowHandler;
 import com.zz.messagepush.cron.domain.vo.CrowdInfoVO;
 import com.zz.messagepush.cron.pending.AbstractLazyPending;
 import com.zz.messagepush.cron.pending.CrowdBatchTaskPending;
-import com.zz.messagepush.cron.pending.PendingParam;
 import com.zz.messagepush.cron.service.TaskHandler;
 import com.zz.messagepush.cron.utils.ReadFileUtils;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
@@ -18,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @Description

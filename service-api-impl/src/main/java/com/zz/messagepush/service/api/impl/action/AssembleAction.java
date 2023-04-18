@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
-import com.zz.messagepush.common.domain.dto.ContentModel;
+import com.zz.messagepush.common.domain.dto.model.ContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.enums.RespStatusEnum;

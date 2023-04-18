@@ -1,4 +1,4 @@
-package com.zz.messagepush.handler.domain.dto;
+package com.zz.messagepush.common.domain.dto.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OfficialAccountParam {
+public class WechatOfficialAccount {
 
     /**
      * 用户关注的服务号id

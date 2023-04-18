@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain.dto;
+package com.zz.messagepush.common.domain.dto.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -2,7 +2,7 @@ package com.zz.messagepush.handler.handler.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
-import com.zz.messagepush.common.domain.dto.OfficialAccountContentModel;
+import com.zz.messagepush.common.domain.dto.model.OfficialAccountContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;

@@ -1,4 +1,4 @@
-package com.zz.messagepush.handler.domain;
+package com.zz.messagepush.common.domain.dto.account;
 
 /**
  * @Description * 腾讯短信参数

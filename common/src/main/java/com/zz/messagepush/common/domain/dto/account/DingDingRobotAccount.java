@@ -1,4 +1,4 @@
-package com.zz.messagepush.handler.domain.dingding;
+package com.zz.messagepush.common.domain.dto.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

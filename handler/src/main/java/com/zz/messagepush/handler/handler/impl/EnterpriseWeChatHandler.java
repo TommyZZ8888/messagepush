@@ -1,12 +1,12 @@
 package com.zz.messagepush.handler.handler.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.zz.messagepush.common.domain.dto.EnterpriseWeChatContentModel;
+import com.zz.messagepush.common.domain.dto.model.EnterpriseWeChatContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
-import com.zz.messagepush.handler.utils.AccountUtils;
+import com.zz.messagepush.support.utils.AccountUtils;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.api.impl.WxCpMessageServiceImpl;
@@ -15,7 +15,6 @@ import me.chanjar.weixin.cp.bean.message.WxCpMessage;
 import me.chanjar.weixin.cp.bean.message.WxCpMessageSendResult;
 import me.chanjar.weixin.cp.config.impl.WxCpDefaultConfigImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

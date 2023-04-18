@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain.dto;
+package com.zz.messagepush.common.domain.dto.model;
 
 /**
  * @Description 发送内容的模型（不同渠道不同的消息体）
