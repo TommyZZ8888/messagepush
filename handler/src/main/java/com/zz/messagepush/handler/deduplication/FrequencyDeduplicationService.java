@@ -3,6 +3,8 @@ package com.zz.messagepush.handler.deduplication;
 import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.DeduplicationType;
+import com.zz.messagepush.handler.deduplication.limit.LimitService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,7 +19,8 @@ public class FrequencyDeduplicationService extends AbstractDeduplicationService 
 
     private static final String PREFIX = "FRE";
 
-    public FrequencyDeduplicationService() {
+    public FrequencyDeduplicationService(@Qualifier("SimpleLimitService")LimitService limitService) {
+        this.limitService = limitService;
         deduplicationType = DeduplicationType.FREQUENCY.getCode();
     }
 
@@ -31,7 +34,7 @@ public class FrequencyDeduplicationService extends AbstractDeduplicationService 
      * @return
      */
     @Override
-    protected String deduplicationSingleKey(TaskInfo taskInfo, String receiver) {
+    public String deduplicationSingleKey(TaskInfo taskInfo, String receiver) {
         return PREFIX + StrUtil.C_UNDERLINE
                 + receiver + StrUtil.C_UNDERLINE
                 + taskInfo.getMessageTemplateId() + StrUtil.C_UNDERLINE

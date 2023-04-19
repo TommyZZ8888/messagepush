@@ -2,10 +2,12 @@ package com.zz.messagepush.support.utils;
 
 import cn.hutool.core.collection.CollUtil;
 import com.google.common.base.Throwables;
+import com.zz.messagepush.common.constant.AustinConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -84,6 +86,7 @@ public class RedisUtil {
 
     /**
      * lpush并设置过期时间
+     *
      * @param key
      * @param value
      * @param second
@@ -158,7 +161,20 @@ public class RedisUtil {
         } catch (Exception e) {
             log.error("redis pipelineHashIncr fail :{}", Throwables.getStackTraceAsString(e));
         }
+    }
 
+
+    public Boolean execLimitLua(RedisScript<Long> redisScript, List<String> keys, String... args) {
+        try {
+            Long execute = redisTemplate.execute(redisScript, keys, args);
+            if (execute == null) {
+                return false;
+            }
+            return AustinConstant.TRUE.equals(execute.intValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
