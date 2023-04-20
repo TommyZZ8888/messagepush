@@ -1,5 +1,6 @@
 package com.zz.messagepush.handler.handler.impl;
 
+import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.domain.dto.account.DingDingWorkNoticeAccount;
 import com.zz.messagepush.common.enums.ChannelType;
@@ -15,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
 
-    private final static String DING_DING_NOTICE_ACCOUNT_KEY = "dingDingNoticeAccount";
-    private final static String PREFIX = "ding_ding_notice_account_";
-
     @Autowired
     private AccountUtils accountUtils;
 
@@ -29,7 +27,7 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
     @Override
     public boolean handler(TaskInfo taskInfo) {
 
-        DingDingWorkNoticeAccount account = accountUtils.getAccount(10, DING_DING_NOTICE_ACCOUNT_KEY, PREFIX, new DingDingWorkNoticeAccount());
+        DingDingWorkNoticeAccount account = accountUtils.getAccount(10, SendAccountConstant.DING_DING_WORK_NOTICE_ACCOUNT_KEY, SendAccountConstant.DING_DING_WORK_NOTICE_PREFIX, DingDingWorkNoticeAccount.class);
         return false;
     }
 }

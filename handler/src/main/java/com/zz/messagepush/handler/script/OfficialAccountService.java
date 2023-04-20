@@ -1,7 +1,7 @@
 package com.zz.messagepush.handler.script;
 
+import com.zz.messagepush.handler.domain.wechat.WeChatOfficialParam;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ public interface OfficialAccountService {
 
     /**
      * 发送模板消息
-     * @param wxMpTemplateMessages
+     * @param weChatOfficialParam 模板消息参数
      * @return
      */
-    List<String> send(List<WxMpTemplateMessage> wxMpTemplateMessages) throws WxErrorException;
+    List<String> send(WeChatOfficialParam weChatOfficialParam) throws Exception;
 }

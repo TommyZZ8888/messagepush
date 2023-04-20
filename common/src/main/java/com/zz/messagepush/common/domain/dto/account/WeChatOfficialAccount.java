@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 /**
  * @Description 模板消息参数
  * 参数示例：
@@ -19,12 +17,12 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WechatOfficialAccount {
+public class WeChatOfficialAccount {
 
     /**
      * 用户关注的服务号id
      */
-    private String openId;
+    private String secret;
 
     /**
      * 消息模板id
@@ -37,9 +35,9 @@ public class WechatOfficialAccount {
     private String url;
 
     /**
-     * 接收消息的载体
+     * 模板消息跳转的小程序id
      */
-    private Map<String,String> map;
+    private String miniProgramId;
 
     /**
      * 消息跳转的页面路径

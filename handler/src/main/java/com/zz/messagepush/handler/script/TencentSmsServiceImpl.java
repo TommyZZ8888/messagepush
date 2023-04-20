@@ -44,7 +44,7 @@ public class TencentSmsServiceImpl implements SmsService {
 
     @Override
     public List<SmsRecordEntity> send(SmsParam smsParam) throws Exception {
-        TencentSmsParam tencentSmsParam = accountUtils.getAccount(smsParam.getSendAccount(), SMS_ACCOUNT_KEY, PREFIX, TencentSmsParam.builder().build());
+        TencentSmsParam tencentSmsParam = accountUtils.getAccount(smsParam.getSendAccount(), SMS_ACCOUNT_KEY, PREFIX, TencentSmsParam.class);
         SmsClient client = init(tencentSmsParam);
         SendSmsRequest request = assembleReq(smsParam, tencentSmsParam);
         SendSmsResponse response = client.SendSms(request);

@@ -1,6 +1,7 @@
 package com.zz.messagepush.handler.handler.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.model.EnterpriseWeChatContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
@@ -30,12 +31,6 @@ public class EnterpriseWeChatHandler extends BaseHandler implements Handler {
     private static final String ALL = "@all";
     private static final String DELIMITER = "|";
 
-    /**
-     * 账号信息
-     */
-    private static final String ENTERPRISE_WECHAT_ACCOUNT_KEY = "enterprise_wechat_account_key";
-    private static final String PREFIX = "enterprise_wechat_";
-
     @Autowired
     private AccountUtils accountUtils;
 
@@ -46,7 +41,7 @@ public class EnterpriseWeChatHandler extends BaseHandler implements Handler {
 
     @Override
     public boolean handler(TaskInfo taskInfo)  {
-        WxCpDefaultConfigImpl account = accountUtils.getAccount(taskInfo.getSendAccount(), ENTERPRISE_WECHAT_ACCOUNT_KEY, PREFIX, new WxCpDefaultConfigImpl());
+        WxCpDefaultConfigImpl account = accountUtils.getAccount(taskInfo.getSendAccount(), SendAccountConstant.ENTERPRISE_WECHAT_ACCOUNT_KEY, SendAccountConstant.ENTERPRISE_WECHAT_PREFIX, WxCpDefaultConfigImpl.class);
         WxCpMessageSendResult result = null;
         try {
             WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(initService(account));

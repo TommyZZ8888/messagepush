@@ -5,6 +5,7 @@ import cn.hutool.extra.mail.MailUtil;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.google.common.util.concurrent.RateLimiter;
 import com.sun.mail.util.MailSSLSocketFactory;
+import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.model.EmailContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
@@ -29,10 +30,6 @@ import java.security.GeneralSecurityException;
 @Slf4j
 public class EmailHandler extends BaseHandler implements Handler {
 
-
-    private static final String EMAIL_ACCOUNT_KEY = "emailAccount";
-    private static final String PREFIX = "email_";
-
     @Autowired
     private AccountUtils accountUtils;
 
@@ -44,7 +41,6 @@ public class EmailHandler extends BaseHandler implements Handler {
         flowControlParam = FlowControlParam.builder().rateInitValue(rateInitValue)
                 .rateLimitStrategy(RateLimitStrategy.REQUEST_RATE_LIMIT)
                 .rateLimiter(RateLimiter.create(rateInitValue)).build();
-
     }
 
 
@@ -63,7 +59,7 @@ public class EmailHandler extends BaseHandler implements Handler {
     }
 
     private MailAccount getAccountConfig(Integer sendAccount) {
-        MailAccount account = accountUtils.getAccount(sendAccount, EMAIL_ACCOUNT_KEY, PREFIX, new MailAccount());
+        MailAccount account = accountUtils.getAccount(sendAccount, SendAccountConstant.EMAIL_ACCOUNT_KEY, SendAccountConstant.EMAIL_PREFIX, MailAccount.class);
 
         try {
             account.setHost("smtp.qq.com").setPort(465);

@@ -40,7 +40,7 @@ public class RefreshDingDingAccessTokenHandler {
     public void execute() {
         SupportThreadPoolConfig.getPendingSingleThreadPool().execute(() -> {
             for (int i = 10; i < 1000; i = i + 10) {
-                DingDingWorkNoticeAccount account = accountUtils.getAccount(10, DING_DING_ROBOT_ACCOUNT_KEY, PREFIX, new DingDingWorkNoticeAccount());
+                DingDingWorkNoticeAccount account = accountUtils.getAccount(10, DING_DING_ROBOT_ACCOUNT_KEY, PREFIX, DingDingWorkNoticeAccount.class);
                 if (account == null) {
                     break;
                 }

@@ -8,12 +8,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.twitter.chill.Base64;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.model.DingDingContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.domain.dto.account.DingDingRobotAccount;
 import com.zz.messagepush.handler.domain.dingding.DingDingRobotResult;
-import com.zz.messagepush.handler.domain.dto.DingDingRobotParam;
+import com.zz.messagepush.handler.domain.dingding.DingDingRobotParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.support.utils.AccountUtils;
@@ -42,16 +43,12 @@ public class DingDingRobotHandler extends BaseHandler implements Handler {
         channelCode = ChannelType.DING_DING_ROBOT.getCode();
     }
 
-    private static final String DING_DING_ROBOT_ACCOUNT_KEY = "dingDingRobotAccount";
-
-    private static final String PREFIX = "ding_ding_robot_";
-
     @Autowired
     private AccountUtils accountUtils;
 
     @Override
     public boolean handler(TaskInfo taskInfo) {
-        DingDingRobotAccount account = accountUtils.getAccount(taskInfo.getSendAccount(), DING_DING_ROBOT_ACCOUNT_KEY, PREFIX, new DingDingRobotAccount());
+        DingDingRobotAccount account = accountUtils.getAccount(taskInfo.getSendAccount(), SendAccountConstant.DING_DING_ROBOT_ACCOUNT_KEY, SendAccountConstant.DING_DING_ROBOT_PREFIX, DingDingRobotAccount.class);
         DingDingRobotParam dingRobotParam = assemblyParam(taskInfo);
         String post = HttpUtil.post(assemblyParamUrl(account), JSONObject.toJSONString(dingRobotParam));
         DingDingRobotResult dingDingRobotResult = JSON.parseObject(post, DingDingRobotResult.class);

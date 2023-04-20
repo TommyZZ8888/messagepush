@@ -5,6 +5,7 @@ import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.zz.messagepush.common.domain.dto.model.OfficialAccountContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
+import com.zz.messagepush.handler.domain.wechat.WeChatOfficialParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.OfficialAccountService;
@@ -40,11 +41,18 @@ public class OfficialAccountHandler extends BaseHandler implements Handler {
 
     @Override
     public boolean handler(TaskInfo taskInfo) {
-        List<WxMpTemplateMessage> wxMpTemplateMessages = buildTemplateMsg(taskInfo);
+        // 构建微信模板消息
+        OfficialAccountContentModel contentModel = (OfficialAccountContentModel) taskInfo.getContentModel();
+        WeChatOfficialParam officialParam = WeChatOfficialParam.builder()
+                .openIds(taskInfo.getReceiver())
+                .messageTemplateId(taskInfo.getMessageTemplateId())
+                .sendAccount(taskInfo.getSendAccount())
+                .data(contentModel.getMap())
+                .build();
 
         try {
-            officialAccountScript.send(wxMpTemplateMessages);
-            log.info("OfficialAccountHandler#handler successfully messageIds:{}", wxMpTemplateMessages);
+            List<String> send = officialAccountScript.send(officialParam);
+            log.info("OfficialAccountHandler#handler successfully messageIds:{}", send);
             return true;
         } catch (Exception e) {
             log.error("OfficialAccountHandler#handler fail:{},params:{}",
@@ -60,7 +68,7 @@ public class OfficialAccountHandler extends BaseHandler implements Handler {
      * @param taskInfo
      * @return
      */
-    private List<WxMpTemplateMessage> buildTemplateMsg(TaskInfo taskInfo) {
+   /** private List<WxMpTemplateMessage> buildTemplateMsg(TaskInfo taskInfo) {
         Set<String> receiver = taskInfo.getReceiver();
         Long messageTemplateId = taskInfo.getMessageTemplateId();
         OfficialAccountContentModel contentModel = (OfficialAccountContentModel) taskInfo.getContentModel();
@@ -79,5 +87,5 @@ public class OfficialAccountHandler extends BaseHandler implements Handler {
             list.add(wxMpTemplateMessage);
         }
         return list;
-    }
+    }*/
 }
