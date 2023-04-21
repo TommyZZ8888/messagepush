@@ -36,5 +36,12 @@ public class SendAccountConstant {
      * 微信服务号
      */
     public static final String WECHAT_OFFICIAL_ACCOUNT_KEY = "officialAccount";
-    public static final String WECHAT_OFFICIAL__PREFIX = "official_";
+    public static final String WECHAT_OFFICIAL_PREFIX = "official_";
+
+    /**
+     * 微信小程序
+     */
+    public static final String WECHAT_MINI_PROGRAM_ACCOUNT_KEY = "miniProgramAccount";
+    public static final String WECHAT_MINI_PROGRAM_PREFIX = "mini_program_";
+
 }

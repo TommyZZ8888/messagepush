@@ -1,5 +1,6 @@
-package com.zz.messagepush.handler.script;
+package com.zz.messagepush.handler.script.impl;
 
+import com.zz.messagepush.handler.script.EnterpriseWeChatService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;
