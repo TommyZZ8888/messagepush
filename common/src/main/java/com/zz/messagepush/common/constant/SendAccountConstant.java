@@ -8,6 +8,10 @@ package com.zz.messagepush.common.constant;
  */
 public class SendAccountConstant {
 
+
+    public static final Integer START = 10;
+    public static final Integer STEP = 10;
+
     /**
      * 钉钉自定义机器人
      */
@@ -43,5 +47,13 @@ public class SendAccountConstant {
      */
     public static final String WECHAT_MINI_PROGRAM_ACCOUNT_KEY = "miniProgramAccount";
     public static final String WECHAT_MINI_PROGRAM_PREFIX = "mini_program_";
+
+
+    /**
+     * 个推
+     */
+    public static final String GE_TUI_ACCOUNT_KEY = "geTuiAccount";
+    public static final String GE_TUI_ACCOUNT_PREFIX = "ge_tui_account_";
+    public static final String GE_TUI_ACCESS_TOKEN_PREFIX = "ge_tui_access_token_";
 
 }
