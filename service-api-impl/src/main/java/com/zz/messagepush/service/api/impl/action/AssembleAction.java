@@ -2,6 +2,7 @@ package com.zz.messagepush.service.api.impl.action;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.messagepush.common.constant.AustinConstant;
@@ -88,7 +89,7 @@ public class AssembleAction implements BusinessProcess<SendTaskModel> {
 
             if (StrUtil.isNotBlank(originValue)) {
                 String resultValue = ContentHolderUtil.replaceHolder(originValue, variables);
-                Object object = JSON.parseObject(resultValue, field.getType());
+                Object object = JSONUtil.isTypeJSONObject(resultValue)?JSONUtil.toBean(resultValue,field.getType()):resultValue;
                 ReflectUtil.setFieldValue(contentModel, field, object);
             }
         }

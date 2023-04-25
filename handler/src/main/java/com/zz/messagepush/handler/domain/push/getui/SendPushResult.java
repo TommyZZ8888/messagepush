@@ -1,4 +1,4 @@
-package com.zz.messagepush.handler.domain.getui;
+package com.zz.messagepush.handler.domain.push.getui;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
