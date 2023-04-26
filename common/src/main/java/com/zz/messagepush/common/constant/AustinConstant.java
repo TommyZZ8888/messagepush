@@ -49,4 +49,10 @@ public class AustinConstant {
      */
     public static final String CHARSET_NAME = "UTF-8";
 
+    /**
+     * http 请求方法
+     */
+    public static final String REQUEST_METHOD_GET = "get";
+    public static final String REQUEST_METHOD_POST = "post";
+
 }

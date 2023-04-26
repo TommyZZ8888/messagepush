@@ -19,7 +19,9 @@ public enum IdType {
 
     ENTERPRISE_USER_ID(60,"enterprise_user_id"),
 
-    DING_DING_USER_ID(70,"ding_ding_user_id")
+    DING_DING_USER_ID(70,"ding_ding_user_id"),
+
+    CID(80,"cid"),
     ;
 
     private Integer code;

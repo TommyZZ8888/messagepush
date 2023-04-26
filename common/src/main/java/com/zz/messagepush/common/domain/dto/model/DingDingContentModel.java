@@ -15,7 +15,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DingDingContentModel extends ContentModel{
+public class DingDingContentModel extends ContentModel {
 
+    /**
+     * 发送类型
+     */
+    private String sendType;
+
+    /**
+     * 文本消息 需要发送的内容
+     */
     private String content;
+
+    /**
+     * 图片文本语音消息，需要发送使用的素材字段
+     */
+    private String mediaId;
+
 }

@@ -20,7 +20,7 @@ public class EnterpriseWeChatContentModel extends ContentModel {
     /**
      * 下发企业微信的消息类型
      */
-    private String messageType;
+    private String sendType;
 
     /**
      * 文案
