@@ -11,12 +11,18 @@ import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.enums.SimpleAnchorInfo;
+import com.zz.messagepush.common.enums.SmsStatus;
+import com.zz.messagepush.common.utils.EnumUtil;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
+import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.MessageTemplateMapper;
+import com.zz.messagepush.support.mapper.SmsRecordMapper;
 import com.zz.messagepush.support.utils.RedisUtil;
 import com.zz.messagepush.support.utils.TaskInfoUtils;
 import com.zz.messagepush.web.constant.AmisVoConstant;
+import com.zz.messagepush.web.domain.vo.DataParamVO;
 import com.zz.messagepush.web.domain.vo.amis.EchartsVO;
+import com.zz.messagepush.web.domain.vo.amis.SmsTimeLineVO;
 import com.zz.messagepush.web.domain.vo.amis.UserTimeLineVO;
 import com.zz.messagepush.web.service.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +44,9 @@ public class DataServiceImpl implements DataService {
 
     @Autowired
     private MessageTemplateMapper messageTemplateMapper;
+
+    @Autowired
+    private SmsRecordMapper smsRecordMapper;
 
 
     @Override
@@ -121,6 +130,38 @@ public class DataServiceImpl implements DataService {
                 .yAxis(EchartsVO.YAxisVO.builder().build())
                 .tooltip(EchartsVO.ToolTipVO.builder().build())
                 .build();
+    }
+
+    @Override
+    public SmsTimeLineVO getTraceSmsInfo(DataParamVO dataParamVO) {
+        List<SmsTimeLineVO.ItemsVO> itemsVOS = new ArrayList<>();
+        SmsTimeLineVO smsTimeLineVO = SmsTimeLineVO.builder().items(itemsVOS).build();
+        Integer sendDate = Integer.valueOf(DateUtil.format(new Date(dataParamVO.getDateTime() * 1000L), DatePattern.PURE_DATE_PATTERN));
+        List<SmsRecordEntity> smsRecordEntityList = smsRecordMapper.findByPhoneAndSendDate(Long.valueOf(String.valueOf(dataParamVO.getReceiver())), sendDate);
+        if (CollUtil.isEmpty(smsRecordEntityList)) {
+            return smsTimeLineVO;
+        }
+
+        Map<String, List<SmsRecordEntity>> map = smsRecordEntityList.stream().collect(Collectors.groupingBy(o -> o.getPhone() + o.getSeriesId()));
+        for (Map.Entry<String, List<SmsRecordEntity>> entry : map.entrySet()) {
+            SmsTimeLineVO.ItemsVO itemsVO = SmsTimeLineVO.ItemsVO.builder().build();
+            for (SmsRecordEntity smsRecord : entry.getValue()) {
+                // 发送记录 messageTemplateId >0 ,回执记录 messageTemplateId =0
+                if (smsRecord.getMessageTemplateId() > 0) {
+                    itemsVO.setBusinessId(String.valueOf(smsRecord.getMessageTemplateId()));
+                    itemsVO.setContent(smsRecord.getMsgContent());
+                    itemsVO.setSendType(EnumUtil.getValue(SmsStatus.class, smsRecord.getStatus()));
+                    itemsVO.setSendTime(DateUtil.format(new Date(smsRecord.getCreated().getTime() * 1000L), DatePattern.NORM_DATETIME_PATTERN));
+
+                } else {
+                    itemsVO.setReceiveType(EnumUtil.getValue(SmsStatus.class, smsRecord.getStatus()));
+                    itemsVO.setReceiveContent(smsRecord.getReportContent());
+                    itemsVO.setReceiveTime(DateUtil.format(new Date(smsRecord.getUpdated().getTime() * 1000L), DatePattern.NORM_DATETIME_PATTERN));
+                }
+                itemsVOS.add(itemsVO);
+            }
+        }
+        return smsTimeLineVO;
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.zz.messagepush.web.service;
 
+import com.zz.messagepush.web.domain.vo.DataParamVO;
 import com.zz.messagepush.web.domain.vo.amis.EchartsVO;
+import com.zz.messagepush.web.domain.vo.amis.SmsTimeLineVO;
 import com.zz.messagepush.web.domain.vo.amis.UserTimeLineVO;
 
 /**
@@ -26,5 +28,12 @@ public interface DataService {
      * @return
      */
     EchartsVO getTraceMessageTemplateInfo(String businessId);
+
+    /**
+     * 获取短信下发记录
+     * @param dataParamVO
+     * @return
+     */
+    SmsTimeLineVO getTraceSmsInfo(DataParamVO dataParamVO);
 
 }

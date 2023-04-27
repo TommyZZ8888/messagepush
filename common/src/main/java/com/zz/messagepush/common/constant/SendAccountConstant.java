@@ -56,4 +56,11 @@ public class SendAccountConstant {
     public static final String GE_TUI_ACCOUNT_PREFIX = "ge_tui_account_";
     public static final String GE_TUI_ACCESS_TOKEN_PREFIX = "ge_tui_access_token_";
 
+
+    /**
+     * sms
+     */
+    public static final String SMS_ACCOUNT_KEY = "smsAccount";
+    public static final String SMS_ACCOUNT_PREFIX = "sms_account_";
+
 }

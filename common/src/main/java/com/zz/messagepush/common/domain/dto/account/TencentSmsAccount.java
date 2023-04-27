@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TencentSmsParam {
+public class TencentSmsAccount {
 
     /**
      * api相关

@@ -16,5 +16,12 @@ import java.util.List;
 public interface SmsRecordMapper extends JpaRepository<SmsRecordEntity,Long> {
 
 
+    /**
+     * 通过日期和手机号找到发送记录
+     * @param phone 手机号
+     * @param sendDate 发送日期
+     * @return list
+     */
+   List<SmsRecordEntity> findByPhoneAndSendDate(Long phone,Integer sendDate);
 
 }

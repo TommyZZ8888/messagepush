@@ -1,10 +1,11 @@
 package com.zz.messagepush.web.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.domain.ResponseResult;
+import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.support.utils.RedisUtil;
 import com.zz.messagepush.web.domain.vo.DataParamVO;
 import com.zz.messagepush.web.domain.vo.amis.EchartsVO;
+import com.zz.messagepush.web.domain.vo.amis.SmsTimeLineVO;
 import com.zz.messagepush.web.domain.vo.amis.UserTimeLineVO;
 import com.zz.messagepush.web.service.DataService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Map;
 
 /**
  * @Description 获取数据接口 == 全链路追踪
@@ -40,11 +40,12 @@ public class DataController {
      * @return
      */
     @RequestMapping(value = "/getData", method = RequestMethod.POST)
-    public ResponseResult<Boolean> getData(@RequestBody DataParamVO dataParamVO) {
-        String businessId = dataParamVO.getBusinessId();
-        Map<Object, Object> objectObjectMap = redisUtil.hGetAll(businessId);
-        log.info("data get:{}", JSON.toJSONString(objectObjectMap));
-        return ResponseResult.success();
+    public ResponseResult<SmsTimeLineVO> getData(@RequestBody DataParamVO dataParamVO) {
+        if (dataParamVO == null || dataParamVO.getDateTime() == null || dataParamVO.getReceiver() == null) {
+            return ResponseResult.success(RespStatusEnum.SUCCESS.getCode(), new SmsTimeLineVO());
+        }
+        SmsTimeLineVO smsTimeLineVo = dataService.getTraceSmsInfo(dataParamVO);
+        return ResponseResult.success(RespStatusEnum.SUCCESS.getCode(), smsTimeLineVo);
     }
 
     @RequestMapping(value = "/getUserData", method = RequestMethod.POST)
