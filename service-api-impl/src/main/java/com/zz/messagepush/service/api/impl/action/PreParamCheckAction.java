@@ -21,13 +21,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class PreParamCheckAction implements BusinessProcess<SendTaskModel> {
+
+    private static final Integer BATCH_RECEIVER_SIZE = 100;
+
     @Override
     public void process(ProcessContext<SendTaskModel> context) {
-        SendTaskModel processModel =  context.getProcessModel();
+        SendTaskModel processModel = context.getProcessModel();
 
         Long messageTemplateId = processModel.getMessageTemplateId();
         List<MessageParam> messageParamList = processModel.getMessageParamList();
 
+        //没有传入消息模板id或者messageParam
         if (messageTemplateId == null || CollUtil.isEmpty(messageParamList)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.CLIENT_BAD_PARAMETERS.getDescription()));
             return;
@@ -40,5 +44,8 @@ public class PreParamCheckAction implements BusinessProcess<SendTaskModel> {
             return;
         }
         processModel.setMessageParamList(list);
+        if (list.stream().anyMatch(messageParam -> messageParam.getReceiver().split(StrUtil.COMMA).length >= BATCH_RECEIVER_SIZE)) {
+            context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.TOO_MANY_RECEIVER.getDescription()));
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain.dto;
+package com.zz.messagepush.handler.domain.sms;
 
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +25,8 @@ public class SmsParam {
      */
     private String content;
 
-    /**
-     * 发送账号
-     */
-    private Integer sendAccount;
+//    /**
+//     * 发送账号
+//     */
+//    private Integer sendAccount;
 }

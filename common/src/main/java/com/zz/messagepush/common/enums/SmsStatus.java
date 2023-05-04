@@ -12,6 +12,8 @@ public enum SmsStatus {
     RECEIVE_SUCCESS(20,"用户收到短信(收到渠道短信回执，状态成功)"),
 
     RECEIVE_FAIL(30,"用户收不到短信(收到渠道短信回执，状态失败)"),
+
+    SEND_FAIL(40,"调用渠道接口发送失败"),
     ;
 
     private Integer code;

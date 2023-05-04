@@ -2,12 +2,8 @@ package com.zz.messagepush.service.api.impl.action;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
-import com.tencentcloudapi.tcaplusdb.v20190823.models.IdlFileInfo;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
-import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.enums.IdType;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
@@ -16,9 +12,7 @@ import com.zz.messagepush.support.pipeline.ProcessContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,14 +24,25 @@ import java.util.stream.Collectors;
 @Service
 public class AfterParamCheckAction implements BusinessProcess<SendTaskModel> {
 
+    public static final String EMAIL_REGEX_EXP = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\\\\.[a-zA-Z0-9]+";
     public static final String PHONE_REGEX_EXP = "^((13[0-9])|(14[5,7,9])|(15[0-3,5-9])|(166)|(17[0-9])|(18[0-9])|(19[1,8,9]))\\d{8}$";
+
+    private static final Map<Integer, String> CHANNEL_REGEX_EXP = new HashMap<>();
+
+    static {
+        CHANNEL_REGEX_EXP.put(IdType.PHONE.getCode(), PHONE_REGEX_EXP);
+        CHANNEL_REGEX_EXP.put(IdType.EMAIL.getCode(), EMAIL_REGEX_EXP);
+    }
 
     @Override
     public void process(ProcessContext<SendTaskModel> context) {
         SendTaskModel processModel = context.getProcessModel();
         List<TaskInfo> taskInfo = processModel.getTaskInfo();
 
-        filterIllegalPhoneNum(taskInfo);
+        /**
+         * 过滤掉不合法的手机号、邮件
+         */
+        filterIllegalReceiver(taskInfo);
 
         if (CollUtil.isEmpty(taskInfo)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.CLIENT_BAD_PARAMETERS.getDescription()));
@@ -50,24 +55,27 @@ public class AfterParamCheckAction implements BusinessProcess<SendTaskModel> {
      *
      * @param taskInfoList
      */
-    private void filterIllegalPhoneNum(List<TaskInfo> taskInfoList) {
+    private void filterIllegalReceiver(List<TaskInfo> taskInfoList) {
         Integer idType = taskInfoList.get(0).getIdType();
-        Integer sendChannel = taskInfoList.get(0).getSendChannel();
+        filter(taskInfoList, CHANNEL_REGEX_EXP.get(idType));
+    }
 
-        if (IdType.PHONE.getCode().equals(idType) && ChannelType.SMS.getCode().equals(sendChannel)) {
-            Iterator<TaskInfo> iterator = taskInfoList.iterator();
-
-            if (iterator.hasNext()) {
-                TaskInfo task = iterator.next();
-                Set<String> illegalPhone = task.getReceiver().stream().filter(phone -> !ReUtil.isMatch(PHONE_REGEX_EXP, phone)).collect(Collectors.toSet());
-
-                if (CollUtil.isNotEmpty(illegalPhone)) {
-                    task.getReceiver().removeAll(illegalPhone);
-                    log.error("{} find illegal phone!{}", task.getMessageTemplateId(), JSON.toJSONString(illegalPhone));
-                }
-                if (CollUtil.isEmpty(task.getReceiver())) {
-                    iterator.remove();
-                }
+    /**
+     * 利用正则过滤掉不合法的接收者
+     *
+     * @param taskInfoList
+     * @param regexExp
+     */
+    private void filter(List<TaskInfo> taskInfoList, String regexExp) {
+        Iterator<TaskInfo> iterator = taskInfoList.iterator();
+        while (iterator.hasNext()) {
+            TaskInfo taskInfo = iterator.next();
+            Set<String> illegalPhone = taskInfo.getReceiver().stream().filter(phone -> ReUtil.isMatch(regexExp, phone)).collect(Collectors.toSet());
+            if (CollUtil.isNotEmpty(illegalPhone)) {
+                taskInfo.getReceiver().removeAll(illegalPhone);
+            }
+            if (CollUtil.isEmpty(taskInfo.getReceiver())) {
+                iterator.remove();
             }
         }
     }

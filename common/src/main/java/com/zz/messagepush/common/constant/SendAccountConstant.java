@@ -63,4 +63,11 @@ public class SendAccountConstant {
     public static final String SMS_ACCOUNT_KEY = "smsAccount";
     public static final String SMS_ACCOUNT_PREFIX = "sms_account_";
 
+
+    /**
+     * 短信账号code
+     */
+    public static final Integer TENCENT_SMS_CODE = 10;
+    public static final Integer YUN_PIAN_SMS_CODE = 20;
+
 }

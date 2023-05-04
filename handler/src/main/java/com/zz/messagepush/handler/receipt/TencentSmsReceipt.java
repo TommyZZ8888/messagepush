@@ -44,48 +44,43 @@ public class TencentSmsReceipt {
     @Autowired
     private SmsRecordMapper smsRecordMapper;
 
-    @PostConstruct
-    public void init() {
+    public void pull() {
         TencentSmsAccount account = accountUtils.getAccount(10, SendAccountConstant.SMS_ACCOUNT_KEY, SendAccountConstant.SMS_ACCOUNT_PREFIX, TencentSmsAccount.class);
-        SupportThreadPoolConfig.getPendingSingleThreadPool().execute(() -> {
-            while (true) {
-                try {
-                    SmsClient smsClient = getSmsClient(account);
-                    PullSmsSendStatusRequest req = new PullSmsSendStatusRequest();
-                    req.setLimit(10L);
-                    req.setSmsSdkAppId(account.getSmsSdkAppId());
+        try {
+            SmsClient smsClient = getSmsClient(account);
+            PullSmsSendStatusRequest req = new PullSmsSendStatusRequest();
+            req.setLimit(10L);
+            req.setSmsSdkAppId(account.getSmsSdkAppId());
 
-                    PullSmsSendStatusResponse resp = smsClient.PullSmsSendStatus(req);
+            PullSmsSendStatusResponse resp = smsClient.PullSmsSendStatus(req);
 
-                    List<SmsRecordEntity> smsRecordList = new ArrayList<>();
-                    if (resp != null && resp.getPullSmsSendStatusSet() != null && resp.getPullSmsSendStatusSet().length > 0) {
-                        for (PullSmsSendStatus pullSmsSendStatus : resp.getPullSmsSendStatusSet()) {
-                            SmsRecordEntity smsRecord = SmsRecordEntity.builder()
-                                    .sendDate(new Date())
-                                    .messageTemplateId(0L)
-                                    .phone(Long.valueOf(pullSmsSendStatus.getSubscriberNumber()))
-                                    .supplierId(account.getSupplierId())
-                                    .supplierName(account.getSupplierName())
-                                    .msgContent("")
-                                    .seriesId(pullSmsSendStatus.getSerialNo())
-                                    .chargingNum(0)
-                                    .status("SUCCESS".equals(pullSmsSendStatus.getReportStatus()) ? SmsStatus.RECEIVE_SUCCESS.getCode() : SmsStatus.RECEIVE_FAIL.getCode())
-                                    .reportContent(pullSmsSendStatus.getDescription())
-                                    .created(DateUtil.date(pullSmsSendStatus.getUserReceiveTime()))
-                                    .updated(new Date())
-                                    .build();
-                            smsRecordList.add(smsRecord);
-                        }
-                    }
-                    if (CollUtil.isNotEmpty(smsRecordList)) {
-                        smsRecordMapper.saveAll(smsRecordList);
-                    }
-                    Thread.sleep(200);
-                } catch (Exception e) {
-                    log.error("tencentSmsReceipt#init fail:{}", Throwables.getStackTraceAsString(e));
+            List<SmsRecordEntity> smsRecordList = new ArrayList<>();
+            if (resp != null && resp.getPullSmsSendStatusSet() != null && resp.getPullSmsSendStatusSet().length > 0) {
+                for (PullSmsSendStatus pullSmsSendStatus : resp.getPullSmsSendStatusSet()) {
+                    SmsRecordEntity smsRecord = SmsRecordEntity.builder()
+                            .sendDate(new Date())
+                            .messageTemplateId(0L)
+                            .phone(Long.valueOf(pullSmsSendStatus.getSubscriberNumber()))
+                            .supplierId(account.getSupplierId())
+                            .supplierName(account.getSupplierName())
+                            .msgContent("")
+                            .seriesId(pullSmsSendStatus.getSerialNo())
+                            .chargingNum(0)
+                            .status("SUCCESS".equals(pullSmsSendStatus.getReportStatus()) ? SmsStatus.RECEIVE_SUCCESS.getCode() : SmsStatus.RECEIVE_FAIL.getCode())
+                            .reportContent(pullSmsSendStatus.getDescription())
+                            .created(DateUtil.date(pullSmsSendStatus.getUserReceiveTime()))
+                            .updated(new Date())
+                            .build();
+                    smsRecordList.add(smsRecord);
                 }
             }
-        });
+            if (CollUtil.isNotEmpty(smsRecordList)) {
+                smsRecordMapper.saveAll(smsRecordList);
+            }
+            Thread.sleep(200);
+        } catch (Exception e) {
+            log.error("tencentSmsReceipt#init fail:{}", Throwables.getStackTraceAsString(e));
+        }
     }
 
     /**
