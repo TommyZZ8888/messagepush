@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * @Description YunPianSendResult
+ * @Description 云片网短信调用发送接口返回
  * @Author 张卫刚
  * @Date Created on 2023/5/4
  */

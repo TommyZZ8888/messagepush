@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class YunPianSmsReceipt {
 
-public void pull(){}
+public void pull(){
+
+}
 
 }
