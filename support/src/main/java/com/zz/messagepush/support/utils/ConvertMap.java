@@ -32,10 +32,18 @@ public class ConvertMap {
     }
 
 
+    /**
+     * 主要兼容amis的回显
+     * @param obj
+     * @param fieldName
+     * @return
+     * @throws IllegalAccessException
+     */
     public static Map<String, Object> flatSingle(Object obj, List<String> fieldName) throws IllegalAccessException {
         Map<String, Object> map = new HashMap<>();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
+            //msgContent需要打散
             if (fieldName.contains(field.getName())) {
                 JSONObject jsonObject;
                 Object value = field.get(obj);
@@ -45,7 +53,11 @@ public class ConvertMap {
                     jsonObject = JSONObject.parseObject(JSON.toJSONString(value));
                 }
                 for (String key : jsonObject.keySet()) {
-                    map.put(key, jsonObject.getString(key));
+                    if ("btns".equals(key) || "feedCards".equals(key)) {
+                        map.put(key, JSON.parseArray(jsonObject.getString(key)));
+                    } else {
+                        map.put(key, jsonObject.getString(key));
+                    }
                 }
             }
             map.put(field.getName(), field.get(obj));

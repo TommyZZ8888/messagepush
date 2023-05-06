@@ -9,10 +9,12 @@ import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.twitter.chill.Base64;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.constant.SendAccountConstant;
-import com.zz.messagepush.common.domain.dto.model.DingDingContentModel;
+import com.zz.messagepush.common.domain.dto.model.DingDingRobotContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.domain.dto.account.DingDingRobotAccount;
+import com.zz.messagepush.common.enums.SendMessageType;
+import com.zz.messagepush.common.utils.EnumUtil;
 import com.zz.messagepush.handler.domain.dingding.DingDingRobotResult;
 import com.zz.messagepush.handler.domain.dingding.DingDingRobotParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
@@ -29,6 +31,7 @@ import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description
@@ -74,9 +77,30 @@ public class DingDingRobotHandler extends BaseHandler implements Handler {
             atVO.setAtUserIds(new ArrayList<>(taskInfo.getReceiver()));
         }
 
-        DingDingContentModel contentModel = (DingDingContentModel) taskInfo.getContentModel();
-        return DingDingRobotParam.builder().at(atVO).msgType("text")
-                .text(DingDingRobotParam.TextVO.builder().content(contentModel.getContent()).build()).build();
+        DingDingRobotContentModel contentModel = (DingDingRobotContentModel) taskInfo.getContentModel();
+        SendMessageType enumByCode = EnumUtil.getEnumByCode(SendMessageType.class, contentModel.getSendType());
+        DingDingRobotParam param = DingDingRobotParam.builder().at(atVO).msgType(enumByCode.getDingDingRobotType()).build();
+        if (SendMessageType.TEXT.getCode().equals(contentModel.getSendType())){
+            param.setText(DingDingRobotParam.TextVO.builder().content(contentModel.getContent()).build());
+        }
+        if (SendMessageType.MARKDOWN.getCode().equals(contentModel.getSendType())){
+            param.setMarkdown(DingDingRobotParam.MarkdownVO.builder().title(contentModel.getTitle()).text(contentModel.getContent()).build());
+        }
+        if (SendMessageType.LINK.getCode().equals(contentModel.getSendType())) {
+            param.setLink(DingDingRobotParam.LinkVO.builder().title(contentModel.getTitle()).text(contentModel.getContent()).messageUrl(contentModel.getUrl()).picUrl(contentModel.getPicUrl()).build());
+        }
+        if (SendMessageType.NEWS.getCode().equals(contentModel.getSendType())) {
+            List<DingDingRobotParam.FeedCardVO.LinksVO> linksVOS = JSON.parseArray(contentModel.getFeedCards(), DingDingRobotParam.FeedCardVO.LinksVO.class);
+            DingDingRobotParam.FeedCardVO feedCardVO = DingDingRobotParam.FeedCardVO.builder().links(linksVOS).build();
+            param.setFeedCard(feedCardVO);
+        }
+        if (SendMessageType.ACTION_CARD.getCode().equals(contentModel.getSendType())) {
+            List<DingDingRobotParam.ActionCardVO.BtnsVO> btnsVOS = JSON.parseArray(contentModel.getBtns(), DingDingRobotParam.ActionCardVO.BtnsVO.class);
+            DingDingRobotParam.ActionCardVO actionCardVO = DingDingRobotParam.ActionCardVO.builder().title(contentModel.getTitle()).text(contentModel.getContent()).btnOrientation(contentModel.getBtnOrientation()).btns(btnsVOS).build();
+            param.setActionCard(actionCardVO);
+        }
+
+        return param;
     }
 
     /**

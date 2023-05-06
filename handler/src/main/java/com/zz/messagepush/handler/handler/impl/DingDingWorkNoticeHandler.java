@@ -2,6 +2,7 @@ package com.zz.messagepush.handler.handler.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
@@ -11,8 +12,10 @@ import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.domain.dto.account.DingDingWorkNoticeAccount;
-import com.zz.messagepush.common.domain.dto.model.DingDingContentModel;
+import com.zz.messagepush.common.domain.dto.model.DingDingWorkContentModel;
 import com.zz.messagepush.common.enums.ChannelType;
+import com.zz.messagepush.common.enums.SendMessageType;
+import com.zz.messagepush.common.utils.EnumUtil;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.support.utils.AccountUtils;
@@ -53,7 +56,7 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
             OapiMessageCorpconversationAsyncsendV2Request request = assembleParam(account, taskInfo);
             String accessToken = redisTemplate.opsForValue().get(SendAccountConstant.DING_DING_WORK_NOTICE_ACCOUNT_KEY + taskInfo.getSendAccount());
             OapiMessageCorpconversationAsyncsendV2Response response = new DefaultDingTalkClient(URL).execute(request, accessToken);
-            if (response.getErrcode()==0) {
+            if (response.getErrcode() == 0) {
                 return true;
             }
         } catch (ApiException e) {
@@ -65,7 +68,7 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
 
     private OapiMessageCorpconversationAsyncsendV2Request assembleParam(DingDingWorkNoticeAccount account, TaskInfo taskInfo) {
         OapiMessageCorpconversationAsyncsendV2Request req = new OapiMessageCorpconversationAsyncsendV2Request();
-        DingDingContentModel contentModel = (DingDingContentModel) taskInfo.getContentModel();
+        DingDingWorkContentModel contentModel = (DingDingWorkContentModel) taskInfo.getContentModel();
 
         try {
             if (AustinConstant.SEND_ALL.equals(CollUtil.getFirst(taskInfo.getReceiver()))) {
@@ -77,11 +80,63 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
 
             //内容相关
             OapiMessageCorpconversationAsyncsendV2Request.Msg message = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
-            message.setMsgtype("text");
-            OapiMessageCorpconversationAsyncsendV2Request.Text textObj = new OapiMessageCorpconversationAsyncsendV2Request.Text();
-            textObj.setContent(contentModel.getContent());
-            message.setText(textObj);
+            SendMessageType enumByCode = EnumUtil.getEnumByCode(SendMessageType.class, contentModel.getSendType());
+            message.setMsgtype(enumByCode.getDingDingWorkType());
 
+            // 根据类型设置入参
+            if (SendMessageType.TEXT.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.Text textObj = new OapiMessageCorpconversationAsyncsendV2Request.Text();
+                textObj.setContent(contentModel.getContent());
+                message.setText(textObj);
+            }
+            if (SendMessageType.IMAGE.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.Image image = new OapiMessageCorpconversationAsyncsendV2Request.Image();
+                image.setMediaId(contentModel.getMediaId());
+                message.setImage(image);
+            }
+            if (SendMessageType.VOICE.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.Voice voice = new OapiMessageCorpconversationAsyncsendV2Request.Voice();
+                voice.setMediaId(contentModel.getMediaId());
+                voice.setDuration(contentModel.getDuration());
+                message.setVoice(voice);
+            }
+            if (SendMessageType.FILE.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.File file = new OapiMessageCorpconversationAsyncsendV2Request.File();
+                file.setMediaId(contentModel.getMediaId());
+                message.setFile(file);
+            }
+            if (SendMessageType.LINK.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.Link link = new OapiMessageCorpconversationAsyncsendV2Request.Link();
+                link.setText(contentModel.getContent());
+                link.setTitle(contentModel.getTitle());
+                link.setPicUrl(contentModel.getPicUrl());
+                link.setMessageUrl(contentModel.getUrl());
+                message.setLink(link);
+            }
+
+            if (SendMessageType.MARKDOWN.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.Markdown markdown = new OapiMessageCorpconversationAsyncsendV2Request.Markdown();
+                markdown.setText(contentModel.getContent());
+                markdown.setTitle(contentModel.getTitle());
+                message.setMarkdown(markdown);
+
+            }
+            if (SendMessageType.ACTION_CARD.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.ActionCard actionCard = new OapiMessageCorpconversationAsyncsendV2Request.ActionCard();
+                actionCard.setTitle(contentModel.getTitle());
+                actionCard.setMarkdown(contentModel.getContent());
+                actionCard.setBtnOrientation(contentModel.getBtnOrientation());
+                actionCard.setBtnJsonList(JSON.parseArray(contentModel.getBtns(), OapiMessageCorpconversationAsyncsendV2Request.BtnJsonList.class));
+                message.setActionCard(actionCard);
+
+            }
+            if (SendMessageType.ACTION_CARD.getCode().equals(contentModel.getSendType())) {
+                OapiMessageCorpconversationAsyncsendV2Request.OA oa = new OapiMessageCorpconversationAsyncsendV2Request.OA();
+                oa.setMessageUrl(contentModel.getUrl());
+                oa.setHead(JSON.parseObject(contentModel.getHead(), OapiMessageCorpconversationAsyncsendV2Request.Head.class));
+                oa.setBody(JSON.parseObject(contentModel.getBody(), OapiMessageCorpconversationAsyncsendV2Request.Body.class));
+                message.setOa(oa);
+            }
             req.setMsg(message);
         } catch (NumberFormatException e) {
             log.error("DingDingWorkNoticeHandler#assembleParam fail: {}", Throwables.getStackTraceAsString(e));

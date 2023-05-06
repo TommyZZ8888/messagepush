@@ -23,9 +23,9 @@ public enum ChannelType {
 
     ENTERPRISE_WE_CHAT(70, "enterpriseWeChat(企业微信)", EnterpriseWeChatContentModel.class, "enterprise_we_chat"),
 
-    DING_DING_ROBOT(80,"dingDingRobot(钉钉机器人)", DingDingContentModel.class,"ding_ding_robot"),
+    DING_DING_ROBOT(80,"dingDingRobot(钉钉机器人)", DingDingRobotContentModel.class,"ding_ding_robot"),
 
-   DING_DING_WORK_NOTICE(90,"dingDingWorkNotice(钉钉工作通知)",DingDingContentModel.class,"ding_ding_work_notice"),
+   DING_DING_WORK_NOTICE(90,"dingDingWorkNotice(钉钉工作通知)", DingDingWorkContentModel.class,"ding_ding_work_notice"),
     ;
 
     private Integer code;
