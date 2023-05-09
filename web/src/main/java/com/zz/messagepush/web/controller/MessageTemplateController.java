@@ -55,17 +55,17 @@ public class MessageTemplateController {
     }
 
 
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseResult<MessageTemplateVO> queryList(@RequestBody MessageTemplateParamDTO dto) throws IllegalAccessException {
         List<MessageTemplateEntity> messageTemplateEntities = messageTemplateService.queryNotDeletedList(dto);
-        MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities,FLAT_FIELD_NAME)).count((long) messageTemplateEntities.size()).build();
+        MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities)).count((long) messageTemplateEntities.size()).build();
         return ResponseResult.success("query ok", build);
     }
 
 
     @RequestMapping(value = "/queryById", method = RequestMethod.GET)
     public ResponseResult<MessageTemplateEntity> queryById(Long id) {
-        return ResponseResult.success("query ok", messageTemplateService.queryById(id));
+        return ResponseResult.success("query ok", ConvertMap.flatFirst(messageTemplateService.queryById(id)));
     }
 
 

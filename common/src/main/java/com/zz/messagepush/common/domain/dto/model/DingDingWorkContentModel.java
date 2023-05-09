@@ -14,27 +14,25 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DingDingWorkContentModel extends ContentModel{
+public class DingDingWorkContentModel extends ContentModel {
 
-private String sendType;
+    private String sendType;
 
-private String content;
+    private String content;
 
-private String title;
+    private String title;
 
-private String btnOrientation;
+    private String btnOrientation;
 
-private String btns;
+    private String btns;
 
-private String url;
+    private String url;
 
-private String picUrl;
+    private String mediaId;
 
-private String mediaId;
+    private String duration;
 
-private String duration;
+    private String dingDingOaHead;
 
-private String head;
-
-private String body;
+    private String dingDingOaBody;
 }
