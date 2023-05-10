@@ -5,10 +5,8 @@ import com.zz.messagepush.service.api.impl.action.AfterParamCheckAction;
 import com.zz.messagepush.service.api.impl.action.AssembleAction;
 import com.zz.messagepush.service.api.impl.action.PreParamCheckAction;
 import com.zz.messagepush.service.api.impl.action.SendMqAction;
-import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessHandler;
 import com.zz.messagepush.support.pipeline.ProcessTemplate;
-import org.apache.kafka.common.network.Send;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,7 +60,16 @@ public class PipelineConfig {
         ProcessHandler processHandler = new ProcessHandler();
         Map<String, ProcessTemplate> map = new HashMap<>();
         map.put(BusinessCode.COMMON_SEND.getCode(), commonSendTemplate());
+        map.put(BusinessCode.RECALL_SEND.getCode(), recallMessageTemplate());
         processHandler.setTemplateConfig(map);
         return processHandler;
+    }
+
+
+    @Bean("recallMessageTemplate")
+    public ProcessTemplate recallMessageTemplate(){
+        ProcessTemplate processTemplate = new ProcessTemplate();
+        processTemplate.setProcessList(Arrays.asList(assembleAction,sendMqAction));
+        return processTemplate;
     }
 }

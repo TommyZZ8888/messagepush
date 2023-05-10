@@ -12,6 +12,7 @@ import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.service.api.domain.dto.MessageParam;
+import com.zz.messagepush.service.api.enums.BusinessCode;
 import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.mapper.MessageTemplateMapper;
@@ -46,6 +47,13 @@ public class AssembleAction implements BusinessProcess<SendTaskModel> {
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(messageTemplateId).orElse(null);
         if (messageTemplateEntity == null || messageTemplateEntity.getIsDeleted().equals(AustinConstant.TRUE)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.TEMPLATE_NOT_FOUND.getDescription()));
+            return;
+        }
+        if (BusinessCode.COMMON_SEND.getCode().equals(context.getCode())){
+            List<TaskInfo> taskInfos = assembleTaskInfo(processModel, messageTemplateEntity);
+            processModel.setTaskInfo(taskInfos);
+        }else if(BusinessCode.RECALL_SEND.getCode().equals(context.getCode())){
+            processModel.setMessageTemplateEntity(messageTemplateEntity);
         }
     }
 

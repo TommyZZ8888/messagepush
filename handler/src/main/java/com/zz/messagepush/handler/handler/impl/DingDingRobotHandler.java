@@ -19,6 +19,7 @@ import com.zz.messagepush.handler.domain.dingding.DingDingRobotResult;
 import com.zz.messagepush.handler.domain.dingding.DingDingRobotParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,5 +136,10 @@ public class DingDingRobotHandler extends BaseHandler implements Handler {
             log.error("dingDingRobotHandler#assemblySign fail: {}", Throwables.getStackTraceAsString(e));
         }
         return sign;
+    }
+
+    @Override
+    public void recall(MessageTemplateEntity messageTemplate) {
+
     }
 }

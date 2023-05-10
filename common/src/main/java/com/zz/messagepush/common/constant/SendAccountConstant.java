@@ -12,6 +12,8 @@ public class SendAccountConstant {
     public static final Integer START = 10;
     public static final Integer STEP = 10;
 
+    public static final String DING_DING_ACCESS_TOKEN_PREFIX  ="ding_ding_access_token_";
+
     /**
      * 钉钉自定义机器人
      */

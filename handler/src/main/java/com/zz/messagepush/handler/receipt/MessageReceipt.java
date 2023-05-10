@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 
 @Component
 @Slf4j
-public class SmsReceipt {
+public class MessageReceipt {
 
     @Autowired
     private TencentSmsReceipt tencentSmsReceipt;

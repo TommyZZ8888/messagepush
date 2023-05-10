@@ -72,6 +72,13 @@ austin:
         upload:
             crowd:
                 path: /Users/3y/temp
+        topic:
+            name: austinBusiness
+        recall:
+            topic:
+                name: austinRecall
+            group:
+                name: recallGroupId
     async:
         task:
             thread-name-prefix: austinAsyncExecutor- # task前缀名

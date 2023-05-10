@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.zz.messagepush.common.constant.AustinConstant;
@@ -16,7 +15,7 @@ import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.SmsScriptHolder;
-import com.zz.messagepush.handler.script.SmsService;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.SmsRecordMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -154,5 +153,10 @@ public class SmsHandler extends BaseHandler implements Handler {
             }
         }
         return null;
+    }
+
+    @Override
+    public void recall(MessageTemplateEntity messageTemplate) {
+
     }
 }

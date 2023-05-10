@@ -9,6 +9,7 @@ import com.zz.messagepush.handler.domain.wechat.WeChatMiniProgramParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.MiniProgramAccountService;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,5 +55,10 @@ public class MiniProgramAccountHandler extends BaseHandler implements Handler {
 
         miniProgramParam.setData(contentModel.getParam());
         return miniProgramParam;
+    }
+
+    @Override
+    public void recall(MessageTemplateEntity messageTemplate) {
+
     }
 }

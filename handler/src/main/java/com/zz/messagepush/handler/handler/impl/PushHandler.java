@@ -20,7 +20,7 @@ import com.zz.messagepush.handler.domain.push.getui.SendPushParam;
 import com.zz.messagepush.handler.domain.push.getui.SendPushResult;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
-import com.zz.messagepush.service.api.domain.dto.SendRequest;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,5 +140,10 @@ public class PushHandler extends BaseHandler implements Handler {
             sendPushParam.setAudience(SendPushParam.AudienceVO.builder().cid(cid).build());
         }
         return sendPushParam;
+    }
+
+    @Override
+    public void recall(MessageTemplateEntity messageTemplate) {
+
     }
 }

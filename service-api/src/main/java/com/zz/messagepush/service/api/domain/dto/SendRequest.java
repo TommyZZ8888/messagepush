@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
+ * 发送/撤回接口的参数
  * @author DELL
  */
 @Data

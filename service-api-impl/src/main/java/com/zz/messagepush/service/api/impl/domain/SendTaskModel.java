@@ -2,6 +2,7 @@ package com.zz.messagepush.service.api.impl.domain;
 
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.service.api.domain.dto.MessageParam;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.pipeline.ProcessModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -36,4 +37,6 @@ public class SendTaskModel implements ProcessModel {
     private List<TaskInfo> taskInfo;
 
     private Long messageTemplateId;
+
+    private MessageTemplateEntity messageTemplateEntity;
 }

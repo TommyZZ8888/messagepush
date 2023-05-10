@@ -3,6 +3,11 @@ package com.zz.messagepush.web.controller;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.domain.ResponseResult;
+import com.zz.messagepush.common.enums.RespStatusEnum;
+import com.zz.messagepush.service.api.domain.SendResponse;
+import com.zz.messagepush.service.api.domain.dto.SendRequest;
+import com.zz.messagepush.service.api.enums.BusinessCode;
+import com.zz.messagepush.service.api.service.RecallService;
 import com.zz.messagepush.service.api.service.SendService;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
@@ -47,6 +52,9 @@ public class MessageTemplateController {
     @Autowired
     private SendService sendService;
 
+    @Autowired
+    private RecallService recallService;
+
 
     @RequestMapping(value = "/save", method = RequestMethod.GET)
     public ResponseResult<Boolean> saveOrUpdate(@RequestBody MessageTemplateParamDTO dto) {
@@ -64,8 +72,8 @@ public class MessageTemplateController {
 
 
     @RequestMapping(value = "/queryById", method = RequestMethod.GET)
-    public ResponseResult<MessageTemplateEntity> queryById(Long id) {
-        return ResponseResult.success("query ok", ConvertMap.flatFirst(messageTemplateService.queryById(id)));
+    public ResponseResult<Map<String, Object>> queryById(Long id) throws IllegalAccessException {
+        return ResponseResult.success("query ok", ConvertMap.flatSingle(messageTemplateService.queryById(id)));
     }
 
 
@@ -92,35 +100,46 @@ public class MessageTemplateController {
     }
 
 
-
     @ApiOperation("启动模板的定时任务")
-    @RequestMapping(value = "/start",method = RequestMethod.POST)
-    public ResponseResult start(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
+    @RequestMapping(value = "/start", method = RequestMethod.POST)
+    public ResponseResult start(@RequestParam(value = "id", required = false) @NotBlank(message = "id不能为空") Long id) {
         return messageTemplateService.startCronTask(id);
     }
 
 
     @ApiOperation("暂停模板的定时任务")
-    @RequestMapping(value = "/stop",method = RequestMethod.POST)
-    public ResponseResult<Boolean> stop(@RequestParam(value = "id",required = false) @NotBlank(message = "id不能为空") Long id){
+    @RequestMapping(value = "/stop", method = RequestMethod.POST)
+    public ResponseResult<Boolean> stop(@RequestParam(value = "id", required = false) @NotBlank(message = "id不能为空") Long id) {
         messageTemplateService.stopCronTask(id);
         return ResponseResult.success();
     }
 
 
     @ApiOperation("上传人群文件")
-    @RequestMapping(value = "/upload",method = RequestMethod.POST)
-    public ResponseResult<Boolean> upload(@RequestParam("file") MultipartFile file){
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ResponseResult<Boolean> upload(@RequestParam("file") MultipartFile file) {
         String path = dataPath + IdUtil.fastSimpleUUID() + file.getOriginalFilename();
 
         try {
             File localFile = new File(path);
-            if (!localFile.exists()){
+            if (!localFile.exists()) {
                 boolean mkdir = localFile.mkdir();
             }
             file.transferTo(localFile);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return ResponseResult.success();
+    }
+
+
+    @ApiOperation("撤回消息")
+    @RequestMapping(value = "/recall", method = RequestMethod.POST)
+    public ResponseResult<Boolean> recall(@RequestParam("id") String id) {
+        SendRequest sendRequest = SendRequest.builder().messageTemplateId(Long.valueOf(id)).code(BusinessCode.RECALL_SEND.getCode()).build();
+        SendResponse response = recallService.recall(sendRequest);
+        if (response.getCode() != RespStatusEnum.SUCCESS.getCode()) {
+            return ResponseResult.fail("recall fail");
         }
         return ResponseResult.success();
     }

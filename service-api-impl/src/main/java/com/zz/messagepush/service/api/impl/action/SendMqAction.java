@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
+import com.zz.messagepush.service.api.enums.BusinessCode;
 import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
 import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessContext;
@@ -27,15 +28,24 @@ public class SendMqAction implements BusinessProcess<SendTaskModel> {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
-    @Value("${austin.rabbitmq.topic.name}")
-    private String topicName;
+    @Value("${austin.business.topic.name}")
+    private String sendMessageTopic;
+
+    @Value("${austin.business.recall.topic.name}")
+    private String austinRecall;
 
     @Override
     public void process(ProcessContext<SendTaskModel> context) {
         SendTaskModel processModel = context.getProcessModel();
 
         try {
-            kafkaTemplate.send(topicName, JSON.toJSONString(processModel.getTaskInfo(), SerializerFeature.WriteClassName));
+            if (BusinessCode.COMMON_SEND.getCode().equals(context.getCode())){
+                String message = JSON.toJSONString(processModel.getTaskInfo(), new SerializerFeature[]{SerializerFeature.WriteClassName});
+                kafkaTemplate.send(sendMessageTopic, message);
+            } else if (BusinessCode.RECALL_SEND.getCode().equals(context.getCode())) {
+                String message = JSON.toJSONString(processModel.getMessageTemplateEntity(), new SerializerFeature[]{SerializerFeature.WriteClassName});
+                kafkaTemplate.send(austinRecall,message);
+            }
         } catch (Exception e) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription()));
             log.error("send kafka fail! e:{}", Throwables.getStackTraceAsString(e));

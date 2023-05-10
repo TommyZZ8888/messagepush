@@ -6,9 +6,11 @@ import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.LogParam;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
+import com.zz.messagepush.handler.handler.HandlerHolder;
 import com.zz.messagepush.handler.pending.Task;
 import com.zz.messagepush.handler.pending.TaskPendingHolder;
 import com.zz.messagepush.handler.utils.GroupIdMappingUtils;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -41,6 +43,9 @@ public class Receiver {
     @Autowired
     private TaskPendingHolder taskPendingHolder;
 
+    @Autowired
+    private HandlerHolder handlerHolder;
+
     @KafkaListener(topics = "#{'${austin.kafka.topic.name}'}")
     public void consumer(ConsumerRecord<?, String> consumerRecord, @Header(KafkaHeaders.GROUP_ID) String topicGroupId) {
         Optional<String> kafkaMessage = Optional.ofNullable(consumerRecord.value());
@@ -57,6 +62,17 @@ public class Receiver {
                 }
             }
             log.info("receive message:{}", JSON.toJSONString(taskInfos));
+        }
+    }
+
+
+    @KafkaListener(topics = "#{'${austin.business.recall.topic.name}'}",groupId = "#{'${austin.business.recall.group.name}'}")
+    public void recall(ConsumerRecord<?, String> consumerRecord) {
+        Optional<String> kafkaMessage = Optional.ofNullable(consumerRecord.value());
+        if (kafkaMessage.isPresent()) {
+            MessageTemplateEntity messageTemplateEntity = JSON.parseObject(kafkaMessage.get(), MessageTemplateEntity.class);
+            handlerHolder.route(messageTemplateEntity.getSendAccount()).recall(messageTemplateEntity);
+            log.info("receive message:{}", JSON.toJSONString(messageTemplateEntity));
         }
     }
 }

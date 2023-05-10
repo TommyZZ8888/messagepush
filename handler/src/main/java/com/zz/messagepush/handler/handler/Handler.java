@@ -1,6 +1,7 @@
 package com.zz.messagepush.handler.handler;
 
 import com.zz.messagepush.common.domain.dto.TaskInfo;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 
 /**
  * @Description
@@ -15,5 +16,11 @@ public interface Handler {
      * @param taskInfo
      */
     void doHandler(TaskInfo taskInfo);
+
+    /**
+     * 撤回消息
+     * @param messageTemplate
+     */
+    void recall(MessageTemplateEntity messageTemplate);
 
 }

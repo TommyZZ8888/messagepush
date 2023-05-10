@@ -13,6 +13,7 @@ import com.zz.messagepush.handler.enums.RateLimitStrategy;
 import com.zz.messagepush.handler.flowcontrol.FlowControlParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +76,10 @@ public class EmailHandler extends BaseHandler implements Handler {
             log.error("EmailHandler#getAccount fail!{}", Throwables.getStackTraceAsString(e));
         }
         return account;
+    }
+
+    @Override
+    public void recall(MessageTemplateEntity messageTemplate) {
+
     }
 }

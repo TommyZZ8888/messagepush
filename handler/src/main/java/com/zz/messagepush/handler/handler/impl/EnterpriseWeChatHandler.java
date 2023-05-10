@@ -7,6 +7,7 @@ import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.utils.AccountUtils;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;
@@ -83,5 +84,10 @@ public class EnterpriseWeChatHandler extends BaseHandler implements Handler {
                 .agentId(agentId)
                 .toUser(userId)
                 .content(contentModel.getContent()).build();
+    }
+
+    @Override
+    public void recall(MessageTemplateEntity messageTemplate) {
+
     }
 }

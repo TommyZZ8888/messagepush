@@ -9,16 +9,12 @@ import com.zz.messagepush.handler.domain.wechat.WeChatOfficialParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.handler.script.OfficialAccountService;
+import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
-import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @Description 微信服务号推送处理
@@ -59,6 +55,11 @@ public class OfficialAccountHandler extends BaseHandler implements Handler {
                     Throwables.getStackTraceAsString(e), JSON.toJSONString(taskInfo));
         }
         return false;
+    }
+
+    @Override
+    public void recall(MessageTemplateEntity messageTemplate) {
+
     }
 
 
