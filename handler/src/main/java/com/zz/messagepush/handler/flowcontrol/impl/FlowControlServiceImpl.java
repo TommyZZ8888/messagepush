@@ -1,8 +1,6 @@
 package com.zz.messagepush.handler.flowcontrol.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.google.common.util.concurrent.RateLimiter;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
@@ -10,7 +8,9 @@ import com.zz.messagepush.common.utils.EnumUtil;
 import com.zz.messagepush.handler.enums.RateLimitStrategy;
 import com.zz.messagepush.handler.flowcontrol.FlowControlParam;
 import com.zz.messagepush.handler.flowcontrol.FlowControlService;
+import com.zz.messagepush.support.service.ConfigService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,12 +24,12 @@ import org.springframework.stereotype.Service;
 public class FlowControlServiceImpl implements FlowControlService {
 
 
-    private static final String FLOW_CONTROL_KEY = "flowControl";
+    private static final String FLOW_CONTROL_KEY = "flowControlRule";
 
     private static final String PREFIX = "flow_control_";
 
-    @ApolloConfig("boss.austin")
-    private Config config;
+    @Autowired
+    private ConfigService config;
 
 
     @Override

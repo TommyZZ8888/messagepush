@@ -10,8 +10,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableApolloConfig(value = {"dynamic-tp-apollo-dtp.yml"})
 public class AustinWebApplication {
     public static void main(String[] args) {
-        // TODO apollo的ip/port【must】
-//        System.setProperty("apollo.config-service", "http://ip:7000");
+        /** TODO [optional]
+         * 如果你需要动态配置
+         * 1.启动apollo
+         * 2.将下方application.yml中 Apollo.enabled改为true
+         * 3.下方ip:port输入真实的ip port
+         */
+        System.setProperty("apollo.config-service", "http://ip:port");
         SpringApplication.run(AustinWebApplication.class, args);
     }
 

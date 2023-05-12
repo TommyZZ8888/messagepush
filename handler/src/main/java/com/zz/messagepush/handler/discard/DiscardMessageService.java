@@ -2,13 +2,13 @@ package com.zz.messagepush.handler.discard;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
+import com.zz.messagepush.support.service.ConfigService;
 import com.zz.messagepush.support.utils.LogUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,10 +21,10 @@ import org.springframework.stereotype.Service;
 public class DiscardMessageService {
 
 
-    private static final String DISCARD_MESSAGE_KEY = "discard";
+    private static final String DISCARD_MESSAGE_KEY = "discardMsgIds";
 
-    @ApolloConfig("boss.austin")
-    private Config config;
+    @Autowired
+    private ConfigService config;
 
     /**
      * 丢弃消息，配置在apollo

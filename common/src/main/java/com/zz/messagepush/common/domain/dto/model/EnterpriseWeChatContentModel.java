@@ -30,10 +30,44 @@ public class EnterpriseWeChatContentModel extends ContentModel {
     /**
      * 媒体类型
      */
-    private String mediaType;
+    private String mediaId;
 
 
     /**
-     *  其他消息类型： https://developer.work.weixin.qq.com/document/path/90372#%E6%96%87%E6%9C%AC%E6%B6%88%E6%81%AF
+     * 标题
      */
+    private String title;
+
+    /**
+     * 描述
+     */
+    private String description;
+
+    /**
+     * 链接
+     */
+    private String url;
+
+    /**
+     * 按钮文案
+     */
+    private String btnTxt;
+
+    /**
+     * 图文消息
+     */
+    private String articles;
+
+    private String mpNewsArticle;
+
+    /**
+     * 小程序
+     */
+    private String appId;
+
+    private String page;
+
+    private Boolean emphasisFirstItem;
+
+    private String contentItems;
 }

@@ -69,7 +69,7 @@ public class EmailHandler extends BaseHandler implements Handler {
 
             MailSSLSocketFactory sf = new MailSSLSocketFactory();
             sf.setTrustAllHosts(true);
-            account.setAuth(true).setStarttlsEnable(true).setSslEnable(true).setCustomProperty("mail.smtp.ssl.socketFactory", sf);
+            account.setAuth(account.isAuth()).setStarttlsEnable(account.isStarttlsEnable()).setSslEnable(account.isSslEnable()).setCustomProperty("mail.smtp.ssl.socketFactory", sf);
 
             account.setTimeout(25000).setConnectionTimeout(25000);
         } catch (GeneralSecurityException e) {

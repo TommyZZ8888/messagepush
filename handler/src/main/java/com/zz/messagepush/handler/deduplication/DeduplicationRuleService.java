@@ -1,15 +1,13 @@
 package com.zz.messagepush.handler.deduplication;
 
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.DeduplicationType;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
+import com.zz.messagepush.support.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,9 +25,9 @@ public class DeduplicationRuleService {
     /**
      * 配置样例：{"contentDeduplication":{"num":1,"time":300},"frequencyDeduplication":{"num":5}}
      */
-    private static final String DEDUPLICATION_RULE_KEY = "deduplication";
-    @ApolloConfig("boss.austin")
-    private Config config;
+    private static final String DEDUPLICATION_RULE_KEY = "deduplicationRule";
+    @Autowired
+    private ConfigService config;
 
     //需要去重的服务
 

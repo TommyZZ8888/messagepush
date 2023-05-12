@@ -148,6 +148,8 @@ xxl:
             logretentiondays: 30 # 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；
             jobHandlerName: austinJob
         accessToken:  # 执行器通讯TOKEN [选填]：非空时启用；
+xxl-job:
+    enabled: false
 
 ##################### wx mp config #####################
 wx:

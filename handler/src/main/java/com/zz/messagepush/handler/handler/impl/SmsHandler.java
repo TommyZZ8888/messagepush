@@ -140,7 +140,7 @@ public class SmsHandler extends BaseHandler implements Handler {
      * @return
      */
     private List<MessageTypeSmsConfig> messageTypeSmsConfigs(Integer msgType) {
-        String apolloKey = "msg_type_sms_config";
+        String apolloKey = "msgTypeSmsConfig";
         String messagePrefix = "message_type_";
 
         String property = config.getProperty(apolloKey, AustinConstant.APOLLO_DEFAULT_VALUE_JSON_ARRAY);
