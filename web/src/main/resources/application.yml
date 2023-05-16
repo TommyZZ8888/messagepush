@@ -79,6 +79,9 @@ austin:
                 name: austinRecall
             group:
                 name: recallGroupId
+        tagId
+            key: kafka_tag_id
+            value: 3y
     async:
         task:
             thread-name-prefix: austinAsyncExecutor- # task前缀名

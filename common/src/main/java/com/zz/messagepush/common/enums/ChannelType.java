@@ -17,7 +17,7 @@ public enum ChannelType {
 
     EMAIL(40, "email(邮件)", EmailContentModel.class, "email"),
 
-    OFFICIAL_ACCOUNT(50, "OfficialAccount(服务号)", OfficialAccountContentModel.class, "official_accounts"),
+    OFFICIAL_ACCOUNT(50, "officialAccount(服务号)", OfficialAccountContentModel.class, "official_accounts"),
 
     MINI_PROGRAM(60, "miniProgram(小程序)", MiniProgramContentModel.class, "mini_program"),
 
@@ -28,6 +28,8 @@ public enum ChannelType {
     DING_DING_WORK_NOTICE(90, "dingDingWorkNotice(钉钉工作通知)", DingDingWorkContentModel.class, "ding_ding_work_notice"),
 
     ENTERPRISE_WE_CHAT_ROBOT(100, "enterpriseWeChat(企业微信机器人)", EnterpriseWeChatRobotContentModel.class, "enterprise_we_chat_robot"),
+
+    FEI_SHU_ROBOT(110,"feiShuRobot(飞书机器人)",FeiShuRobotContentModel.class,"fei_shu_robot"),
     ;
 
     private Integer code;

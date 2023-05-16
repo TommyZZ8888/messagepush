@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Description
+ * @Description 采用普通的技术去重方法，限制每天发送的条数
  * @Author 张卫刚
  * @Date Created on 2023/4/19
  */

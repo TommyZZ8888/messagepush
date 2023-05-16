@@ -35,7 +35,7 @@ import java.util.Optional;
 public class Receiver {
 
 
-    private static final String LOG_BIZ_TYPE  = "Receiver#consumer";
+    private static final String LOG_BIZ_TYPE = "Receiver#consumer";
 
     @Autowired
     private ApplicationContext context;
@@ -46,7 +46,7 @@ public class Receiver {
     @Autowired
     private HandlerHolder handlerHolder;
 
-    @KafkaListener(topics = "#{'${austin.kafka.topic.name}'}")
+    @KafkaListener(topics = "#{'${austin.kafka.topic.name}'}", containerFactory = "filterContainerFactory")
     public void consumer(ConsumerRecord<?, String> consumerRecord, @Header(KafkaHeaders.GROUP_ID) String topicGroupId) {
         Optional<String> kafkaMessage = Optional.ofNullable(consumerRecord.value());
         if (kafkaMessage.isPresent()) {
@@ -54,7 +54,7 @@ public class Receiver {
             String groupId = GroupIdMappingUtils.getGroupIdByTaskInfo(CollUtil.getFirst(taskInfos.iterator()));
 
             //每个消费者只关心自身的信息
-            if (groupId.equals(topicGroupId)){
+            if (groupId.equals(topicGroupId)) {
                 for (TaskInfo taskInfo : taskInfos) {
                     LogUtils.print(LogParam.builder().bizType(LOG_BIZ_TYPE).object(taskInfo).build(), AnchorInfo.builder().ids(taskInfo.getReceiver()).businessId(taskInfo.getBusinessId()).state(AnchorStateEnum.RECEIVE.getCode()).build());
                     Task task = context.getBean(Task.class).setTaskInfo(taskInfo);
@@ -66,7 +66,8 @@ public class Receiver {
     }
 
 
-    @KafkaListener(topics = "#{'${austin.business.recall.topic.name}'}",groupId = "#{'${austin.business.recall.group.name}'}")
+    @KafkaListener(topics = "#{'${austin.business.recall.topic.name}'}", groupId = "#{'${austin.business.recall.group.name}'}",
+            containerFactory = "filterContainerFactory")
     public void recall(ConsumerRecord<?, String> consumerRecord) {
         Optional<String> kafkaMessage = Optional.ofNullable(consumerRecord.value());
         if (kafkaMessage.isPresent()) {

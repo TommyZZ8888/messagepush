@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @Description
+ * @Description 滑动窗口去重器（内容去重采用redis的zset滑动窗口去重，可以做到严格控制单位时间内的频次）
  * @Author 张卫刚
  * @Date Created on 2023/4/19
  */

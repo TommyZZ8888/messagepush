@@ -7,33 +7,25 @@ package com.zz.messagepush.common.enums;
  */
 public enum SendMessageType {
 
-    TEXT("10", "文本", "text", "text", "text"),
+    TEXT("10", "文本", "text", "text","text","text"),
+    VOICE("20", "语音", null, "voice",null,null),
+    VIDEO("30", "视频", null, null,null,null),
+    NEWS("40", "图文", "feedCard", null,"news",null),
+    TEXT_CARD("50", "文本卡片", null, null,null,null),
+    FILE("60", "文件", null, "file","file",null),
+    MINI_PROGRAM_NOTICE("70", "小程序通知", null, null,null,null),
+    MARKDOWN("80", "markdown", "markdown", "markdown","markdown",null),
+    TEMPLATE_CARD("90", "模板卡片", null, null,"template_card",null),
+    IMAGE("100", "图片", null, "image","image","image"),
+    LINK("110", "链接消息", "link", "link",null,null),
+    ACTION_CARD("120", "跳转卡片消息", "actionCard", "action_card",null,"interactive"),
+    OA("130", "OA消息", null, "oa",null,null),
+    MP_NEWS("140", "图文消息(mpNews)", null, null,null,null),
+    RICH_TEXT("150", "富文本", null, null,null,"post"),
+    SHARE_CHAT("160", "群名片", null, null,null,"share_chat")
 
-    VOICE("20", "语音", null, "voice", null),
-
-    VIDEO("30", "视频", null, null, null),
-
-    NEWS("40", "图文", "feedCard", null, "news"),
-
-    TEXT_CARD("50", "文本卡片", null, null, null),
-
-    FILE("60", "文件", null, "file", "file"),
-
-    MINI_PROGRAM_NOTICE("70", "小程序通知", null, null, null),
-
-    MARKDOWN("80", "markdown", "markdown", "markdown", "markdown"),
-
-    TEMPLATE_CARD("90", "模板卡片", null, null, "template_card"),
-
-    IMAGE("100", "图片", null, "image", "image"),
-
-    LINK("110", "链接消息", "link", "link", null),
-
-    ACTION_CARD("120", "跳转卡片消息", "actionCard", "action_card", null),
-
-    OA("130", "OA消息", null, "oa", null),
-    MP_NEWS("140", "图文消息（mpnews）", null, null, null),
     ;
+
 
     public String code;
 
@@ -45,12 +37,15 @@ public enum SendMessageType {
 
     public String enterpriseRobotType;
 
-    SendMessageType(String code, String description, String dingDingRobotType, String dingDingWorkType, String enterpriseRobotType) {
+    public String feiShuRobotType;
+
+    SendMessageType(String code, String description, String dingDingRobotType, String dingDingWorkType, String enterpriseRobotType,String feiShuRobotType) {
         this.code = code;
         this.description = description;
         this.dingDingRobotType = dingDingRobotType;
         this.dingDingWorkType = dingDingWorkType;
         this.enterpriseRobotType = enterpriseRobotType;
+        this.feiShuRobotType = feiShuRobotType;
     }
 
     public void setCode(String code) {
@@ -93,11 +88,28 @@ public enum SendMessageType {
         return enterpriseRobotType;
     }
 
+    public void setFeiShuRobotType(String feiShuRobotType) {
+        this.feiShuRobotType = feiShuRobotType;
+    }
+
+    public String getFeiShuRobotType() {
+        return feiShuRobotType;
+    }
+
 
     public static String getEnterpriseWeChatRobotTypeByCode(String code) {
         for (SendMessageType sendMessageType : SendMessageType.values()) {
             if (code.equals(sendMessageType.getCode())) {
                 return sendMessageType.getEnterpriseRobotType();
+            }
+        }
+        return null;
+    }
+
+    public static String getFeiShuRobotTypeByCode(String code) {
+        for (SendMessageType sendMessageType : SendMessageType.values()) {
+            if (code.equals(sendMessageType.getCode())) {
+                return sendMessageType.getFeiShuRobotType();
             }
         }
         return null;
