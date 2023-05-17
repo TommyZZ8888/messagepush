@@ -36,6 +36,9 @@ public class ShieldServiceImpl implements ShieldService {
      */
     @Override
     public void shield(TaskInfo taskInfo) {
+        if (ShieldType.NIGHT_NO_SHIELD.getCode().equals(taskInfo.getShieldType())){
+            return;
+        }
         if (isNight() && isNightShieldType(taskInfo.getShieldType())) {
             if (ShieldType.NIGHT_SHIELD_BUT_NEXT_DAY_SEND.getCode().equals(taskInfo.getIsNightShield())) {
                 redisUtil.lPush(NIGHT_SHIELD_BUT_NEXT_DAY_SEND_KEY, JSON.toJSONString(taskInfo), (DateUtil.offsetDay(new Date(), 1).getTime()) / 1000);

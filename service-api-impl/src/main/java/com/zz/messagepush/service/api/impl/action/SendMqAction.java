@@ -7,6 +7,7 @@ import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.service.api.enums.BusinessCode;
 import com.zz.messagepush.service.api.impl.domain.SendTaskModel;
+import com.zz.messagepush.support.mq.SendMqService;
 import com.zz.messagepush.support.pipeline.BusinessProcess;
 import com.zz.messagepush.support.pipeline.ProcessContext;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Service;
 public class SendMqAction implements BusinessProcess<SendTaskModel> {
 
     @Autowired
-    private KafkaTemplate kafkaTemplate;
+    private SendMqService sendMqService;
 
     @Value("${austin.business.topic.name}")
     private String sendMessageTopic;
@@ -44,10 +45,10 @@ public class SendMqAction implements BusinessProcess<SendTaskModel> {
         try {
             if (BusinessCode.COMMON_SEND.getCode().equals(context.getCode())) {
                 String message = JSON.toJSONString(processModel.getTaskInfo(), SerializerFeature.WriteClassName);
-                kafkaTemplate.send(sendMessageTopic, message, tagId);
+                sendMqService.send(sendMessageTopic, message, tagId);
             } else if (BusinessCode.RECALL_SEND.getCode().equals(context.getCode())) {
                 String message = JSON.toJSONString(processModel.getMessageTemplateEntity(), SerializerFeature.WriteClassName);
-                kafkaTemplate.send(austinRecall, message, tagId);
+                sendMqService.send(austinRecall, message, tagId);
             }
         } catch (Exception e) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription()));

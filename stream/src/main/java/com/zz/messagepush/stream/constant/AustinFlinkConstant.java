@@ -9,10 +9,11 @@ public class AustinFlinkConstant {
 
     /**
      * kafka配置信息
+     * 如果想要自己监听到所有信息，改掉groupId
      */
     public static final String GROUP_ID = "austinLogGroup";
-    public static final String TOPIC_NAME="austinTopic";
-    public static final String BROKEN=  "ip:port";
+    public static final String TOPIC_NAME="austinTraceLog";
+    public static final String BROKEN=  "austin.kafka";
 
     /**
      * redis配置信息

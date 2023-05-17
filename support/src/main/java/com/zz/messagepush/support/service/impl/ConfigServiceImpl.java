@@ -7,6 +7,8 @@ import com.zz.messagepush.support.service.ConfigService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * @Description 读取本地配置实现类
  * @Author 张卫刚
@@ -19,7 +21,7 @@ public class ConfigServiceImpl implements ConfigService {
      * 本地配置
      */
     private static final String PROPERTIES_PATH = "local.properties";
-    private final Props props  = new Props(PROPERTIES_PATH);
+    private final Props props  = new Props(PROPERTIES_PATH, StandardCharsets.UTF_8);
 
     @Value("${apollo.bootstrap.enabled}")
     private Boolean enableApollo;

@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.enums.SimpleAnchorInfo;
+import com.zz.messagepush.stream.callback.RedisPipelineCallBack;
 import com.zz.messagepush.stream.utils.LettuceRedisUtils;
 import io.lettuce.core.RedisFuture;
+import io.lettuce.core.api.async.RedisAsyncCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 
@@ -34,7 +36,6 @@ public class AustinSink implements SinkFunction<AnchorInfo> {
      * 2、消息模板维度（查看消息模板整体下发情况），数据级小，保留30天
      */
     private void realTimeData(AnchorInfo anchorInfo) {
-
         try {
             LettuceRedisUtils.pipeline(redisAsyncCommands -> {
                 List<RedisFuture<?>> redisFutures = new ArrayList<>();

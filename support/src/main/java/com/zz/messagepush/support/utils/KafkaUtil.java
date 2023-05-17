@@ -27,6 +27,11 @@ public class KafkaUtil {
     private String tagIdKey;
 
 
+    /**
+     *发送kafka消息（不支持tag过滤）
+     * @param topicName
+     * @param jsonMessage
+     */
     public void send(String topicName, String jsonMessage) {
         send(topicName, jsonMessage, null);
     }
@@ -38,11 +43,11 @@ public class KafkaUtil {
      *
      * @param topicName
      * @param jsonMessage
-     * @param tagIdKey
+     * @param tagId
      */
-    public void send(String topicName, String jsonMessage, String tagIdKey) {
-        if (StringUtils.isNotBlank(tagIdKey)) {
-            List<RecordHeader> recordHeaders = List.of(new RecordHeader(tagIdKey, tagIdKey.getBytes(StandardCharsets.UTF_8)));
+    public void send(String topicName, String jsonMessage, String tagId) {
+        if (StringUtils.isNotBlank(tagId)) {
+            List<RecordHeader> recordHeaders = List.of(new RecordHeader(tagIdKey, tagId.getBytes(StandardCharsets.UTF_8)));
             kafkaTemplate.send(new ProducerRecord(topicName, null, null, null, jsonMessage, recordHeaders));
         } else {
             kafkaTemplate.send(topicName, jsonMessage);

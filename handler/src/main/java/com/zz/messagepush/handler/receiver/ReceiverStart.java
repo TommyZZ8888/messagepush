@@ -2,9 +2,11 @@ package com.zz.messagepush.handler.receiver;
 
 import com.zz.messagepush.handler.receiver.kafka.Receiver;
 import com.zz.messagepush.handler.utils.GroupIdMappingUtils;
+import com.zz.messagepush.support.constant.MessageQueuePipeline;
 import org.apache.kafka.common.header.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.KafkaListenerAnnotationBeanPostProcessor;
@@ -26,6 +28,7 @@ import java.util.Optional;
 
 
 @Service
+@ConditionalOnProperty(name = "austin-mq-pipeline",havingValue = MessageQueuePipeline.KAFKA)
 public class ReceiverStart {
 
     @Autowired

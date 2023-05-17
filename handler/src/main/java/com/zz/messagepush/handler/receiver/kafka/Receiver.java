@@ -2,20 +2,13 @@ package com.zz.messagepush.handler.receiver.kafka;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
-import com.zz.messagepush.common.domain.AnchorInfo;
-import com.zz.messagepush.common.domain.LogParam;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
-import com.zz.messagepush.common.enums.AnchorStateEnum;
-import com.zz.messagepush.handler.handler.HandlerHolder;
-import com.zz.messagepush.handler.pending.Task;
-import com.zz.messagepush.handler.pending.TaskPendingHolder;
+import com.zz.messagepush.handler.receiver.service.ConsumeService;
 import com.zz.messagepush.handler.utils.GroupIdMappingUtils;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
-import com.zz.messagepush.support.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -34,17 +27,8 @@ import java.util.Optional;
 @Slf4j
 public class Receiver {
 
-
-    private static final String LOG_BIZ_TYPE = "Receiver#consumer";
-
     @Autowired
-    private ApplicationContext context;
-
-    @Autowired
-    private TaskPendingHolder taskPendingHolder;
-
-    @Autowired
-    private HandlerHolder handlerHolder;
+    private ConsumeService consumeService;
 
     @KafkaListener(topics = "#{'${austin.kafka.topic.name}'}", containerFactory = "filterContainerFactory")
     public void consumer(ConsumerRecord<?, String> consumerRecord, @Header(KafkaHeaders.GROUP_ID) String topicGroupId) {
@@ -55,11 +39,7 @@ public class Receiver {
 
             //每个消费者只关心自身的信息
             if (groupId.equals(topicGroupId)) {
-                for (TaskInfo taskInfo : taskInfos) {
-                    LogUtils.print(LogParam.builder().bizType(LOG_BIZ_TYPE).object(taskInfo).build(), AnchorInfo.builder().ids(taskInfo.getReceiver()).businessId(taskInfo.getBusinessId()).state(AnchorStateEnum.RECEIVE.getCode()).build());
-                    Task task = context.getBean(Task.class).setTaskInfo(taskInfo);
-                    taskPendingHolder.route(topicGroupId).execute(task);
-                }
+                consumeService.consume2Send(taskInfos);
             }
             log.info("receive message:{}", JSON.toJSONString(taskInfos));
         }
@@ -72,8 +52,7 @@ public class Receiver {
         Optional<String> kafkaMessage = Optional.ofNullable(consumerRecord.value());
         if (kafkaMessage.isPresent()) {
             MessageTemplateEntity messageTemplateEntity = JSON.parseObject(kafkaMessage.get(), MessageTemplateEntity.class);
-            handlerHolder.route(messageTemplateEntity.getSendAccount()).recall(messageTemplateEntity);
-            log.info("receive message:{}", JSON.toJSONString(messageTemplateEntity));
+            consumeService.consume2Recall(messageTemplateEntity);
         }
     }
 }

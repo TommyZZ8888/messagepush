@@ -82,6 +82,9 @@ austin:
         tagId
             key: kafka_tag_id
             value: 3y
+        log:
+            topic:
+                name: austinTraceLog
     async:
         task:
             thread-name-prefix: austinAsyncExecutor- # task前缀名
@@ -95,6 +98,9 @@ austin:
             wait-for-tasks-to-complete-on-shut-down: true # 任务执行完,在关闭应用
 app:
     id: austin
+austin-kafka-ip: austin-kafka-ip
+austin-kafka-port: port
+austin-mq-pipeline: pipeline
 apollo:
     bootstrap:
         enabled: ${austin.apollo.enabled}
