@@ -8,7 +8,6 @@ import com.zz.messagepush.handler.deduplication.builder.DeduplicationService;
 import com.zz.messagepush.handler.deduplication.limit.LimitService;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
 import com.zz.messagepush.support.utils.LogUtils;
-import com.zz.messagepush.support.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +31,9 @@ public abstract class AbstractDeduplicationService implements DeduplicationServi
 
     public LimitService limitService;
 
+    @Autowired
+    private LogUtils logUtils;
+
 
     @PostConstruct
     public void init() {
@@ -46,7 +48,7 @@ public abstract class AbstractDeduplicationService implements DeduplicationServi
         //剔除不符合条件的用户
         if (CollUtil.isNotEmpty(filterReceiver)) {
             taskInfo.getReceiver().removeAll(filterReceiver);
-            LogUtils.print(AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(filterReceiver).state(deduplicationParam.getAnchorStateEnum().getCode()).build());
+            logUtils.print(AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(filterReceiver).state(deduplicationParam.getAnchorStateEnum().getCode()).build());
         }
     }
 

@@ -48,6 +48,12 @@ spring:
         allow-bean-definition-overriding: true
 
 austin:
+    rocketmq:
+        nameserver:
+            ip: 8987
+            port: unique-producer-group
+        biz-consumer-group: unique-biz-consumer-group
+        recall-consumer-group: unique-recall-consumer-group
     rabbitmq:
         topic:
             name: austinRabbit
@@ -168,3 +174,8 @@ wx:
             secret: secret
             token: token
             aesKey: aesKey
+##################### rocketmq properties #####################
+rocketmq:
+    name-server: ${austin-rocketmq-nameserver-ip}:${austin-rocketmq-nameserver-port}
+    producer:
+        group: ${austin-rocketmq-producer-group}

@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @Service
-@ConditionalOnProperty(name = "austin-mq-pipeline", havingValue = MessageQueuePipeline.EVENT_BUS)
+@ConditionalOnProperty(name = "austin-mq-pipeline", havingValue = MessageQueuePipeline.KAFKA)
 public class KafkaSendMqServiceImpl implements SendMqService {
 
 

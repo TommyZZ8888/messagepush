@@ -182,7 +182,7 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
                     assert taskId != null;
                     request.setMsgTaskId(Long.valueOf(taskId));
                     OapiMessageCorpconversationRecallResponse response = client.execute(request,accessToken);
-                    LogUtils.print(LogParam.builder().bizType(RECALL_BIZ_TYPE).object(JSON.toJSONString(response)).build());
+                    logUtils.print(LogParam.builder().bizType(RECALL_BIZ_TYPE).object(JSON.toJSONString(response)).build());
                 }
             }catch (Exception e){
                 e.printStackTrace();

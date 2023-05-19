@@ -5,7 +5,11 @@ import cn.monitor4all.logRecord.service.CustomLogListener;
 import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.LogParam;
+import com.zz.messagepush.support.constant.MessageQueuePipeline;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,6 +20,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class LogUtils extends CustomLogListener {
+
+    @Value("${austin.business.log.topic.name}")
+    private String topicName;
+
+    @Value("${austin-mq-pipeline}")
+    private String mqPipeline;
+
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
 
 
     /**
@@ -34,7 +47,7 @@ public class LogUtils extends CustomLogListener {
      *
      * @param logParam
      */
-    public static void print(LogParam logParam) {
+    public void print(LogParam logParam) {
         logParam.setTimestamp(System.currentTimeMillis());
         log.info(JSON.toJSONString(logParam));
     }
@@ -44,9 +57,17 @@ public class LogUtils extends CustomLogListener {
      *
      * @param anchorInfo
      */
-    public static void print(AnchorInfo anchorInfo) {
+    public void print(AnchorInfo anchorInfo) {
         anchorInfo.setTimeStamp(System.currentTimeMillis());
         log.info(JSON.toJSONString(anchorInfo));
+
+        if (MessageQueuePipeline.KAFKA.equals(mqPipeline)) {
+            try {
+                kafkaTemplate.send(topicName, JSON.toJSONString(anchorInfo));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -55,7 +76,7 @@ public class LogUtils extends CustomLogListener {
      * @param logParam
      * @param anchorInfo
      */
-    public static void print(LogParam logParam, AnchorInfo anchorInfo) {
+    public void print(LogParam logParam, AnchorInfo anchorInfo) {
         print(logParam);
         print(anchorInfo);
     }

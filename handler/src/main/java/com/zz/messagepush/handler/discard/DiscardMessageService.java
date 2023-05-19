@@ -26,6 +26,9 @@ public class DiscardMessageService {
     @Autowired
     private ConfigService config;
 
+    @Autowired
+    private LogUtils logUtils;
+
     /**
      * 丢弃消息，配置在apollo
      *
@@ -35,7 +38,7 @@ public class DiscardMessageService {
     public boolean isDiscard(TaskInfo taskInfo) {
         JSONArray array = JSON.parseArray(config.getProperty(DISCARD_MESSAGE_KEY, AustinConstant.APOLLO_DEFAULT_VALUE_JSON_ARRAY));
         if (array.contains(String.valueOf(taskInfo.getMessageTemplateId()))) {
-            LogUtils.print(AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).state(AnchorStateEnum.DISCARD.getCode()).build());
+            logUtils.print(AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).state(AnchorStateEnum.DISCARD.getCode()).build());
             return true;
         }
         return false;

@@ -36,11 +36,14 @@ public class ConsumeServiceImpl implements ConsumeService {
     @Autowired
     private HandlerHolder handlerHolder;
 
+    @Autowired
+    private LogUtils logUtils;
+
     @Override
     public void consume2Send(List<TaskInfo> list) {
         String topicGroupId = GroupIdMappingUtils.getGroupIdByTaskInfo(CollUtil.getFirst(list));
         for (TaskInfo taskInfo : list) {
-            LogUtils.print(LogParam.builder().bizType(LOG_BIZ_TYPE).object(taskInfo).build(),
+            logUtils.print(LogParam.builder().bizType(LOG_BIZ_TYPE).object(taskInfo).build(),
                     AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).state(AnchorStateEnum.RECEIVE.getCode()).build());
             Task task = ApplicationContextUtil.getBean(Task.class).setTaskInfo(taskInfo);
             taskPendingHolder.route(topicGroupId).execute(task);
@@ -49,7 +52,7 @@ public class ConsumeServiceImpl implements ConsumeService {
 
     @Override
     public void consume2Recall(MessageTemplateEntity messageTemplateEntity) {
-        LogUtils.print(LogParam.builder().bizType(LOG_BIZ_RECALL_TYPE).object(messageTemplateEntity).build());
+        logUtils.print(LogParam.builder().bizType(LOG_BIZ_RECALL_TYPE).object(messageTemplateEntity).build());
         handlerHolder.route(messageTemplateEntity.getSendChannel()).recall(messageTemplateEntity);
     }
 }
