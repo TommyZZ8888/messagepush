@@ -57,7 +57,7 @@ public class TaskHandlerImpl implements TaskHandler {
                     .messageTemplateId(messageTemplateId).build();
             crowdBatchTaskPending.pending(crowdInfoVo);
 
-            onComplete(row,countCsvRow,crowdBatchTaskPending,messageTemplateId);
+            onComplete(row, countCsvRow, crowdBatchTaskPending, messageTemplateId);
         });
 
     }
@@ -67,6 +67,7 @@ public class TaskHandlerImpl implements TaskHandler {
      * 文章暂停结束时
      * 暂停单线程消费
      * 更改消息模板的状态
+     *
      * @param csvRow
      * @param countCsvRow
      * @param abstractLazyPending

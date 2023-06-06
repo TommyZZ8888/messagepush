@@ -6,6 +6,7 @@ import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
 import com.zz.messagepush.handler.flowcontrol.FlowControlParam;
 import com.zz.messagepush.handler.flowcontrol.FlowControlService;
+import com.zz.messagepush.handler.flowcontrol.impl.FlowControlFactory;
 import com.zz.messagepush.support.utils.LogUtils;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public abstract class BaseHandler implements Handler {
     protected FlowControlParam flowControlParam;
 
     @Autowired
-    private FlowControlService flowControlService;
+    private FlowControlFactory flowControlFactory;
 
     @Autowired
     private LogUtils logUtils;
@@ -61,7 +62,7 @@ public abstract class BaseHandler implements Handler {
 
     public void flowControl(TaskInfo taskInfo){
         if (flowControlParam!=null){
-            flowControlService.flowControl(taskInfo,flowControlParam);
+            flowControlFactory.flowControl(taskInfo,flowControlParam);
         }
     }
 
