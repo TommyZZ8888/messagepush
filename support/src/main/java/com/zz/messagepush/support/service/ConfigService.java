@@ -9,8 +9,8 @@ public interface ConfigService {
 
     /**
      * 读取配置
-     * 1.当启动了apollo，优先读取apollo
-     * 2.当没有启动apollo，读取本地local.properties的配置
+     * 1.当启动了apollo或者nacos，优先读取远程配置
+     * 2.当没有启动远程配置，读取本地local.properties的配置
      * @param key
      * @param defaultValue
      * @return

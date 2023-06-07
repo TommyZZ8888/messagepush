@@ -54,6 +54,8 @@ spring:
             retry-times-when-send-async-failed: 3
 
 austin:
+    nacos:
+        enabled: false
     rocketmq:
         nameserver:
             ip: 8987

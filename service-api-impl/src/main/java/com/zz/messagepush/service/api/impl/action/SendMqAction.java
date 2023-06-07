@@ -1,5 +1,6 @@
 package com.zz.messagepush.service.api.impl.action;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
@@ -37,6 +38,9 @@ public class SendMqAction implements BusinessProcess<SendTaskModel> {
     @Value("${austin.business.tagId.value}")
     private String tagId;
 
+    @Value("${austin.mq.pipeline}")
+    private String mqPipeline;
+
     @Override
     public void process(ProcessContext<SendTaskModel> context) {
         SendTaskModel processModel = context.getProcessModel();
@@ -51,7 +55,8 @@ public class SendMqAction implements BusinessProcess<SendTaskModel> {
             }
         } catch (Exception e) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.SERVICE_ERROR.getDescription()));
-            log.error("send kafka fail! e:{}", Throwables.getStackTraceAsString(e));
+            log.error("send {} kafka fail! e:{},params: {}", mqPipeline, Throwables.getStackTraceAsString(e),
+                    JSON.toJSONString(CollUtil.getFirst(processModel.getTaskInfo().iterator())));
         }
     }
 }

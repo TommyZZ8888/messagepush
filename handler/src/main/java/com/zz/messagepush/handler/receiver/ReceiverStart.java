@@ -28,8 +28,12 @@ import java.util.Optional;
 
 
 @Service
-@ConditionalOnProperty(name = "austin-mq-pipeline",havingValue = MessageQueuePipeline.KAFKA)
+@ConditionalOnProperty(name = "austin-mq-pipeline", havingValue = MessageQueuePipeline.KAFKA)
 public class ReceiverStart {
+
+    @Value("${austin.nacos.enabled}")
+    private Boolean nacosEnabled;
+
 
     @Autowired
     private ApplicationContext context;
@@ -58,7 +62,11 @@ public class ReceiverStart {
      */
     @PostConstruct
     public void init() {
-        for (int i = 0; i < GROUP_IDS.size(); i++) {
+        int total = GROUP_IDS.size();
+        if (nacosEnabled) {
+            total = -1;
+        }
+        for (int i = 0; i < total; i++) {
             context.getBean(Receiver.class);
         }
     }
@@ -75,8 +83,7 @@ public class ReceiverStart {
             if (element instanceof Method) {
                 String name = ((Method) element).getDeclaringClass().getSimpleName() + "." + ((Method) element).getName();
                 if (RECEIVER_METHOD_NAME.equals(name)) {
-                    attrs.put("groupId", GROUP_IDS.get(index));
-                    index++;
+                    attrs.put("groupId", GROUP_IDS.get(index++));
                 }
             }
             return attrs;

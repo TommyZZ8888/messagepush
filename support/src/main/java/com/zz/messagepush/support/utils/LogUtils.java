@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.LogParam;
 import com.zz.messagepush.support.constant.MessageQueuePipeline;
+import com.zz.messagepush.support.mq.SendMqService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class LogUtils extends CustomLogListener {
     private String mqPipeline;
 
     @Autowired
-    private KafkaTemplate kafkaTemplate;
+    private SendMqService sendMqService;
 
 
     /**
@@ -63,7 +64,7 @@ public class LogUtils extends CustomLogListener {
 
         if (MessageQueuePipeline.KAFKA.equals(mqPipeline)) {
             try {
-                kafkaTemplate.send(topicName, JSON.toJSONString(anchorInfo));
+                sendMqService.send(topicName, JSON.toJSONString(anchorInfo));
             } catch (Exception e) {
                 e.printStackTrace();
             }
