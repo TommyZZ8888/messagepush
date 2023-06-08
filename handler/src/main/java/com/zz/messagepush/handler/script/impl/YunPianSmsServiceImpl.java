@@ -2,7 +2,6 @@ package com.zz.messagepush.handler.script.impl;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
@@ -12,13 +11,12 @@ import com.zz.messagepush.handler.domain.sms.SmsParam;
 import com.zz.messagepush.common.domain.dto.account.YunPianSmsAccount;
 import com.zz.messagepush.common.enums.SmsStatus;
 import com.zz.messagepush.handler.domain.sms.YunPianSendResult;
-import com.zz.messagepush.handler.script.BaseSmsScript;
 import com.zz.messagepush.handler.script.SmsService;
-import com.zz.messagepush.handler.script.anno.SmsScriptHandler;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.utils.AccountUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -27,8 +25,8 @@ import java.util.*;
  * @Author 张卫刚
  * @Date Created on 2023/5/4
  */
-@SmsScriptHandler(value = "YunPianSmsService")
-public class YunPianSmsServiceImpl extends BaseSmsScript implements SmsService {
+@Component("YunPianSmsService")
+public class YunPianSmsServiceImpl implements SmsService {
 
     @Autowired
     private AccountUtils accountUtils;
