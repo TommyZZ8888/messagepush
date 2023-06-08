@@ -13,13 +13,12 @@ import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.handler.domain.sms.SmsParam;
 import com.zz.messagepush.common.domain.dto.account.TencentSmsAccount;
 import com.zz.messagepush.common.enums.SmsStatus;
-import com.zz.messagepush.handler.script.BaseSmsScript;
 import com.zz.messagepush.handler.script.SmsService;
-import com.zz.messagepush.handler.script.anno.SmsScriptHandler;
 import com.zz.messagepush.support.utils.AccountUtils;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,10 +32,10 @@ import java.util.List;
  * 2. 推荐直接使用SDK
  * 3. 推荐使用API Explorer 生成代码
  */
-@Service
+
 @Slf4j
-@SmsScriptHandler(value = "TencentSmsService")
-public class TencentSmsServiceImpl extends BaseSmsScript implements SmsService {
+@Component("TencentSmsService")
+public class TencentSmsServiceImpl implements SmsService {
 
     private static final Integer PHONE_NUM = 11;
 

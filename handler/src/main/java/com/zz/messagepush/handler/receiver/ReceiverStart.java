@@ -31,10 +31,6 @@ import java.util.Optional;
 @ConditionalOnProperty(name = "austin-mq-pipeline", havingValue = MessageQueuePipeline.KAFKA)
 public class ReceiverStart {
 
-    @Value("${austin.nacos.enabled}")
-    private Boolean nacosEnabled;
-
-
     @Autowired
     private ApplicationContext context;
 
@@ -62,11 +58,7 @@ public class ReceiverStart {
      */
     @PostConstruct
     public void init() {
-        int total = GROUP_IDS.size();
-        if (nacosEnabled) {
-            total = -1;
-        }
-        for (int i = 0; i < total; i++) {
+        for (int i = 0; i < GROUP_IDS.size(); i++) {
             context.getBean(Receiver.class);
         }
     }
@@ -74,7 +66,6 @@ public class ReceiverStart {
 
     /**
      * 给每个Receiver对象的consumer方法，@KafkaListener赋值相应的groupId
-     *
      * @return
      */
     @Bean
@@ -93,7 +84,6 @@ public class ReceiverStart {
 
     /**
      * 针对tag消息过滤
-     *
      * @param tagIdKey   将tag写进header里
      * @param tagIdValue
      * @return

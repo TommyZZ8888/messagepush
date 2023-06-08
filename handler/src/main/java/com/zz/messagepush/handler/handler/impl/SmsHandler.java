@@ -14,7 +14,7 @@ import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
-import com.zz.messagepush.handler.script.SmsScriptHolder;
+import com.zz.messagepush.handler.script.SmsService;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.SmsRecordMapper;
@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -38,7 +39,7 @@ public class SmsHandler extends BaseHandler implements Handler {
     private SmsRecordMapper smsRecordMapper;
 
     @Autowired
-    private SmsScriptHolder smsScriptHolder;
+    private Map<String, SmsService> smsServiceMap;
 
     @ApolloConfig("boss.austin")
     private Config config;
@@ -62,7 +63,7 @@ public class SmsHandler extends BaseHandler implements Handler {
         try {
             MessageTypeSmsConfig[] messageTypeSmsConfigs = loadBalance(messageTypeSmsConfigs(taskInfo.getMsgType()));
             for (MessageTypeSmsConfig messageTypeSmsConfig : messageTypeSmsConfigs) {
-                List<SmsRecordEntity> list = smsScriptHolder.route(messageTypeSmsConfig.getScriptName()).send(smsParam);
+                List<SmsRecordEntity> list = smsServiceMap.get(messageTypeSmsConfig.getScriptName()).send(smsParam);
                 if (CollUtil.isNotEmpty(list)) {
                     smsRecordMapper.saveAll(list);
                     return true;
