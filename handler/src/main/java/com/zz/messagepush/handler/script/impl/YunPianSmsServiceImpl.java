@@ -32,8 +32,8 @@ public class YunPianSmsServiceImpl implements SmsService {
     private AccountUtils accountUtils;
 
     @Override
-    public List<SmsRecordEntity> send(SmsParam smsParam)     {
-        YunPianSmsAccount account = accountUtils.getAccount(SendAccountConstant.YUN_PIAN_SMS_CODE, SendAccountConstant.SMS_ACCOUNT_KEY, SendAccountConstant.SMS_ACCOUNT_PREFIX, YunPianSmsAccount.class);
+    public List<SmsRecordEntity> send(SmsParam smsParam) {
+        YunPianSmsAccount account = accountUtils.getAccount(smsParam.getSendAccountId(), SendAccountConstant.SMS_ACCOUNT_KEY, SendAccountConstant.SMS_ACCOUNT_PREFIX, YunPianSmsAccount.class);
 
         Map<String, String> params = assembleReq(smsParam, account);
         String result = HttpRequest.post(account.getUrl())
@@ -74,7 +74,6 @@ public class YunPianSmsServiceImpl implements SmsService {
 
     /**
      * 组装参数
-     *
      * @param
      * @return
      */
