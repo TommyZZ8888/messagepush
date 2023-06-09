@@ -25,8 +25,8 @@ public class SmsParam {
      */
     private String content;
 
-//    /**
-//     * 发送账号
-//     */
-//    private Integer sendAccount;
+    /**
+     * 发送渠道账号的id
+     */
+    private Integer sendAccountId;
 }

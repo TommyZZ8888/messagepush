@@ -51,14 +51,13 @@ public class SmsHandler extends BaseHandler implements Handler {
 
     @Override
     public boolean handler(TaskInfo taskInfo) {
-
         String resultContent = getSmsContent(taskInfo);
 
         SmsParam smsParam = SmsParam.builder()
                 .phones(taskInfo.getReceiver())
                 .content(resultContent)
                 .messageTemplateId(taskInfo.getMessageTemplateId())
-//                .sendAccount(taskInfo.getSendAccount())
+                .sendAccountId(taskInfo.getSendAccount())
                 .build();
         try {
             MessageTypeSmsConfig[] messageTypeSmsConfigs = loadBalance(messageTypeSmsConfigs(taskInfo.getMsgType()));

@@ -27,4 +27,16 @@ public interface ChannelAccountService {
      * @return
      */
     List<ChannelAccountEntity> queryByChannelType(Integer channelType);
+
+    /**
+     * 列表信息 无条件
+     * @return
+     */
+    List<ChannelAccountEntity> list();
+
+    /**
+     * 软删除
+     * @param ids
+     */
+    void deleteByIds(List<Long> ids);
 }

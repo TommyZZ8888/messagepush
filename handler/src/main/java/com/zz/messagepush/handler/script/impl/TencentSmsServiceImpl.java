@@ -47,12 +47,12 @@ public class TencentSmsServiceImpl implements SmsService {
     @Override
     public List<SmsRecordEntity> send(SmsParam smsParam) {
         try {
-            TencentSmsAccount tencentSmsParam = accountUtils.getAccount(SendAccountConstant.TENCENT_SMS_CODE, SendAccountConstant.SMS_ACCOUNT_KEY, SendAccountConstant.SMS_ACCOUNT_PREFIX, TencentSmsAccount.class);
+            TencentSmsAccount tencentSmsParam = accountUtils.getAccount(smsParam.getSendAccountId(), SendAccountConstant.SMS_ACCOUNT_KEY, SendAccountConstant.SMS_ACCOUNT_PREFIX, TencentSmsAccount.class);
             SmsClient client = init(tencentSmsParam);
             SendSmsRequest request = assembleReq(smsParam, tencentSmsParam);
             SendSmsResponse response = client.SendSms(request);
             return assembleSmsRecord(smsParam, response, tencentSmsParam);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -87,7 +87,6 @@ public class TencentSmsServiceImpl implements SmsService {
 
     /**
      * 组装参数
-     *
      * @param
      * @return
      */
@@ -105,7 +104,6 @@ public class TencentSmsServiceImpl implements SmsService {
 
     /**
      * 初始化client
-     *
      * @return
      */
     private SmsClient init(TencentSmsAccount account) {
