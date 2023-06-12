@@ -30,6 +30,8 @@ public enum ChannelType {
     ENTERPRISE_WE_CHAT_ROBOT(100, "enterpriseWeChat(企业微信机器人)", EnterpriseWeChatRobotContentModel.class, "enterprise_we_chat_robot"),
 
     FEI_SHU_ROBOT(110,"feiShuRobot(飞书机器人)",FeiShuRobotContentModel.class,"fei_shu_robot"),
+
+    ALIPAY_MINI_PROGRAM(120,"alipayMiniProgram(支付宝小程序)",AlipayMiniProgramContentModel.class,"alipay_mini_program"),
     ;
 
     private Integer code;

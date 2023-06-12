@@ -85,4 +85,11 @@ public class SendAccountConstant {
     public static final String FEI_SHU_ROBOT_ACCOUNT_KEY = "feiShuRobotAccount";
     public static final String FEI_SHU_ROBOT_PREFIX = "fei_shu_robot_";
 
+
+    /**
+     * 支付宝小程序 应用信息 账号
+     */
+    public static final String ALIPAY_MINI_PROGRAM_ACCOUNT_KEY = "alipayMiniProgramAccount";
+    public static final String ALIPAY_MINI_PROGRAM_PREFIX = "alipay_mini_program_";
+
 }
