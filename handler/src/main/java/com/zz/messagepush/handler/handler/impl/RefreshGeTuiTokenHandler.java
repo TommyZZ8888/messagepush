@@ -8,17 +8,23 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.account.GeTuiAccount;
 import cn.hutool.crypto.SecureUtil;
+import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.cron.domain.dto.geTui.GeTuiTokenResultDTO;
 import com.zz.messagepush.cron.domain.dto.geTui.QueryTokenParamDTO;
 import com.zz.messagepush.support.config.SupportThreadPoolConfig;
+import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
+import com.zz.messagepush.support.mapper.ChannelAccountMapper;
 import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Description RefreshGeTuiTokenHandler
@@ -35,20 +41,21 @@ public class RefreshGeTuiTokenHandler {
 
 
     @Autowired
-    private AccountUtils accountUtils;
+    private ChannelAccountMapper channelAccountMapper;
 
     @XxlJob("refreshGeTuiAccessTokenJob")
     public void execute() {
         SupportThreadPoolConfig.getPendingSingleThreadPool().execute(() -> {
-            for (int index = SendAccountConstant.START; true; index = index + SendAccountConstant.STEP) {
-                GeTuiAccount account = accountUtils.getAccount(index, SendAccountConstant.GE_TUI_ACCOUNT_KEY, SendAccountConstant.GE_TUI_ACCOUNT_PREFIX, GeTuiAccount.class);
+            List<ChannelAccountEntity> list = channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(CommonConstant.FALSE, ChannelType.PUSH.getCode());
+            for (ChannelAccountEntity account : list) {
 
-                if (account == null) {
+                GeTuiAccount geTuiAccount = JSON.parseObject(account.getAccountConfig(), GeTuiAccount.class);
+                if (geTuiAccount == null) {
                     break;
                 }
-                String accessToken = getAccessToken(account);
+                String accessToken = getAccessToken(geTuiAccount);
                 if (StrUtil.isNotBlank(accessToken)) {
-                    redisTemplate.opsForValue().set(SendAccountConstant.GE_TUI_ACCESS_TOKEN_PREFIX + index, accessToken);
+                    redisTemplate.opsForValue().set(SendAccountConstant.GE_TUI_ACCESS_TOKEN_PREFIX + account.getId(), accessToken);
                 }
             }
         });

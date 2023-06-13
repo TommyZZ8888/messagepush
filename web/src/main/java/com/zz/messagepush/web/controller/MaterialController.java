@@ -1,5 +1,6 @@
 package com.zz.messagepush.web.controller;
 
+import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.web.service.MaterialService;
@@ -19,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api("素材管理接口")
 @RestController
 @RequestMapping("/material")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*")
+@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowCredentials = "true", allowedHeaders = "*")
 public class MaterialController {
 
     @Autowired

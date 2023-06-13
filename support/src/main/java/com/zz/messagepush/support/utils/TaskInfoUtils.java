@@ -2,6 +2,7 @@ package com.zz.messagepush.support.utils;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import com.zz.messagepush.common.constant.CommonConstant;
 
 import java.util.Date;
 
@@ -14,7 +15,7 @@ public class TaskInfoUtils {
 
     private static final int TYPE_FLAG = 1000000;
 
-    private static final char PARAM = '?';
+    private static final String CODE = "track_indo_bid";
 
     /**
      * 生成businessId
@@ -63,10 +64,10 @@ public class TaskInfoUtils {
     public static String generateUrl(String url, Long templateId, Integer templateType) {
         url = url.trim();
         Long businessId = generateBusinessId(templateId, templateType);
-        if (url.indexOf(PARAM) == -1) {
-            url = url + "?track_code_bid=" + businessId;
+        if (url.indexOf(CommonConstant.QM) == -1) {
+            url = url + CommonConstant.QM_STRING + CODE + CommonConstant.EQUAL_STRING + businessId;
         } else {
-            url = url + "&track_code_bid=" + businessId;
+            url = url + CommonConstant.AND_STRING + CODE + CommonConstant.EQUAL_STRING + businessId;
         }
         return url;
     }

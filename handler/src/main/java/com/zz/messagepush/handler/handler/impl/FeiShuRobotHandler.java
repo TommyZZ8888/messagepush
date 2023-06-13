@@ -48,7 +48,7 @@ public class FeiShuRobotHandler extends BaseHandler implements Handler {
     @Override
     public boolean handler(TaskInfo taskInfo) {
         try {
-            FeiShuRobotAccount account = accountUtils.getAccount(taskInfo.getSendAccount(), SendAccountConstant.FEI_SHU_ROBOT_ACCOUNT_KEY, SendAccountConstant.FEI_SHU_ROBOT_PREFIX, FeiShuRobotAccount.class);
+            FeiShuRobotAccount account = accountUtils.getAccountById(taskInfo.getSendAccount(), FeiShuRobotAccount.class);
             FeiShuRobotParam feiShuRobotParam = assembleParam(taskInfo);
             String body = HttpRequest.post(account.getWebhook())
                     .header(Header.CONTENT_TYPE.getValue(), ContentType.JSON.getValue())

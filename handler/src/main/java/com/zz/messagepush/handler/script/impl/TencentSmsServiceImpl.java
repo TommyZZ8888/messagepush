@@ -11,7 +11,7 @@ import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.handler.domain.sms.SmsParam;
-import com.zz.messagepush.common.domain.dto.account.TencentSmsAccount;
+import com.zz.messagepush.common.domain.dto.account.sms.TencentSmsAccount;
 import com.zz.messagepush.common.enums.SmsStatus;
 import com.zz.messagepush.handler.script.SmsService;
 import com.zz.messagepush.support.utils.AccountUtils;
@@ -19,7 +19,6 @@ import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;

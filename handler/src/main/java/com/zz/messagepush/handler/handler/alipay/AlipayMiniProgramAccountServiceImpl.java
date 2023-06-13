@@ -6,12 +6,10 @@ import com.alipay.api.AlipayConfig;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayOpenAppMiniTemplatemessageSendModel;
 import com.alipay.api.request.AlipayOpenAppMiniTemplatemessageSendRequest;
-import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.account.AlipayMiniProgramAccount;
 import com.zz.messagepush.handler.domain.alipay.AlipayMiniProgramParam;
 import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.network.Send;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +32,7 @@ public class AlipayMiniProgramAccountServiceImpl implements AlipayMiniProgramAcc
 
     @Override
     public void send(AlipayMiniProgramParam alipayMiniProgramParam) throws AlipayApiException {
-        AlipayMiniProgramAccount account = accountUtils.getAccount(alipayMiniProgramParam.getSendAccount(), SendAccountConstant.ALIPAY_MINI_PROGRAM_ACCOUNT_KEY,
-                SendAccountConstant.ALIPAY_MINI_PROGRAM_PREFIX, AlipayMiniProgramAccount.class);
+        AlipayMiniProgramAccount account = accountUtils.getAccountById(alipayMiniProgramParam.getSendAccount(), AlipayMiniProgramAccount.class);
         AlipayClient alipayClient = initService(account);
         List<AlipayOpenAppMiniTemplatemessageSendRequest> requests = assemblyReq(alipayMiniProgramParam, account);
         for (AlipayOpenAppMiniTemplatemessageSendRequest request : requests) {

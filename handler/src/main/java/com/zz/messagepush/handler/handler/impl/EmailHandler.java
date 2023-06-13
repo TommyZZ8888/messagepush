@@ -60,7 +60,7 @@ public class EmailHandler extends BaseHandler implements Handler {
     }
 
     private MailAccount getAccountConfig(Integer sendAccount) {
-        MailAccount account = accountUtils.getAccount(sendAccount, SendAccountConstant.EMAIL_ACCOUNT_KEY, SendAccountConstant.EMAIL_PREFIX, MailAccount.class);
+        MailAccount account = accountUtils.getAccountById(sendAccount, MailAccount.class);
 
         try {
             account.setHost("smtp.qq.com").setPort(465);

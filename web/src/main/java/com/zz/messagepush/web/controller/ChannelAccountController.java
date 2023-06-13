@@ -2,6 +2,7 @@ package com.zz.messagepush.web.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.nacos.common.tls.SelfTrustManager;
+import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
 import com.zz.messagepush.web.service.ChannelAccountService;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/account")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowedHeaders = "*", allowCredentials = "true")
 public class ChannelAccountController {
 
 

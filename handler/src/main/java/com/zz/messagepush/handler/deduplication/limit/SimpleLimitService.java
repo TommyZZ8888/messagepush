@@ -2,6 +2,7 @@ package com.zz.messagepush.handler.deduplication.limit;
 
 import cn.hutool.core.collection.CollUtil;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.handler.deduplication.AbstractDeduplicationService;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
@@ -67,7 +68,7 @@ public class SimpleLimitService extends AbstractLimitService {
             if (inRedisValue.get(key) != null) {
                 keyValues.put(key, String.valueOf(Integer.parseInt(inRedisValue.get(key)) + 1));
             } else {
-                keyValues.put(key, String.valueOf(AustinConstant.TRUE));
+                keyValues.put(key, String.valueOf(CommonConstant.TRUE));
             }
         }
 

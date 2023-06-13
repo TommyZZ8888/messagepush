@@ -1,6 +1,7 @@
 package com.zz.messagepush.web.service.impl;
 
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
 import com.zz.messagepush.support.mapper.ChannelAccountMapper;
 import com.zz.messagepush.web.service.ChannelAccountService;
@@ -26,7 +27,7 @@ public class ChannelAccountServiceImpl implements ChannelAccountService {
     public ChannelAccountEntity save(ChannelAccountEntity channelAccountEntity) {
         if (channelAccountEntity.getId() == null) {
             channelAccountEntity.setCreated(new Date());
-            channelAccountEntity.setIsDeleted(AustinConstant.FALSE);
+            channelAccountEntity.setIsDeleted(CommonConstant.FALSE);
         }
         channelAccountEntity.setUpdated(new Date());
         return channelAccountMapper.save(channelAccountEntity);
@@ -34,7 +35,7 @@ public class ChannelAccountServiceImpl implements ChannelAccountService {
 
     @Override
     public List<ChannelAccountEntity> queryByChannelType(Integer channelType) {
-        return channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(AustinConstant.FALSE, channelType);
+        return channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(CommonConstant.FALSE, channelType);
     }
 
     @Override

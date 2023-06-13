@@ -6,9 +6,10 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.handler.domain.sms.SmsParam;
-import com.zz.messagepush.common.domain.dto.account.YunPianSmsAccount;
+import com.zz.messagepush.common.domain.dto.account.sms.YunPianSmsAccount;
 import com.zz.messagepush.common.enums.SmsStatus;
 import com.zz.messagepush.handler.domain.sms.YunPianSendResult;
 import com.zz.messagepush.handler.script.SmsService;
@@ -33,7 +34,7 @@ public class YunPianSmsServiceImpl implements SmsService {
 
     @Override
     public List<SmsRecordEntity> send(SmsParam smsParam) {
-        YunPianSmsAccount account = accountUtils.getAccount(smsParam.getSendAccountId(), SendAccountConstant.SMS_ACCOUNT_KEY, SendAccountConstant.SMS_ACCOUNT_PREFIX, YunPianSmsAccount.class);
+        YunPianSmsAccount account = accountUtils.getAccountById(smsParam.getSendAccountId(), YunPianSmsAccount.class);
 
         Map<String, String> params = assembleReq(smsParam, account);
         String result = HttpRequest.post(account.getUrl())
@@ -59,11 +60,11 @@ public class YunPianSmsServiceImpl implements SmsService {
                     .sendDate(new Date())
                     .messageTemplateId(smsParamDTO.getMessageTemplateId())
                     .phone(Long.valueOf(datum.getMobile()))
-                    .supplierId(Integer.valueOf(account.getSupplierId()))
+                    .supplierId(account.getSupplierId())
                     .supplierName(account.getSupplierName())
                     .seriesId(datum.getSid())
                     .chargingNum(Math.toIntExact(datum.getCount()))
-                    .status(datum.getCode().equals(0) ? SmsStatus.SEND_SUCCESS.getCode() : SmsStatus.SEND_FAIL.getCode())
+                    .status(CommonConstant.ZERO.equals(datum.getCode()) ? SmsStatus.SEND_SUCCESS.getCode() : SmsStatus.SEND_FAIL.getCode())
                     .msgContent(smsParamDTO.getContent())
                     .reportContent(datum.getMsg())
                     .created(new Date()).build();
