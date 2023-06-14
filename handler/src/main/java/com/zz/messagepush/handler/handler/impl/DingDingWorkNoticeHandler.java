@@ -33,6 +33,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,6 +58,7 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
     private static final String SEND_URL = "https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2";
     private static final String RECALL_URL = "https://oapi.dingtalk.com/topapi/message/corpconversation/recall";
     private static final String RECALL_BIZ_TYPE = "DingDingWorkNoticeHandler#recall";
+    private static final String PULL_URL = "https://oapi.dingtalk.com/topapi/message/corpconversation/getsendresult";
 
     private static final String DING_DING_RECALL_KEY_PREFIX = "RECALL_";
 
@@ -173,8 +175,7 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
                 if (size == null) {
                     return;
                 }
-                Long size1 = redisTemplate.opsForList().size(DING_DING_RECALL_KEY_PREFIX + messageTemplate.getId());
-                while (0 < size1) {
+                while (0 < Objects.requireNonNull(redisTemplate.opsForList().size(DING_DING_RECALL_KEY_PREFIX + messageTemplate.getId()))) {
                     String taskId = redisTemplate.opsForList().leftPop(DING_DING_RECALL_KEY_PREFIX + messageTemplate.getId());
                     DefaultDingTalkClient client = new DefaultDingTalkClient(RECALL_URL);
                     OapiMessageCorpconversationRecallRequest request = new OapiMessageCorpconversationRecallRequest();
@@ -188,5 +189,9 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void pull(Long accountId){
+
     }
 }

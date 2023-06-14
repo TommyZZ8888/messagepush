@@ -1,11 +1,13 @@
 package com.zz.messagepush.handler.receipt;
 
+import com.zz.messagepush.handler.receipt.starter.ReceiptMessageStarter;
 import com.zz.messagepush.support.config.SupportThreadPoolConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * @Description SmsReceipt
@@ -18,18 +20,17 @@ import javax.annotation.PostConstruct;
 public class MessageReceipt {
 
     @Autowired
-    private TencentSmsReceipt tencentSmsReceipt;
+    private List<ReceiptMessageStarter> receiptMessageStarterList;
 
-    @Autowired
-    private YunPianSmsReceipt yunPianSmsReceipt;
 
     @PostConstruct
     private void init() {
         SupportThreadPoolConfig.getPendingSingleThreadPool().execute(() -> {
             while (true) {
                 //TODO 回执这里自行打开，免得报错
-                //tencentSmsReceipt.pull();
-                //yunPianSmsReceipt.pull();
+                for (ReceiptMessageStarter messageStarter : receiptMessageStarterList) {
+//                    messageStarter.start();
+                }
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {

@@ -7,7 +7,6 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.messagepush.common.constant.CommonConstant;
-import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.handler.domain.sms.SmsParam;
 import com.zz.messagepush.common.domain.dto.account.sms.YunPianSmsAccount;
 import com.zz.messagepush.common.enums.SmsStatus;
