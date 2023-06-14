@@ -39,5 +39,5 @@ public class WeChatOfficialParam {
     /**
      * 发送账户
      */
-    private Integer sendAccount;
+    private Long sendAccount;
 }

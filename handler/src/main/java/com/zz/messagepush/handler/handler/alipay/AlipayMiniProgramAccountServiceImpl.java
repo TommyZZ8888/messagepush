@@ -7,6 +7,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayOpenAppMiniTemplatemessageSendModel;
 import com.alipay.api.request.AlipayOpenAppMiniTemplatemessageSendRequest;
 import com.zz.messagepush.common.domain.dto.account.AlipayMiniProgramAccount;
+import com.zz.messagepush.handler.config.AlipayClientSingleton;
 import com.zz.messagepush.handler.domain.alipay.AlipayMiniProgramParam;
 import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class AlipayMiniProgramAccountServiceImpl implements AlipayMiniProgramAcc
     @Override
     public void send(AlipayMiniProgramParam alipayMiniProgramParam) throws AlipayApiException {
         AlipayMiniProgramAccount account = accountUtils.getAccountById(alipayMiniProgramParam.getSendAccount(), AlipayMiniProgramAccount.class);
-        AlipayClient alipayClient = initService(account);
+        AlipayClient alipayClient = AlipayClientSingleton.getSingleton(account);
         List<AlipayOpenAppMiniTemplatemessageSendRequest> requests = assemblyReq(alipayMiniProgramParam, account);
         for (AlipayOpenAppMiniTemplatemessageSendRequest request : requests) {
             alipayClient.execute(request);
@@ -59,21 +60,4 @@ public class AlipayMiniProgramAccountServiceImpl implements AlipayMiniProgramAcc
     }
 
 
-    /**
-     * 初始化支付宝小程序
-     * @param account
-     * @return
-     * @throws AlipayApiException
-     */
-    private AlipayClient initService(AlipayMiniProgramAccount account) throws AlipayApiException {
-        AlipayConfig alipayConfig = new AlipayConfig();
-        alipayConfig.setServerUrl("https://openapi.alipaydev.com/gateway.do");
-        alipayConfig.setAppId(account.getAppId());
-        alipayConfig.setPrivateKey(account.getPrivateKey());
-        alipayConfig.setAlipayPublicKey(account.getAlipayPublicKey());
-        alipayConfig.setFormat("json");
-        alipayConfig.setCharset("utf-8");
-        alipayConfig.setSignType("RSA2");
-        return new DefaultAlipayClient(alipayConfig);
-    }
 }

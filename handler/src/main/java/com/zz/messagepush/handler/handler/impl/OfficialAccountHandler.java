@@ -42,7 +42,7 @@ public class OfficialAccountHandler extends BaseHandler implements Handler {
         WeChatOfficialParam officialParam = WeChatOfficialParam.builder()
                 .openIds(taskInfo.getReceiver())
                 .messageTemplateId(taskInfo.getMessageTemplateId())
-                .sendAccount(taskInfo.getSendAccount())
+//                .sendAccount(taskInfo.getSendAccount())
                 .data(contentModel.getMap())
                 .build();
 

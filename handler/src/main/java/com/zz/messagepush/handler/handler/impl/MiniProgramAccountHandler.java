@@ -1,18 +1,24 @@
 package com.zz.messagepush.handler.handler.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaSubscribeService;
+import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.domain.dto.model.MiniProgramContentModel;
 import com.zz.messagepush.common.enums.ChannelType;
-import com.zz.messagepush.handler.domain.wechat.WeChatMiniProgramParam;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
-import com.zz.messagepush.handler.script.MiniProgramAccountService;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
+import com.zz.messagepush.support.utils.WxServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @Description MiniProgramHandler
@@ -24,7 +30,7 @@ import org.springframework.stereotype.Component;
 public class MiniProgramAccountHandler extends BaseHandler implements Handler {
 
     @Autowired
-    private MiniProgramAccountService miniProgramAccountService;
+    private WxServiceUtil wxServiceUtil;
 
     public MiniProgramAccountHandler() {
         channelCode = ChannelType.MINI_PROGRAM.getCode();
@@ -33,29 +39,40 @@ public class MiniProgramAccountHandler extends BaseHandler implements Handler {
 
     @Override
     public boolean handler(TaskInfo taskInfo) {
-        WeChatMiniProgramParam weChatMiniProgramParam = buildMiniProgramParam(taskInfo);
-
-        try {
-            miniProgramAccountService.send(weChatMiniProgramParam);
-        } catch (Exception e) {
-            log.error("miniProgramAccountHandler#handler fail:{},params:{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(taskInfo));
-            return false;
+        MiniProgramContentModel contentModel = (MiniProgramContentModel) taskInfo.getContentModel();
+        WxMaSubscribeService wxMaSubscribeService = wxServiceUtil.getMiniProgramServiceMap().get(taskInfo.getSendAccount().longValue());
+        List<WxMaSubscribeMessage> wxMaSubscribeMessages = assembleReq(taskInfo.getReceiver(), contentModel);
+        for (WxMaSubscribeMessage message : wxMaSubscribeMessages) {
+            try {
+                wxMaSubscribeService.sendSubscribeMsg(message);
+            } catch (Exception e) {
+                log.info("MiniProgramAccountHandler#handler fail! param:{},e:{}", JSON.toJSONString(taskInfo), Throwables.getStackTraceAsString(e));
+            }
         }
         return true;
     }
 
 
-    private WeChatMiniProgramParam buildMiniProgramParam(TaskInfo taskInfo) {
-       //小程序订阅消息可以关联到系统业务，通过接口查询
-        WeChatMiniProgramParam miniProgramParam = WeChatMiniProgramParam.builder()
-                .messageTemplateId(taskInfo.getMessageTemplateId())
-                .sendAccount(taskInfo.getSendAccount())
-                .openIds(taskInfo.getReceiver()).build();
-        MiniProgramContentModel contentModel = (MiniProgramContentModel) taskInfo.getContentModel();
-
-        miniProgramParam.setData(contentModel.getParam());
-        return miniProgramParam;
+    private List<WxMaSubscribeMessage> assembleReq(Set<String> receiver, MiniProgramContentModel contentModel) {
+        List<WxMaSubscribeMessage> messageList = new ArrayList<>(receiver.size());
+        for (String openId : receiver) {
+            WxMaSubscribeMessage subscribeMessage = WxMaSubscribeMessage.builder()
+                    .toUser(openId)
+                    .data(getWxMaTemplateData(contentModel.getMiniProgramParam()))
+                    .templateId(contentModel.getTemplateId())
+                    .page(contentModel.getPage())
+                    .build();
+            messageList.add(subscribeMessage);
+        }
+        return messageList;
     }
+
+    private List<WxMaSubscribeMessage.MsgData> getWxMaTemplateData(Map<String, String> data) {
+        List<WxMaSubscribeMessage.MsgData> templateDataList = new ArrayList<>(data.size());
+        data.forEach((k, v) -> templateDataList.add(new WxMaSubscribeMessage.MsgData(k, v)));
+        return templateDataList;
+    }
+
 
     @Override
     public void recall(MessageTemplateEntity messageTemplate) {

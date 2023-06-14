@@ -4,13 +4,10 @@ package com.zz.messagepush.handler.script.impl;
 import com.zz.messagepush.common.domain.dto.account.WeChatOfficialAccount;
 import com.zz.messagepush.handler.domain.wechat.WeChatOfficialParam;
 import com.zz.messagepush.handler.script.OfficialAccountService;
-import com.zz.messagepush.support.utils.AccountUtils;
+import com.zz.messagepush.support.utils.WxServiceUtil;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
-import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,13 +23,10 @@ import java.util.Set;
 @Service
 public class OfficialAccountServiceImpl implements OfficialAccountService {
 
-    @Autowired
-    private AccountUtils accountUtils;
-
     @Override
     public List<String> send(WeChatOfficialParam weChatOfficialParam) throws Exception {
-        WeChatOfficialAccount account = accountUtils.getAccountById(weChatOfficialParam.getSendAccount(), WeChatOfficialAccount.class);
-        WxMpService wxMpService = initAccount(account);
+        WeChatOfficialAccount account = WxServiceUtil.wxOfficialAccountMap.get(weChatOfficialParam.getSendAccount());
+        WxMpService wxMpService = WxServiceUtil.wxMpServiceMap.get(weChatOfficialParam.getSendAccount());
         List<WxMpTemplateMessage> messages = assemblyReq(weChatOfficialParam, account);
         List<String> messageIds = new ArrayList<>(messages.size());
         for (WxMpTemplateMessage wxMpTemplateMessage : messages) {
@@ -65,20 +59,4 @@ public class OfficialAccountServiceImpl implements OfficialAccountService {
         data.forEach((k, v) -> wxMpTemplateDataList.add(new WxMpTemplateData(k, v)));
         return wxMpTemplateDataList;
     }
-
-
-    /**
-     * 初始化账号
-     *
-     * @return
-     */
-    public WxMpService initAccount(WeChatOfficialAccount account) {
-        WxMpService wxMpService = new WxMpServiceImpl();
-        WxMpDefaultConfigImpl wxMpDefaultConfig = new WxMpDefaultConfigImpl();
-        wxMpDefaultConfig.setSecret(account.getSecret());
-        wxMpDefaultConfig.setAppId(account.getAppId());
-        wxMpService.setWxMpConfigStorage(wxMpDefaultConfig);
-        return wxMpService;
-    }
-
 }
