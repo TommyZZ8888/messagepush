@@ -18,5 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MiniProgramContentModel extends ContentModel {
 
-    private Map<String,String> param;
+    private Map<String,String> miniProgramParam;
+
+    private String templateId;
+
+    private String page;
 }
