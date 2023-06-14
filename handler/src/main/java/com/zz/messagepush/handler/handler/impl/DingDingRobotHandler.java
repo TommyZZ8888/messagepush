@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.twitter.chill.Base64;
 import com.zz.messagepush.common.constant.AustinConstant;
-import com.zz.messagepush.common.constant.SendAccountConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.dto.model.DingDingRobotContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
@@ -52,7 +52,7 @@ public class DingDingRobotHandler extends BaseHandler implements Handler {
 
     @Override
     public boolean handler(TaskInfo taskInfo) {
-        DingDingRobotAccount account = accountUtils.getAccount(taskInfo.getSendAccount(), SendAccountConstant.DING_DING_ROBOT_ACCOUNT_KEY, SendAccountConstant.DING_DING_ROBOT_PREFIX, DingDingRobotAccount.class);
+        DingDingRobotAccount account = accountUtils.getAccountById(taskInfo.getSendAccount(), DingDingRobotAccount.class);
         DingDingRobotParam dingRobotParam = assemblyParam(taskInfo);
         String post = HttpUtil.post(assemblyParamUrl(account), JSONObject.toJSONString(dingRobotParam));
         DingDingRobotResult dingDingRobotResult = JSON.parseObject(post, DingDingRobotResult.class);
@@ -128,10 +128,10 @@ public class DingDingRobotHandler extends BaseHandler implements Handler {
         String sign = "";
         String stringToSign = currentTimeMiles + String.valueOf(StrUtil.C_LF) + secret;
         try {
-            Mac mac = Mac.getInstance(AustinConstant.HMAC_SHA256_ENCRYPTION_ALGO);
-            mac.init(new SecretKeySpec(secret.getBytes(AustinConstant.CHARSET_NAME), AustinConstant.HMAC_SHA256_ENCRYPTION_ALGO));
-            byte[] signDatas = mac.doFinal(stringToSign.getBytes(AustinConstant.CHARSET_NAME));
-            sign = URLEncoder.encode(Base64.encodeBytes(signDatas), AustinConstant.CHARSET_NAME);
+            Mac mac = Mac.getInstance(CommonConstant.HMAC_SHA256_ENCRYPTION_ALGO);
+            mac.init(new SecretKeySpec(secret.getBytes(CommonConstant.CHARSET_NAME), CommonConstant.HMAC_SHA256_ENCRYPTION_ALGO));
+            byte[] signDatas = mac.doFinal(stringToSign.getBytes(CommonConstant.CHARSET_NAME));
+            sign = URLEncoder.encode(Base64.encodeBytes(signDatas), CommonConstant.CHARSET_NAME);
         } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException e) {
             log.error("dingDingRobotHandler#assemblySign fail: {}", Throwables.getStackTraceAsString(e));
         }

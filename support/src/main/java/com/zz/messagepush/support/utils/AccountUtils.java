@@ -6,13 +6,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
+import com.taobao.api.internal.toplink.channel.ChannelTimeoutException;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
+import com.zz.messagepush.common.domain.dto.account.sms.SmsAccount;
+import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
 import com.zz.messagepush.support.mapper.ChannelAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -39,7 +44,7 @@ public class AccountUtils {
      * (key:dingDingWorkNoticeAccount) 钉钉工作消息参数示例：[{"ding_ding_work_notice_10":{"appKey":"dingh6yyyyyyycrlbx","appSecret":"tQpvmkR863333yyyyyHP3QHyyyymy9Ao1yoL1oQX5Nlx_fYLLLlpPJWHvWKbTu","agentId":"152333383622"}}]
      * (key:officialAccount) 微信服务号模板消息参数示例：[{"official_10":{"appId":"wxecb4693d2eef1ea7","secret":"6240870f4d91701640d769ba20120821","templateId":"JHUk6eE9T5Ts7a5JO3ZQqkBBrZBGn5C9iIiKNDQsk-Q","url":"http://weixin.qq.com/download","miniProgramId":"xiaochengxuappid12345","path":"index?foo=bar"}}]
      */
-    public <T> T getAccount(Integer sendAccountId, String apolloKey, String prefix, Class<T> clazz) {
+    public <T> T getAccountById(Integer sendAccountId, Class<T> clazz) {
         //优先都数据库的，数据库没有才读配置
         try {
             Optional<ChannelAccountEntity> accountEntity = channelAccountMapper.findById(Long.valueOf(sendAccountId));
@@ -50,14 +55,16 @@ public class AccountUtils {
         } catch (Exception e) {
             log.warn("AccountUtil#getAccount not found:{}", Throwables.getStackTraceAsString(e));
         }
+        return null;
+    }
 
-        String accountValues = config.getProperty(apolloKey, AustinConstant.APOLLO_DEFAULT_VALUE_JSON_ARRAY);
-        JSONArray jsonArray = JSON.parseArray(accountValues);
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            T object = jsonObject.getObject(prefix + sendAccountId, clazz);
-            if (object != null) {
-                return object;
+
+    public <T> T getSmsAccountByScriptName(String scriptName, Class<T> clazz) {
+        List<ChannelAccountEntity> entityList = channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(CommonConstant.FALSE, ChannelType.SMS.getCode());
+        for (ChannelAccountEntity channelAccountEntity : entityList) {
+            SmsAccount smsAccount = JSON.parseObject(channelAccountEntity.getAccountConfig(), SmsAccount.class);
+            if (smsAccount.getScriptName().equals(scriptName)) {
+                return JSON.parseObject(channelAccountEntity.getAccountConfig(), clazz);
             }
         }
         return null;

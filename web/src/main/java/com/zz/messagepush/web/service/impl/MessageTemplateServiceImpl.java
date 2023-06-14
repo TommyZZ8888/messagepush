@@ -3,6 +3,7 @@ package com.zz.messagepush.web.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.AuditStatus;
 import com.zz.messagepush.common.enums.MessageStatus;
@@ -44,12 +45,12 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Override
     public List<MessageTemplateEntity> queryNotDeletedList(MessageTemplateParamDTO paramDTO) {
         PageRequest pageRequest = PageRequest.of(paramDTO.getPageIndex() - 1, paramDTO.getPageSize());
-        return messageTemplateMapper.findAllByIsDeletedEquals(AustinConstant.FALSE, pageRequest);
+        return messageTemplateMapper.findAllByIsDeletedEquals(CommonConstant.FALSE, pageRequest);
     }
 
     @Override
     public Long notDeletedCount() {
-        return messageTemplateMapper.countByIsDeletedEquals(AustinConstant.FALSE);
+        return messageTemplateMapper.countByIsDeletedEquals(CommonConstant.FALSE);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Override
     public void deleteByIds(List<Long> ids) {
         Iterable<MessageTemplateEntity> entities = messageTemplateMapper.findAllById(ids);
-        entities.forEach(messageTemplate -> messageTemplate.setIsDeleted(AustinConstant.TRUE));
+        entities.forEach(messageTemplate -> messageTemplate.setIsDeleted(CommonConstant.TRUE));
         for (MessageTemplateEntity entity : entities) {
             if (entity.getCronTaskId() != null && entity.getCronTaskId() > 0) {
                 cronTaskService.deleteCronTask(entity.getCronTaskId());
@@ -99,9 +100,9 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
         messageTemplate.setFlowId(StrUtil.EMPTY)
                 .setMsgStatus(MessageStatus.INIT.getCode()).setAuditStatus(AuditStatus.WAIT_AUDIT.getCode())
                 .setCreator("Java3y").setUpdator("Java3y").setTeam("公众号Java3y").setAuditor("3y")
-                .setDeduplicationTime(AustinConstant.FALSE).setIsNightShield(AustinConstant.FALSE)
+                .setDeduplicationTime(CommonConstant.FALSE).setIsNightShield(CommonConstant.FALSE)
                 .setCreated(new Date()).setUpdated(new Date())
-                .setIsDeleted(AustinConstant.FALSE);
+                .setIsDeleted(CommonConstant.FALSE);
     }
 
     @Override

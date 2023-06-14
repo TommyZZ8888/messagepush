@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain.dto.account;
+package com.zz.messagepush.common.domain.dto.account.sms;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class YunPianSmsAccount {
+public class YunPianSmsAccount extends SmsAccount{
 
     /**
      * [{"sms_20":{"url":"https://sms.yunpian.com/v2/sms/tpl_batch_send.json",
@@ -28,11 +28,4 @@ public class YunPianSmsAccount {
     private String apikey;
 
     private String tplId;
-
-    /**
-     * 标识渠道商id
-     */
-    private String supplierId;
-
-    private String supplierName;
 }

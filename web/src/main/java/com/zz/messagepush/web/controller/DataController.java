@@ -1,5 +1,6 @@
 package com.zz.messagepush.web.controller;
 
+import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.support.utils.RedisUtil;
@@ -22,7 +23,7 @@ import javax.validation.constraints.NotBlank;
 @RequestMapping("/data")
 @RestController
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "")
+@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowCredentials = "true", allowedHeaders = "")
 public class DataController {
 
     @Autowired

@@ -21,7 +21,7 @@ public interface MessageTemplateMapper extends JpaRepository<MessageTemplateEnti
      * @param pageable
      * @return
      */
-    List<MessageTemplateEntity> findAllByIsDeletedEquals(Integer deleted, Pageable pageable);
+    List<MessageTemplateEntity> findAllByIsDeletedEqualsOrderByUpdatedDesc(Integer deleted, Pageable pageable);
 
     /**
      * 统计未删除的条数

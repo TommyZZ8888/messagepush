@@ -8,28 +8,21 @@ package com.zz.messagepush.common.constant;
 public class AustinConstant {
 
     /**
-     * boolean转换
+     * 跨域地址端口
      */
-    public final static Integer TRUE = 1;
-
-    public final static Integer FALSE = 0;
-
-    /**
-     * apollo默认的值
-     */
-    public final static String APOLLO_DEFAULT_VALUE_JSON_OBJECT = "{}";
-    public final static String APOLLO_DEFAULT_VALUE_JSON_ARRAY = "[]";
-
-    /**
-     * cron时间格式
-     */
-    public final static String CRON_FORMAT = "ss mm HH dd MM ? yyyy-yyyy";
+    public static final String ORIGIN_VALUE = "http://localhost:3000";
 
 
     /**
      * businessId默认长度
      */
-    public final static Integer BUSINESS_ID_LENGTH = 16;
+    public static final Integer BUSINESS_ID_LENGTH = 16;
+
+
+    /**
+     * 接口限制 最多的人数
+     */
+    public static final Integer BATCH_RECEIVER_SIZE = 100;
 
 
     /**
@@ -40,20 +33,5 @@ public class AustinConstant {
      */
     public static final String SEND_ALL = "@all";
 
-    /**
-     * 加密算法
-     */
-    public static final String HMAC_SHA256_ENCRYPTION_ALGO = "HmacSHA256";
-
-    /**
-     * 编码格式
-     */
-    public static final String CHARSET_NAME = "UTF-8";
-
-    /**
-     * http 请求方法
-     */
-    public static final String REQUEST_METHOD_GET = "get";
-    public static final String REQUEST_METHOD_POST = "post";
 
 }

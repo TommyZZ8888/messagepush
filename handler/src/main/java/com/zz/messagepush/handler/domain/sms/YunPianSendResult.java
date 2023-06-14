@@ -31,7 +31,7 @@ public class YunPianSendResult {
         @JSONField(name = "http_status_code")
         private Integer httpStatusCode;
         @JSONField(name = "code")
-        private Integer code;
+        private String code;
         @JSONField(name = "msg")
         private String msg;
         @JSONField(name = "count")

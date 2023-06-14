@@ -3,6 +3,7 @@ package com.zz.messagepush.support.utils;
 import cn.hutool.core.collection.CollUtil;
 import com.google.common.base.Throwables;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
@@ -170,7 +171,7 @@ public class RedisUtil {
             if (execute == null) {
                 return false;
             }
-            return AustinConstant.TRUE.equals(execute.intValue());
+            return CommonConstant.TRUE.equals(execute.intValue());
         } catch (Exception e) {
             e.printStackTrace();
         }

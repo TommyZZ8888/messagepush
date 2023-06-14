@@ -49,7 +49,7 @@ public class EnterpriseWeChatHandler extends BaseHandler implements Handler {
 
     @Override
     public boolean handler(TaskInfo taskInfo)  {
-        WxCpDefaultConfigImpl account = accountUtils.getAccount(taskInfo.getSendAccount(), SendAccountConstant.ENTERPRISE_WECHAT_ACCOUNT_KEY, SendAccountConstant.ENTERPRISE_WECHAT_PREFIX, WxCpDefaultConfigImpl.class);
+        WxCpDefaultConfigImpl account = accountUtils.getAccountById(taskInfo.getSendAccount(), WxCpDefaultConfigImpl.class);
         WxCpMessageSendResult result = null;
         try {
             WxCpMessageServiceImpl wxCpMessageService = new WxCpMessageServiceImpl(initService(account));

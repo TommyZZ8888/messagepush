@@ -3,6 +3,7 @@ package com.zz.messagepush.handler.discard;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.AnchorInfo;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.AnchorStateEnum;
@@ -36,7 +37,7 @@ public class DiscardMessageService {
      * @return
      */
     public boolean isDiscard(TaskInfo taskInfo) {
-        JSONArray array = JSON.parseArray(config.getProperty(DISCARD_MESSAGE_KEY, AustinConstant.APOLLO_DEFAULT_VALUE_JSON_ARRAY));
+        JSONArray array = JSON.parseArray(config.getProperty(DISCARD_MESSAGE_KEY, CommonConstant.EMPTY_VALUE_JSON_ARRAY));
         if (array.contains(String.valueOf(taskInfo.getMessageTemplateId()))) {
             logUtils.print(AnchorInfo.builder().businessId(taskInfo.getBusinessId()).ids(taskInfo.getReceiver()).state(AnchorStateEnum.DISCARD.getCode()).build());
             return true;

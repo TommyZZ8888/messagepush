@@ -1,4 +1,4 @@
-package com.zz.messagepush.common.domain.dto.account;
+package com.zz.messagepush.common.domain.dto.account.sms;
 
 /**
  * @Description * 腾讯短信参数
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TencentSmsAccount {
+public class TencentSmsAccount extends SmsAccount{
 
     /**
      * api相关
@@ -34,15 +34,4 @@ public class TencentSmsAccount {
     private String smsSdkAppId;
     private String templateId;
     private String signName;
-
-    /**
-     * 标识渠道商Id
-     */
-    private Integer supplierId;
-
-    /**
-     * 标识渠道商名字
-     */
-    private String supplierName;
-
 }

@@ -1,6 +1,7 @@
 package com.zz.messagepush.handler.deduplication;
 
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.DeduplicationType;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
@@ -34,7 +35,7 @@ public class DeduplicationRuleService {
     public void duplication(TaskInfo taskInfo) {
 
         // 配置样例：{"contentDeduplication":{"num":1,"time":300},"frequencyDeduplication":{"num":5}}
-        String deduplication = config.getProperty(DEDUPLICATION_RULE_KEY, AustinConstant.APOLLO_DEFAULT_VALUE_JSON_OBJECT);
+        String deduplication = config.getProperty(DEDUPLICATION_RULE_KEY, CommonConstant.EMPTY_VALUE_JSON_ARRAY);
         //去重
         List<Integer> deduplicationList = DeduplicationType.getDeduplicationList();
         for (Integer deduplicationType : deduplicationList) {

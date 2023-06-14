@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.dto.model.SmsContentModel;
 import com.zz.messagepush.handler.domain.sms.MessageTypeSmsConfig;
 import com.zz.messagepush.handler.domain.sms.SmsParam;
@@ -43,6 +44,9 @@ public class SmsHandler extends BaseHandler implements Handler {
 
     @ApolloConfig("boss.austin")
     private Config config;
+
+    private static final String FLOW_KEY = "msgTypeSmsConfig";
+    private static final String FLOW_KEY_PREFIX = "message_type_";
 
     public SmsHandler() {
         channelCode = ChannelType.SMS.getCode();
@@ -100,7 +104,7 @@ public class SmsHandler extends BaseHandler implements Handler {
      * @return
      */
     private MessageTypeSmsConfig[] loadBalance(List<MessageTypeSmsConfig> messageTypeSmsConfigs) {
-        int total = 0;
+        int total;
         total = messageTypeSmsConfigs.stream().mapToInt(MessageTypeSmsConfig::getWeights).sum();
 
         Random random = new Random();
@@ -140,16 +144,12 @@ public class SmsHandler extends BaseHandler implements Handler {
      * @return
      */
     private List<MessageTypeSmsConfig> messageTypeSmsConfigs(Integer msgType) {
-        String apolloKey = "msgTypeSmsConfig";
-        String messagePrefix = "message_type_";
-
-        String property = config.getProperty(apolloKey, AustinConstant.APOLLO_DEFAULT_VALUE_JSON_ARRAY);
+        String property = config.getProperty(FLOW_KEY, CommonConstant.EMPTY_VALUE_JSON_ARRAY);
         JSONArray jsonArray = JSON.parseArray(property);
         for (int i = 0; i < jsonArray.size(); i++) {
-            JSONArray array = jsonArray.getJSONObject(i).getJSONArray(apolloKey + messagePrefix);
+            JSONArray array = jsonArray.getJSONObject(i).getJSONArray(FLOW_KEY_PREFIX+msgType);
             if (CollUtil.isNotEmpty(array)) {
-                List<MessageTypeSmsConfig> messageTypeSmsConfigs = JSON.parseArray(JSON.toJSONString(array), MessageTypeSmsConfig.class);
-                return messageTypeSmsConfigs;
+               return JSON.parseArray(JSON.toJSONString(array), MessageTypeSmsConfig.class);
             }
         }
         return null;

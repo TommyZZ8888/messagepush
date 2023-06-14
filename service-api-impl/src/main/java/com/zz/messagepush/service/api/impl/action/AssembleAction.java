@@ -5,7 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyun.teautil.Common;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.domain.dto.model.ContentModel;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
@@ -36,6 +38,8 @@ import java.util.*;
 @Service
 public class AssembleAction implements BusinessProcess<SendTaskModel> {
 
+    private final static String LINK_NAME = "url";
+
     @Autowired
     private MessageTemplateMapper messageTemplateMapper;
 
@@ -45,7 +49,7 @@ public class AssembleAction implements BusinessProcess<SendTaskModel> {
         Long messageTemplateId = processModel.getMessageTemplateId();
 
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(messageTemplateId).orElse(null);
-        if (messageTemplateEntity == null || messageTemplateEntity.getIsDeleted().equals(AustinConstant.TRUE)) {
+        if (messageTemplateEntity == null || messageTemplateEntity.getIsDeleted().equals(CommonConstant.TRUE)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.TEMPLATE_NOT_FOUND.getDescription()));
             return;
         }
@@ -102,10 +106,10 @@ public class AssembleAction implements BusinessProcess<SendTaskModel> {
             }
         }
 
-        String url = (String) ReflectUtil.getFieldValue(contentModel, "url");
+        String url = (String) ReflectUtil.getFieldValue(contentModel, LINK_NAME);
         if (StrUtil.isNotBlank(url)) {
             String resultUrl = TaskInfoUtils.generateUrl(url, messageTemplate.getId(), messageTemplate.getTemplateType());
-            ReflectUtil.setFieldValue(contentModel, "url", resultUrl);
+            ReflectUtil.setFieldValue(contentModel, LINK_NAME, resultUrl);
         }
 
         return contentModel;

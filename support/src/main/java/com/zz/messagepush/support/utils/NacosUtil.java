@@ -27,6 +27,12 @@ public class NacosUtil {
     @Value("${austin.nacos.group}")
     private String nacosGroup;
 
+    @Value("${austin.nacos.username}")
+    private String nacosUserName;
+
+    @Value("${austin.nacos.password}")
+    private String nacosPassword;
+
     @Value("${austin.nacos.dataId}")
     private String nacosDataId;
 

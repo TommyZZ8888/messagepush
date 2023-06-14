@@ -2,6 +2,8 @@ package com.zz.messagepush.web.controller;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.service.api.domain.SendResponse;
@@ -23,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +40,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/messageTemplate")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "")
+@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowCredentials = "true", allowedHeaders = "")
 @Validated
 public class MessageTemplateController {
 
@@ -52,7 +55,7 @@ public class MessageTemplateController {
     @Autowired
     private SendService sendService;
 
-    @Autowired
+    @Resource
     private RecallService recallService;
 
 
@@ -64,7 +67,7 @@ public class MessageTemplateController {
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseResult<MessageTemplateVO> queryList(@RequestBody MessageTemplateParamDTO dto) throws IllegalAccessException {
+    public ResponseResult<MessageTemplateVO> queryList(@Validated @RequestBody MessageTemplateParamDTO dto) throws IllegalAccessException {
         List<MessageTemplateEntity> messageTemplateEntities = messageTemplateService.queryNotDeletedList(dto);
         MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities)).count((long) messageTemplateEntities.size()).build();
         return ResponseResult.success("query ok", build);
