@@ -28,7 +28,7 @@ public class SmsAccount {
     protected String supplierName;
 
     /**
-     * （类名）定位到具体的处理下发和回执逻辑
+     * （类名）定位到具体的处理下发/回执逻辑
      * 依据scriptName对应具体的某一个短信账号
      */
     protected String scriptName;

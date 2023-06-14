@@ -1,11 +1,9 @@
 package com.zz.messagepush.handler.script.impl;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.api.impl.WxMaSubscribeServiceImpl;
 import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
-import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.account.WeChatMiniProgramAccount;
 import com.zz.messagepush.handler.domain.wechat.WeChatMiniProgramParam;
 import com.zz.messagepush.handler.script.MiniProgramAccountService;
@@ -31,7 +29,7 @@ public class MiniProgramAccountServiceImpl implements MiniProgramAccountService 
 
     @Override
     public void send(WeChatMiniProgramParam weChatMiniProgramParam) throws Exception {
-        WeChatMiniProgramAccount account = accountUtils.getAccount(weChatMiniProgramParam.getSendAccount(), SendAccountConstant.WECHAT_MINI_PROGRAM_ACCOUNT_KEY, SendAccountConstant.WECHAT_MINI_PROGRAM_PREFIX, WeChatMiniProgramAccount.class);
+        WeChatMiniProgramAccount account = accountUtils.getAccountById(weChatMiniProgramParam.getSendAccount(), WeChatMiniProgramAccount.class);
         List<WxMaSubscribeMessage> messageList = assembleReq(weChatMiniProgramParam, account);
 
         WxMaSubscribeServiceImpl wxMaSubscribeService = initService(account);

@@ -9,7 +9,6 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.handler.domain.sms.SmsParam;
 import com.zz.messagepush.common.domain.dto.account.sms.TencentSmsAccount;
 import com.zz.messagepush.common.enums.SmsStatus;
@@ -46,7 +45,7 @@ public class TencentSmsServiceImpl implements SmsService {
     @Override
     public List<SmsRecordEntity> send(SmsParam smsParam) {
         try {
-            TencentSmsAccount tencentSmsParam = accountUtils.getAccount(smsParam.getSendAccountId(), SendAccountConstant.SMS_ACCOUNT_KEY, SendAccountConstant.SMS_ACCOUNT_PREFIX, TencentSmsAccount.class);
+            TencentSmsAccount tencentSmsParam = accountUtils.getAccountById(smsParam.getSendAccountId(), TencentSmsAccount.class);
             SmsClient client = init(tencentSmsParam);
             SendSmsRequest request = assembleReq(smsParam, tencentSmsParam);
             SendSmsResponse response = client.SendSms(request);

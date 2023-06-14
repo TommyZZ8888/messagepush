@@ -1,19 +1,16 @@
 package com.zz.messagepush.handler.script.impl;
 
 
-import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.account.WeChatOfficialAccount;
 import com.zz.messagepush.handler.domain.wechat.WeChatOfficialParam;
 import com.zz.messagepush.handler.script.OfficialAccountService;
 import com.zz.messagepush.support.utils.AccountUtils;
-import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ public class OfficialAccountServiceImpl implements OfficialAccountService {
 
     @Override
     public List<String> send(WeChatOfficialParam weChatOfficialParam) throws Exception {
-        WeChatOfficialAccount account = accountUtils.getAccount(weChatOfficialParam.getSendAccount(), SendAccountConstant.WECHAT_OFFICIAL_ACCOUNT_KEY, SendAccountConstant.WECHAT_OFFICIAL_PREFIX, WeChatOfficialAccount.class);
+        WeChatOfficialAccount account = accountUtils.getAccountById(weChatOfficialParam.getSendAccount(), WeChatOfficialAccount.class);
         WxMpService wxMpService = initAccount(account);
         List<WxMpTemplateMessage> messages = assemblyReq(weChatOfficialParam, account);
         List<String> messageIds = new ArrayList<>(messages.size());

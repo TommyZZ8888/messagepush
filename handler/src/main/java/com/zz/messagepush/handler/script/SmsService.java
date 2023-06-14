@@ -17,8 +17,16 @@ public interface SmsService {
     /**
      * 发送短信
      * @param smsParamDTO 发送短信参数
-     * @return 渠道商接口返回值
+     * @return 渠道商发送接口返回值
      */
     List<SmsRecordEntity> send(SmsParam smsParamDTO);
+
+
+    /**
+     * 拉取回执
+     * @param scriptName 标识账号的脚本名
+     * @return 渠道商拉取回执接口返回值
+     */
+    List<SmsRecordEntity> pull(String scriptName);
 
 }
