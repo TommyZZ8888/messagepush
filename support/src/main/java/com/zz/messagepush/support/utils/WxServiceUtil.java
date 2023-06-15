@@ -75,6 +75,7 @@ public class WxServiceUtil {
         WxMpDefaultConfigImpl wxMpDefaultConfig = new WxMpDefaultConfigImpl();
         wxMpDefaultConfig.setAppId(officialAccount.getAppId());
         wxMpDefaultConfig.setSecret(officialAccount.getSecret());
+        wxMpDefaultConfig.setToken(officialAccount.getToken());
         wxMpService.setWxMpConfigStorage(wxMpDefaultConfig);
         return wxMpService;
     }

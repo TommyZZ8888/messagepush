@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/account")
-@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowedHeaders = "*", allowCredentials = "true")
 public class ChannelAccountController {
 
 

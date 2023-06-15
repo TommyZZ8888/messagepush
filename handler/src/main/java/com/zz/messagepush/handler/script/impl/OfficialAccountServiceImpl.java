@@ -8,6 +8,7 @@ import com.zz.messagepush.support.utils.WxServiceUtil;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,10 +24,13 @@ import java.util.Set;
 @Service
 public class OfficialAccountServiceImpl implements OfficialAccountService {
 
+    @Autowired
+    private WxServiceUtil wxServiceUtil;
+
     @Override
     public List<String> send(WeChatOfficialParam weChatOfficialParam) throws Exception {
-        WeChatOfficialAccount account = WxServiceUtil.wxOfficialAccountMap.get(weChatOfficialParam.getSendAccount());
-        WxMpService wxMpService = WxServiceUtil.wxMpServiceMap.get(weChatOfficialParam.getSendAccount());
+        WeChatOfficialAccount account = wxServiceUtil.getOfficialAccountHashMap().get(weChatOfficialParam.getSendAccount());
+        WxMpService wxMpService = wxServiceUtil.getOfficialAccountServiceMap().get(weChatOfficialParam.getSendAccount());
         List<WxMpTemplateMessage> messages = assemblyReq(weChatOfficialParam, account);
         List<String> messageIds = new ArrayList<>(messages.size());
         for (WxMpTemplateMessage wxMpTemplateMessage : messages) {

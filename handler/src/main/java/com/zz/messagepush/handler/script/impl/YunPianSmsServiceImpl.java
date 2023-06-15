@@ -37,14 +37,19 @@ public class YunPianSmsServiceImpl implements SmsService {
 
         Map<String, String> params = assembleReq(smsParam, account);
         String result = HttpRequest.post(account.getUrl())
-                .header(Header.CONTENT_TYPE.getValue(), "application/x-www-form-urlencoded;charset=utf-8;")
-                .header(Header.ACCEPT.getValue(), "application/json;charset=utf-8;")
+                .header(Header.CONTENT_TYPE.getValue(), CommonConstant.CONTENT_TYPE_FROM_URL_ENCODE)
+                .header(Header.ACCEPT.getValue(), CommonConstant.CONTENT_TYPE_JSON)
                 .body(JSON.toJSONString(params))
                 .timeout(2000)
                 .execute().body();
 
         YunPianSendResult yunPianSendResult = JSONObject.parseObject(result, YunPianSendResult.class);
         return assembleSmsRecord(smsParam, yunPianSendResult, account);
+    }
+
+    @Override
+    public List<SmsRecordEntity> pull(String scriptName) {
+        return null;
     }
 
 

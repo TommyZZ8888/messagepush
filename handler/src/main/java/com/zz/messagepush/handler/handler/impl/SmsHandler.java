@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -64,7 +65,8 @@ public class SmsHandler extends BaseHandler implements Handler {
                 .sendAccountId(taskInfo.getSendAccount())
                 .build();
         try {
-            MessageTypeSmsConfig[] messageTypeSmsConfigs = loadBalance(messageTypeSmsConfigs(taskInfo.getMsgType()));
+            MessageTypeSmsConfig[] messageTypeSmsConfigs = loadBalance(Objects.requireNonNull(messageTypeSmsConfigs(taskInfo.getMsgType())));
+            assert messageTypeSmsConfigs != null;
             for (MessageTypeSmsConfig messageTypeSmsConfig : messageTypeSmsConfigs) {
                 List<SmsRecordEntity> list = smsServiceMap.get(messageTypeSmsConfig.getScriptName()).send(smsParam);
                 if (CollUtil.isNotEmpty(list)) {

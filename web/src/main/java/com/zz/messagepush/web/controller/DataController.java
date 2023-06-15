@@ -23,7 +23,6 @@ import javax.validation.constraints.NotBlank;
 @RequestMapping("/data")
 @RestController
 @Slf4j
-@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowCredentials = "true", allowedHeaders = "")
 public class DataController {
 
     @Autowired

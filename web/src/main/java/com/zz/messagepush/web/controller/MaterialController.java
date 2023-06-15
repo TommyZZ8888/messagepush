@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Api("素材管理接口")
 @RestController
 @RequestMapping("/material")
-@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowCredentials = "true", allowedHeaders = "*")
 public class MaterialController {
 
     @Autowired

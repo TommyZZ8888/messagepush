@@ -41,4 +41,12 @@ public class CommonConstant {
     public final static String EMPTY_VALUE_JSON_ARRAY = "[]";
     public final static String CRON_FORMAT = "ss mm HH dd MM ?yyyy-yyyy";
 
+    /**
+     * Http 请求内容格式
+     */
+    public final static String CONTENT_TYPE_JSON = "application/json;charset=utf-8";
+    public final static String CONTENT_TYPE_TEXT = "text/html;charset=utf-8";
+    public final static String CONTENT_TYPE_XML = "application/xml;charset=utf-8";
+    public final static String CONTENT_TYPE_FROM_URL_ENCODE = "application/x-www-form-urlencoded;charset=utf-8";
+
 }
