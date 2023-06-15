@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,15 +29,16 @@ import java.util.List;
 @Api("微信服务号")
 @RestController
 @RequestMapping("/officialAccount")
-@CrossOrigin(origins = {AustinConstant.ORIGIN_VALUE, "https://aisuda.bce.baidu.com"}, allowCredentials = "true", allowedHeaders = "*")
 public class OfficialAccountController {
 
+    @Autowired
+    private WxServiceUtil wxServiceUtil;
 
     @RequestMapping(value = "/templateList", method = RequestMethod.GET)
     @ApiOperation("根据模板id获取模板列表")
     public ResponseResult<List<CommonAmisVo>> queryList(Long id) throws WxErrorException {
         List<CommonAmisVo> list = new ArrayList<>();
-        WxMpService wxMpService = WxServiceUtil.wxMpServiceMap.get(id);
+        WxMpService wxMpService = wxServiceUtil.getOfficialAccountServiceMap().get(id);
         List<WxMpTemplate> allPrivateTemplate = wxMpService.getTemplateMsgService().getAllPrivateTemplate();
         for (WxMpTemplate wxMpTemplate : allPrivateTemplate) {
             CommonAmisVo commonAmisVo = CommonAmisVo.builder().label(wxMpTemplate.getTitle()).value(wxMpTemplate.getTemplateId()).build();
@@ -50,7 +52,7 @@ public class OfficialAccountController {
     @ApiOperation("根据模板id和账号id获取模板列表")
     public ResponseResult<List<CommonAmisVo>> queryDetailList(Long id, String wxTemplateId) throws WxErrorException {
         List<CommonAmisVo> list = new ArrayList<>();
-        WxMpService wxMpService = WxServiceUtil.wxMpServiceMap.get(id);
+        WxMpService wxMpService = wxServiceUtil.getOfficialAccountServiceMap().get(id);
         List<WxMpTemplate> allPrivateTemplate = wxMpService.getTemplateMsgService().getAllPrivateTemplate();
         for (WxMpTemplate wxMpTemplate : allPrivateTemplate) {
             if (wxTemplateId.equals(wxMpTemplate.getTemplateId())){

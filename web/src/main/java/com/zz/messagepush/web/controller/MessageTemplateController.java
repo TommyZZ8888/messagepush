@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/messageTemplate")
-@CrossOrigin(origins = AustinConstant.ORIGIN_VALUE, allowCredentials = "true", allowedHeaders = "")
 @Validated
 public class MessageTemplateController {
 
