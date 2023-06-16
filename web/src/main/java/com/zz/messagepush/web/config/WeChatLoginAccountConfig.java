@@ -4,6 +4,7 @@ import com.zz.messagepush.common.domain.dto.account.WeChatOfficialAccount;
 import com.zz.messagepush.support.utils.WxServiceUtil;
 import lombok.Data;
 import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.mp.api.WxMpMessageHandler;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 /**
  * @Description WeChatLoginAccountConfig
@@ -33,6 +35,10 @@ public class WeChatLoginAccountConfig {
     private String secret;
     @Value("${austin.login.official.account.secret}")
     private String token;
+
+
+    @Autowired
+    private Map<String, WxMpMessageHandler> WxMpMessageHandlers;
 
 
     @Autowired
