@@ -1,5 +1,6 @@
-package com.zz.messagepush.support.config;
+package com.zz.messagepush.web.config;
 
+import com.zz.messagepush.common.constant.OfficialAccountParamConstant;
 import com.zz.messagepush.common.domain.dto.account.WeChatOfficialAccount;
 import com.zz.messagepush.support.utils.WxServiceUtil;
 import lombok.Data;
@@ -59,11 +60,13 @@ public class WeChatLoginAccountConfig {
 
     private void initRoute() {
         wxMpMessageRouter = new WxMpMessageRouter(wxOfficialAccountLoginService);
-        wxMpMessageRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(WxConsts.EventType.SUBSCRIBE).handler(null).end();
-        wxMpMessageRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(WxConsts.EventType.UNSUBSCRIBE).handler(null).end();
+        wxMpMessageRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(WxConsts.EventType.SUBSCRIBE).handler(WxMpMessageHandlers.get(OfficialAccountParamConstant.SUBSCRIBE_HANDLER)).end();
+        wxMpMessageRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(WxConsts.EventType.SCAN).handler(WxMpMessageHandlers.get(OfficialAccountParamConstant.SCAN_HANDLER)).end();
+        wxMpMessageRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(WxConsts.EventType.UNSUBSCRIBE).handler(WxMpMessageHandlers.get(OfficialAccountParamConstant.UNSUBSCRIBE_HANDLER)).end();
     }
 
     private void initConfig() {
+        wxMpDefaultConfig = new WxMpDefaultConfigImpl();
         wxMpDefaultConfig.setAppId(appId);
         wxMpDefaultConfig.setSecret(secret);
         wxMpDefaultConfig.setToken(token);

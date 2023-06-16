@@ -3,6 +3,7 @@ package com.zz.messagepush.support.mapper;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 * @Entity com.zz.messagepush.support.domain.entity.MessageTemplate
 */
 
-public interface MessageTemplateMapper extends JpaRepository<MessageTemplateEntity,Long> {
+public interface MessageTemplateMapper extends JpaRepository<MessageTemplateEntity,Long>, JpaSpecificationExecutor<MessageTemplateEntity> {
 
     /**
      * 查询列表 分页

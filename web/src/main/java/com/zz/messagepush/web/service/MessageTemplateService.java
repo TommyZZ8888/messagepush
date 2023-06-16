@@ -3,6 +3,7 @@ package com.zz.messagepush.web.service;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.support.domain.dto.MessageTemplateParamDTO;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ public interface MessageTemplateService {
      * @return
      */
     Long notDeletedCount();
+
+    Page<MessageTemplateEntity> queryList(MessageTemplateParamDTO messageTemplateParam);
 
     /**
      * 存在id更新
