@@ -16,11 +16,13 @@ import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.domain.vo.MessageTemplateVO;
 import com.zz.messagepush.web.service.MessageTemplateService;
 import com.zz.messagepush.support.utils.ConvertMap;
+import com.zz.messagepush.web.utils.Convert4Amis;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,9 +69,10 @@ public class MessageTemplateController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseResult<MessageTemplateVO> queryList(@Validated @RequestBody MessageTemplateParamDTO dto) throws IllegalAccessException {
-        List<MessageTemplateEntity> messageTemplateEntities = messageTemplateService.queryNotDeletedList(dto);
-        MessageTemplateVO build = MessageTemplateVO.builder().rows(ConvertMap.flatFirst(messageTemplateEntities)).count((long) messageTemplateEntities.size()).build();
-        return ResponseResult.success("query ok", build);
+        Page<MessageTemplateEntity> messageTemplates = messageTemplateService.queryList(dto);
+        List<Map<String, Object>> result = Convert4Amis.flatListMap(messageTemplates.toList());
+        MessageTemplateVO messageTemplateVo = MessageTemplateVO.builder().count(messageTemplates.getTotalElements()).rows(result).build();
+        return ResponseResult.success("query ok", messageTemplateVo);
     }
 
 

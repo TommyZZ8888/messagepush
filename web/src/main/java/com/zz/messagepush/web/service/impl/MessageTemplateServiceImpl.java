@@ -18,12 +18,20 @@ import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.mapper.MessageTemplateMapper;
 import com.zz.messagepush.web.service.MessageTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 /**
  * @author DELL
  * @description 针对表【message_template(消息模板信息)】的数据库操作Service实现
@@ -45,8 +53,25 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Override
     public List<MessageTemplateEntity> queryNotDeletedList(MessageTemplateParamDTO paramDTO) {
         PageRequest pageRequest = PageRequest.of(paramDTO.getPageIndex() - 1, paramDTO.getPageSize());
-        return messageTemplateMapper.findAllByIsDeletedEquals(CommonConstant.FALSE, pageRequest);
+        return messageTemplateMapper.findAllByIsDeletedEqualsOrderByUpdatedDesc(CommonConstant.FALSE, pageRequest);
     }
+
+    public Page<MessageTemplateEntity> queryList(MessageTemplateParamDTO param) {
+        PageRequest pageRequest = PageRequest.of(param.getPage() - 1, param.getPerPage());
+    return messageTemplateMapper.findAll((Specification<MessageTemplateEntity>) (root, query, cb) -> {
+        List<Predicate> predicateList = new ArrayList<>();
+        // 加搜索条件
+        if (StrUtil.isNotBlank(param.getKeywords())) {
+            predicateList.add(cb.like(root.get("name").as(String.class), "%" + param.getKeywords() + "%"));
+        }
+        predicateList.add(cb.equal(root.get("isDeleted").as(Integer.class), CommonConstant.FALSE));
+        Predicate[] p = new Predicate[predicateList.size()];
+        // 查询
+        query.where(cb.and(predicateList.toArray(p)));
+        // 排序
+        query.orderBy(cb.desc(root.get("updated")));
+        return query.getRestriction();
+    }, pageRequest);}
 
     @Override
     public Long notDeletedCount() {

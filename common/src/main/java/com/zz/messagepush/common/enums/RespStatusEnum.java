@@ -1,6 +1,7 @@
 package com.zz.messagepush.common.enums;
 
 
+
 public enum RespStatusEnum {
 
     ERROR_500("500", "服务器未知错误"),

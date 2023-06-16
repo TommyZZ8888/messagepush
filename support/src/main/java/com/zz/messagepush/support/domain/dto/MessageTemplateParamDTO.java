@@ -148,6 +148,10 @@ public class MessageTemplateParamDTO extends PageParam {
 
     private Integer isNightShield;
 
+    private String keywords;
 
+    private int page;
+
+    private int perPage;
 
 }
