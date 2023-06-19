@@ -29,9 +29,13 @@ public class MaterialController {
     public ResponseResult<Boolean> uploadMaterial(@RequestParam("file") MultipartFile file, String sendAccount, Integer sendChannel, String fileType) {
         if (ChannelType.DING_DING_WORK_NOTICE.getCode().equals(sendChannel)) {
             materialService.dingDingMaterialUpload(file, sendAccount, fileType);
+        } else if (ChannelType.ENTERPRISE_WE_CHAT_ROBOT.getCode().equals(sendChannel)) {
+            materialService.enterpriseWeChatRootMaterialUpload(file, sendAccount, fileType);
+        } else if (ChannelType.ENTERPRISE_WE_CHAT.getCode().equals(sendChannel)) {
+            materialService.enterpriseWeChatMaterialUpload(file, sendAccount, fileType);
         }
         return ResponseResult.success();
     }
-
-
 }
+
+

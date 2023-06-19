@@ -29,4 +29,23 @@ public interface ChannelAccountMapper extends JpaRepository<ChannelAccountEntity
      * @return
      */
     Long countByIsDeletedEquals(Integer deleted);
+
+    /**
+     * 查询 列表
+     *
+     * @param deleted     0：未删除 1：删除
+     * @param channelType 渠道值
+     * @param creator     创建者
+     * @return
+     */
+    List<ChannelAccountEntity> findAllByIsDeletedEqualsAndCreatorEqualsAndSendChannelEquals(Integer deleted, String creator, Integer channelType);
+
+
+    /**
+     * 根据创建者检索相关的记录
+     *
+     * @param creator
+     * @return
+     */
+    List<ChannelAccountEntity> findAllByCreatorEquals(String creator);
 }

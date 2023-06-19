@@ -12,6 +12,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
 import com.zz.messagepush.web.domain.vo.amis.CommonAmisVo;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.subscribemsg.TemplateInfo;
@@ -200,152 +201,168 @@ public class Convert4Amis {
         return CommonAmisVo.builder().type("form").title("登录").mode("horizontal").body(Arrays.asList(image, service)).build();
     }
 
-        /**
-         * 【这个方法不用看】，纯粹为了适配amis前端
-         *
-         * 得到微信服务号的【带参数】二维码返回给前端
-         * @return
-         */
-        public static String getLoginJsonp (String userInfo){
-            if (StrUtil.isBlank(userInfo)) {
-                log.error("can't get userInfo!");
-                return "(function() {})();";
-            } else {
-                return "(function() {\n" +
-                        "\tlocalStorage.setItem(\"openId\", \"123\");\n" +
-                        "\tlocalStorage.setItem(\"userName\", \"333\");\n" +
-                        "\twindow.location.href='index.html';\n" +
-                        "})();";
-            }
-        }
-
-        /**
-         * 【这个方法不用看】，纯粹为了适配amis前端
-         * <p>
-         * 获取占位符的参数
-         * @param msgContent
-         * @return
-         */
-        public static CommonAmisVo getTestContent (String msgContent){
-            Set<String> placeholderList = getPlaceholderList(msgContent);
-            if (CollUtil.isEmpty(placeholderList)) {
-                return null;
-            }
-
-            // placeholderList!=null  说明有占位符
-            CommonAmisVo testParam = CommonAmisVo.builder()
-                    .type("input-table")
-                    .name("testParam")
-                    .addable(true)
-                    .editable(true)
-                    .needConfirm(false)
-                    .build();
-            List<CommonAmisVo.ColumnsDTO> columnsDTOS = new ArrayList<>();
-            for (String param : placeholderList) {
-                CommonAmisVo.ColumnsDTO dto = CommonAmisVo.ColumnsDTO.builder().name(param).label(param).type("input-text").required(true).quickEdit(true).build();
-                columnsDTOS.add(dto);
-            }
-            testParam.setColumns(columnsDTOS);
-            return testParam;
-        }
-
-        /**
-         * 获取占位符的参数
-         * @param content
-         * @return
-         */
-        public static Set<String> getPlaceholderList (String content){
-            char[] textChars = content.toCharArray();
-            StringBuilder textSofar = new StringBuilder();
-            StringBuilder sb = new StringBuilder();
-            // 存储占位符 位置信息集合
-            List<String> placeholderList = new ArrayList<>();
-            // 当前标识
-            int modeTg = IGNORE_TG;
-            for (int m = 0; m < textChars.length; m++) {
-                char c = textChars[m];
-                textSofar.append(c);
-                switch (c) {
-                    case '{': {
-                        modeTg = START_TG;
-                        sb.append(c);
-                    }
-                    break;
-                    case '$': {
-                        if (modeTg == START_TG) {
-                            sb.append(c);
-                            modeTg = READ_TG;
-                        } else {
-                            if (modeTg == READ_TG) {
-                                sb = new StringBuilder();
-                                modeTg = IGNORE_TG;
-                            }
-                        }
-                    }
-                    break;
-                    case '}': {
-                        if (modeTg == READ_TG) {
-                            modeTg = IGNORE_TG;
-                            sb.append(c);
-                            String str = sb.toString();
-                            if (StrUtil.isNotEmpty(str)) {
-                                placeholderList.add(str);
-                                textSofar = new StringBuilder();
-                            }
-                            sb = new StringBuilder();
-                        } else if (modeTg == START_TG) {
-                            modeTg = IGNORE_TG;
-                            sb = new StringBuilder();
-                        }
-                        break;
-                    }
-                    default: {
-                        if (modeTg == READ_TG) {
-                            sb.append(c);
-                        } else if (modeTg == START_TG) {
-                            modeTg = IGNORE_TG;
-                            sb = new StringBuilder();
-                        }
-                    }
-                }
-            }
-            Set<String> result = placeholderList.stream().map(s -> s.replaceAll("\\{", "").replaceAll("\\$", "").replaceAll("\\}", "")).collect(Collectors.toSet());
-            return result;
-        }
-
-        /**
-         * 【这个方法不用看】，纯粹为了适配amis前端
-         * <p>
-         * 得到模板的参数 组装好 返回给前端展示
-         * @param wxTemplateId
-         * @param templateList
-         * @return
-         */
-        public static CommonAmisVo getWxMaTemplateParam (String wxTemplateId, List < TemplateInfo > templateList){
-            CommonAmisVo officialAccountParam = null;
-            for (TemplateInfo templateInfo : templateList) {
-                if (wxTemplateId.equals(templateInfo.getPriTmplId())) {
-                    String[] data = templateInfo.getContent().split(StrUtil.LF);
-                    officialAccountParam = CommonAmisVo.builder()
-                            .type("input-table")
-                            .name("miniProgramParam")
-                            .addable(true)
-                            .editable(true)
-                            .needConfirm(false)
-                            .build();
-                    List<CommonAmisVo.ColumnsDTO> columnsDTOS = new ArrayList<>();
-                    for (String datum : data) {
-                        String name = datum.substring(datum.indexOf("{{") + 2, datum.indexOf("."));
-                        String label = datum.split(":")[0];
-                        CommonAmisVo.ColumnsDTO columnsDTO = CommonAmisVo.ColumnsDTO.builder()
-                                .name(name).type("input-text").required(true).quickEdit(true).label(label).build();
-                        columnsDTOS.add(columnsDTO);
-                    }
-                    officialAccountParam.setColumns(columnsDTOS);
-
-                }
-            }
-            return officialAccountParam;
-
+    /**
+     * 【这个方法不用看】，纯粹为了适配amis前端
+     * <p>
+     * 得到微信服务号的【带参数】二维码返回给前端
+     * @return
+     */
+    public static String getLoginJsonp(String userInfo) {
+        if (StrUtil.isBlank(userInfo)) {
+            log.error("can't get userInfo!");
+            return "(function() {})();";
+        } else {
+            return "(function() {\n" +
+                    "\tlocalStorage.setItem(\"openId\", \"123\");\n" +
+                    "\tlocalStorage.setItem(\"userName\", \"333\");\n" +
+                    "\twindow.location.href='index.html';\n" +
+                    "})();";
         }
     }
+
+    /**
+     * 【这个方法不用看】，纯粹为了适配amis前端
+     * <p>
+     * 获取占位符的参数
+     * @param msgContent
+     * @return
+     */
+    public static CommonAmisVo getTestContent(String msgContent) {
+        Set<String> placeholderList = getPlaceholderList(msgContent);
+        if (CollUtil.isEmpty(placeholderList)) {
+            return null;
+        }
+
+        // placeholderList!=null  说明有占位符
+        CommonAmisVo testParam = CommonAmisVo.builder()
+                .type("input-table")
+                .name("testParam")
+                .addable(true)
+                .editable(true)
+                .needConfirm(false)
+                .build();
+        List<CommonAmisVo.ColumnsDTO> columnsDTOS = new ArrayList<>();
+        for (String param : placeholderList) {
+            CommonAmisVo.ColumnsDTO dto = CommonAmisVo.ColumnsDTO.builder().name(param).label(param).type("input-text").required(true).quickEdit(true).build();
+            columnsDTOS.add(dto);
+        }
+        testParam.setColumns(columnsDTOS);
+        return testParam;
+    }
+
+    /**
+     * 获取占位符的参数
+     * @param content
+     * @return
+     */
+    public static Set<String> getPlaceholderList(String content) {
+        char[] textChars = content.toCharArray();
+        StringBuilder textSofar = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        // 存储占位符 位置信息集合
+        List<String> placeholderList = new ArrayList<>();
+        // 当前标识
+        int modeTg = IGNORE_TG;
+        for (int m = 0; m < textChars.length; m++) {
+            char c = textChars[m];
+            textSofar.append(c);
+            switch (c) {
+                case '{': {
+                    modeTg = START_TG;
+                    sb.append(c);
+                }
+                break;
+                case '$': {
+                    if (modeTg == START_TG) {
+                        sb.append(c);
+                        modeTg = READ_TG;
+                    } else {
+                        if (modeTg == READ_TG) {
+                            sb = new StringBuilder();
+                            modeTg = IGNORE_TG;
+                        }
+                    }
+                }
+                break;
+                case '}': {
+                    if (modeTg == READ_TG) {
+                        modeTg = IGNORE_TG;
+                        sb.append(c);
+                        String str = sb.toString();
+                        if (StrUtil.isNotEmpty(str)) {
+                            placeholderList.add(str);
+                            textSofar = new StringBuilder();
+                        }
+                        sb = new StringBuilder();
+                    } else if (modeTg == START_TG) {
+                        modeTg = IGNORE_TG;
+                        sb = new StringBuilder();
+                    }
+                    break;
+                }
+                default: {
+                    if (modeTg == READ_TG) {
+                        sb.append(c);
+                    } else if (modeTg == START_TG) {
+                        modeTg = IGNORE_TG;
+                        sb = new StringBuilder();
+                    }
+                }
+            }
+        }
+        Set<String> result = placeholderList.stream().map(s -> s.replaceAll("\\{", "").replaceAll("\\$", "").replaceAll("\\}", "")).collect(Collectors.toSet());
+        return result;
+    }
+
+    /**
+     * 【这个方法不用看】，纯粹为了适配amis前端
+     * <p>
+     * 得到模板的参数 组装好 返回给前端展示
+     * @param wxTemplateId
+     * @param templateList
+     * @return
+     */
+    public static CommonAmisVo getWxMaTemplateParam(String wxTemplateId, List<TemplateInfo> templateList) {
+        CommonAmisVo officialAccountParam = null;
+        for (TemplateInfo templateInfo : templateList) {
+            if (wxTemplateId.equals(templateInfo.getPriTmplId())) {
+                String[] data = templateInfo.getContent().split(StrUtil.LF);
+                officialAccountParam = CommonAmisVo.builder()
+                        .type("input-table")
+                        .name("miniProgramParam")
+                        .addable(true)
+                        .editable(true)
+                        .needConfirm(false)
+                        .build();
+                List<CommonAmisVo.ColumnsDTO> columnsDTOS = new ArrayList<>();
+                for (String datum : data) {
+                    String name = datum.substring(datum.indexOf("{{") + 2, datum.indexOf("."));
+                    String label = datum.split(":")[0];
+                    CommonAmisVo.ColumnsDTO columnsDTO = CommonAmisVo.ColumnsDTO.builder()
+                            .name(name).type("input-text").required(true).quickEdit(true).label(label).build();
+                    columnsDTOS.add(columnsDTO);
+                }
+                officialAccountParam.setColumns(columnsDTOS);
+
+            }
+        }
+        return officialAccountParam;
+
+    }
+
+    /**
+     * 【这个方法不用看】，纯粹为了适配amis前端
+     * <p>
+     * 得到渠道账号信息，返回给前端做展示
+     * @return
+     */
+    public static List<CommonAmisVo> getChannelAccountVo(List<ChannelAccountEntity> channelAccounts) {
+        List<CommonAmisVo> result = new ArrayList<>();
+        for (ChannelAccountEntity channelAccount : channelAccounts) {
+            CommonAmisVo commonAmisVo = CommonAmisVo.builder().label(channelAccount.getName()).value(String.valueOf(channelAccount.getId())).build();
+            result.add(commonAmisVo);
+        }
+        return result;
+    }
+
+}

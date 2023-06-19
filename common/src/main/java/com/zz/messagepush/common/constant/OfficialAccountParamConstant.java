@@ -26,7 +26,7 @@ public class OfficialAccountParamConstant {
     /**
      * 配置的beanName名
      */
-    public static final String WE_CHAT_LOGIN_CONFIG = "weChatLoginConfig";
+    public static final String WE_CHAT_LOGIN_CONFIG = "weChatLoginAccountConfig";
 
 
     /**

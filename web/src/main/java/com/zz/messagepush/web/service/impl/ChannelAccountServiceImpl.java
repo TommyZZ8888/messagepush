@@ -34,12 +34,12 @@ public class ChannelAccountServiceImpl implements ChannelAccountService {
     }
 
     @Override
-    public List<ChannelAccountEntity> queryByChannelType(Integer channelType) {
+    public List<ChannelAccountEntity> queryByChannelType(Integer channelType,String creator) {
         return channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(CommonConstant.FALSE, channelType);
     }
 
     @Override
-    public List<ChannelAccountEntity> list() {
+    public List<ChannelAccountEntity> list(String creator) {
         return channelAccountMapper.findAll();
     }
 

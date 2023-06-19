@@ -29,7 +29,7 @@ public class MessageReceipt {
             while (true) {
                 //TODO 回执这里自行打开，免得报错
                 for (ReceiptMessageStarter messageStarter : receiptMessageStarterList) {
-//                    messageStarter.start();
+                    messageStarter.start();
                 }
                 try {
                     Thread.sleep(200);

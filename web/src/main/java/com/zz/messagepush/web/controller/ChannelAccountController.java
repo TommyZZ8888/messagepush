@@ -4,8 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.nacos.common.tls.SelfTrustManager;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
+import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.support.domain.entity.ChannelAccountEntity;
+import com.zz.messagepush.web.domain.vo.amis.CommonAmisVo;
 import com.zz.messagepush.web.service.ChannelAccountService;
+import com.zz.messagepush.web.utils.Convert4Amis;
+import com.zz.messagepush.web.utils.LoginUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -34,26 +38,40 @@ public class ChannelAccountController {
     @Autowired
     private ChannelAccountService channelAccountService;
 
+    @Autowired
+    private LoginUtil loginUtil;
+
 
     @ApiOperation("保存数据")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult<Boolean> saveOrUpdate(@RequestBody ChannelAccountEntity channelAccountEntity) {
-        channelAccountService.save(channelAccountEntity);
+        if (loginUtil.needLogin() && StrUtil.isBlank(channelAccountEntity.getCreator())) {
+            return ResponseResult.fail(RespStatusEnum.NO_LOGIN.getDescription());
+        }
+        channelAccountEntity.setCreator(StrUtil.isBlank(channelAccountEntity.getCreator()) ? AustinConstant.DEFAULT_CREATOR : channelAccountEntity.getCreator());
         return ResponseResult.success("success");
     }
 
 
     @ApiOperation("查询数据")
     @RequestMapping(value = "/query", method = RequestMethod.POST)
-    public ResponseResult<Boolean> query(Integer channelType) {
-        channelAccountService.queryByChannelType(channelType);
-        return ResponseResult.success();
+    public ResponseResult<List<CommonAmisVo>> query(Integer channelType, String creator) {
+        channelAccountService.queryByChannelType(channelType,creator);
+        creator = StrUtil.isBlank(creator) ? AustinConstant.DEFAULT_CREATOR : creator;
+
+        List<ChannelAccountEntity> channelAccounts = channelAccountService.queryByChannelType(channelType, creator);
+        return ResponseResult.success("ok",Convert4Amis.getChannelAccountVo(channelAccounts));
     }
 
     @ApiOperation("渠道账户列表信息")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseResult<List<ChannelAccountEntity>> list() {
-        return ResponseResult.success("ok", channelAccountService.list());
+    public ResponseResult<List<ChannelAccountEntity>> list(String creator) {
+            if (loginUtil.needLogin() && StrUtil.isBlank(creator)) {
+                return ResponseResult.fail(RespStatusEnum.NO_LOGIN.getDescription());
+            }
+            creator = StrUtil.isBlank(creator) ? AustinConstant.DEFAULT_CREATOR : creator;
+
+        return ResponseResult.success("ok", channelAccountService.list(creator));
     }
 
 

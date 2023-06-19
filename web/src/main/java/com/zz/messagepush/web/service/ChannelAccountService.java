@@ -26,13 +26,13 @@ public interface ChannelAccountService {
      * @param channelType
      * @return
      */
-    List<ChannelAccountEntity> queryByChannelType(Integer channelType);
+    List<ChannelAccountEntity> queryByChannelType(Integer channelType,String creator);
 
     /**
      * 列表信息 无条件
      * @return
      */
-    List<ChannelAccountEntity> list();
+    List<ChannelAccountEntity> list(String creator);
 
     /**
      * 软删除
