@@ -16,6 +16,7 @@ import com.zz.messagepush.common.domain.dto.model.EnterpriseWeChatRobotContentMo
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.common.enums.SendMessageType;
 import com.zz.messagepush.handler.domain.wechat.robot.EnterpriseWeChatRobotParam;
+import com.zz.messagepush.handler.domain.wechat.robot.EnterpriseWeChatRobotResult;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
@@ -53,11 +54,11 @@ public class EnterpriseWeChatRobotHandler extends BaseHandler implements Handler
                     .body(JSON.toJSONString(enterpriseWeChatRobotParam))
                     .timeout(2000)
                     .execute().body();
-            JSONObject jsonObject = JSON.parseObject(result);
-            if (jsonObject.getInteger("errcode") != 0) {
+            EnterpriseWeChatRobotResult robotResult = JSON.parseObject(result, EnterpriseWeChatRobotResult.class);
+            if (robotResult.getErrcode()==0) {
                 return true;
             }
-            log.error("EnterpriseWeChatRobotHandler#handler fail! result:{},params:{}", JSON.toJSONString(jsonObject), JSON.toJSONString(taskInfo));
+            log.error("EnterpriseWeChatRobotHandler#handler fail! result:{},params:{}", JSON.toJSONString(robotResult), JSON.toJSONString(taskInfo));
         } catch (Exception e) {
             log.error("EnterpriseWeChatRobotHandler#handler fail!e:{},params:{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(taskInfo));
         }
@@ -75,10 +76,7 @@ public class EnterpriseWeChatRobotHandler extends BaseHandler implements Handler
             param.setMarkdown(EnterpriseWeChatRobotParam.MarkdownDTO.builder().content(contentModel.getContent()).build());
         }
         if (SendMessageType.IMAGE.getCode().equals(contentModel.getSendType())) {
-            FileReader fileReader = new FileReader(contentModel.getImagePath());
-            byte[] bytes = fileReader.readBytes();
-            param.setImage(EnterpriseWeChatRobotParam.ImageDTO.builder().base64(Base64.encode(bytes))
-                    .md5(DigestUtil.md5Hex(bytes)).build());
+            param.setImage(EnterpriseWeChatRobotParam.ImageDTO.builder().base64(contentModel.getBase64()).md5(contentModel.getMd5()).build());
         }
         if (SendMessageType.FILE.getCode().equals(contentModel.getSendType())) {
             param.setFile(EnterpriseWeChatRobotParam.FileDTO.builder().mediaId(contentModel.getMediaId()).build());

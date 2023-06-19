@@ -15,6 +15,7 @@ import com.zz.messagepush.support.utils.WxServiceUtil;
 import com.zz.messagepush.web.config.WeChatLoginAccountConfig;
 import com.zz.messagepush.web.domain.vo.amis.CommonAmisVo;
 import com.zz.messagepush.web.utils.Convert4Amis;
+import com.zz.messagepush.web.utils.LoginUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +59,7 @@ public class OfficialAccountController {
     private StringRedisTemplate redisTemplate;
 
     @Autowired
-    private ApplicationContextUtil applicationContext;
+    private LoginUtil loginUtil;
 
 
     @RequestMapping(value = "/templateList", method = RequestMethod.GET)
@@ -110,7 +111,7 @@ public class OfficialAccountController {
     @RequestMapping(value = "/receipt", produces = {CommonConstant.CONTENT_TYPE_XML})
     public String receiptMessage(HttpServletRequest request) {
         try {
-            WeChatLoginAccountConfig configService = ApplicationContextUtil.getBean(OfficialAccountParamConstant.WE_CHAT_LOGIN_CONFIG, WeChatLoginAccountConfig.class);
+            WeChatLoginAccountConfig configService = loginUtil.getLoginConfig();
             if (configService == null) {
                 return RespStatusEnum.NO_LOGIN.getDescription();
             }
@@ -156,7 +157,7 @@ public class OfficialAccountController {
     @PostMapping("/qrCode")
     @ApiOperation("/生成 服务号 二维码")
     public CommonAmisVo getQrCode() throws WxErrorException {
-        WeChatLoginAccountConfig configService = ApplicationContextUtil.getBean(OfficialAccountParamConstant.WE_CHAT_LOGIN_CONFIG, WeChatLoginAccountConfig.class);
+        WeChatLoginAccountConfig configService = loginUtil.getLoginConfig();
         if (configService == null) {
             return null;
         }

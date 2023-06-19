@@ -1,5 +1,6 @@
 package com.zz.messagepush.web.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
@@ -41,7 +42,7 @@ public class DataController {
      */
     @RequestMapping(value = "/getData", method = RequestMethod.POST)
     public ResponseResult<SmsTimeLineVO> getData(@RequestBody DataParamVO dataParamVO) {
-        if (dataParamVO == null || dataParamVO.getDateTime() == null || dataParamVO.getReceiver() == null) {
+        if (dataParamVO == null || dataParamVO.getDateTime() == null || StrUtil.isBlank(dataParamVO.getReceiver())) {
             return ResponseResult.success(RespStatusEnum.SUCCESS.getCode(), new SmsTimeLineVO());
         }
         SmsTimeLineVO smsTimeLineVo = dataService.getTraceSmsInfo(dataParamVO);

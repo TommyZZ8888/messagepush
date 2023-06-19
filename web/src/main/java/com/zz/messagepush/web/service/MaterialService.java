@@ -17,4 +17,22 @@ public interface MaterialService {
      * @param fileType
      */
     void dingDingMaterialUpload(MultipartFile file, String sendAccount, String fileType);
+
+    /**
+     * 企业微信（机器人）素材上传
+     * @param file
+     * @param sendAccount
+     * @param fileType
+     * @return
+     */
+    void enterpriseWeChatRootMaterialUpload(MultipartFile file, String sendAccount, String fileType);
+
+    /**
+     * 企业微信（应用消息）素材上传
+     * @param file
+     * @param sendAccount
+     * @param fileType
+     * @return
+     */
+    void enterpriseWeChatMaterialUpload(MultipartFile file, String sendAccount, String fileType);
 }

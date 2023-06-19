@@ -124,8 +124,10 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     private void initStatus(MessageTemplateEntity messageTemplate) {
         messageTemplate.setFlowId(StrUtil.EMPTY)
                 .setMsgStatus(MessageStatus.INIT.getCode()).setAuditStatus(AuditStatus.WAIT_AUDIT.getCode())
-                .setCreator("Java3y").setUpdator("Java3y").setTeam("公众号Java3y").setAuditor("3y")
-                .setDeduplicationTime(CommonConstant.FALSE).setIsNightShield(CommonConstant.FALSE)
+                .setCreator(StrUtil.isBlank(messageTemplate.getCreator()) ? AustinConstant.DEFAULT_CREATOR : messageTemplate.getCreator())
+                .setUpdator(StrUtil.isBlank(messageTemplate.getUpdator()) ? AustinConstant.DEFAULT_UPDATOR : messageTemplate.getUpdator())
+                .setTeam(StrUtil.isBlank(messageTemplate.getTeam()) ? AustinConstant.DEFAULT_TEAM : messageTemplate.getTeam())
+                .setAuditor(StrUtil.isBlank(messageTemplate.getAuditor()) ? AustinConstant.DEFAULT_AUDITOR : messageTemplate.getAuditor())                .setDeduplicationTime(CommonConstant.FALSE).setIsNightShield(CommonConstant.FALSE)
                 .setCreated(new Date()).setUpdated(new Date())
                 .setIsDeleted(CommonConstant.FALSE);
     }

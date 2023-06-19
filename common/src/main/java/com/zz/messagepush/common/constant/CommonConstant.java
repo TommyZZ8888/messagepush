@@ -48,5 +48,12 @@ public class CommonConstant {
     public final static String CONTENT_TYPE_TEXT = "text/html;charset=utf-8";
     public final static String CONTENT_TYPE_XML = "application/xml;charset=utf-8";
     public final static String CONTENT_TYPE_FROM_URL_ENCODE = "application/x-www-form-urlencoded;charset=utf-8";
+    public final static String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
+
+    /**
+     * 环境常量
+     */
+    public final static String ENV_DEV = "dev";
+    public final static String ENV_TEST = "test";
 
 }

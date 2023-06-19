@@ -41,4 +41,8 @@ public class EnterpriseWeChatRobotContentModel extends ContentModel{
      * 图片路径
      */
     private String imagePath;
+
+    private String md5;
+
+    private String base64;
 }
