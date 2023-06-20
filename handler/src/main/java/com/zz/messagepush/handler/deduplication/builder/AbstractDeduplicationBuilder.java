@@ -7,6 +7,7 @@ import com.zz.messagepush.handler.domain.DeduplicationParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 /**
  * @Description
@@ -29,11 +30,11 @@ public abstract class AbstractDeduplicationBuilder implements Builder {
 
     public DeduplicationParam getParamsFromConfig(Integer key, String deduplicationConfig, TaskInfo taskInfo) {
         JSONObject jsonObject = JSONObject.parseObject(deduplicationConfig);
-        if (jsonObject == null) {
+        if (Objects.isNull(jsonObject)) {
             return null;
         }
         DeduplicationParam deduplicationParam = JSONObject.parseObject(jsonObject.getString(CONFIG_PRE + key), DeduplicationParam.class);
-        if (deduplicationParam == null) {
+        if (Objects.isNull(deduplicationParam)) {
             return null;
         }
         deduplicationParam.setTaskInfo(taskInfo);

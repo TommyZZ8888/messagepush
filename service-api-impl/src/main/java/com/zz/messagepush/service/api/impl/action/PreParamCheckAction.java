@@ -11,6 +11,7 @@ import com.zz.messagepush.support.pipeline.ProcessContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +33,7 @@ public class PreParamCheckAction implements BusinessProcess<SendTaskModel> {
         List<MessageParam> messageParamList = processModel.getMessageParamList();
 
         //没有传入消息模板id或者messageParam
-        if (messageTemplateId == null || CollUtil.isEmpty(messageParamList)) {
+        if (Objects.isNull(messageTemplateId) || CollUtil.isEmpty(messageParamList)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.CLIENT_BAD_PARAMETERS.getDescription()));
             return;
         }

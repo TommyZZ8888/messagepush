@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Description 对redis的某些操作的二次封装
@@ -168,7 +169,7 @@ public class RedisUtil {
     public Boolean execLimitLua(RedisScript<Long> redisScript, List<String> keys, String... args) {
         try {
             Long execute = redisTemplate.execute(redisScript, keys, args);
-            if (execute == null) {
+            if (Objects.isNull(execute)) {
                 return false;
             }
             return CommonConstant.TRUE.equals(execute.intValue());

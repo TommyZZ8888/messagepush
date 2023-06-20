@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Description OfficialAccountController
@@ -112,7 +113,7 @@ public class OfficialAccountController {
     public String receiptMessage(HttpServletRequest request) {
         try {
             WeChatLoginAccountConfig configService = loginUtil.getLoginConfig();
-            if (configService == null) {
+            if (Objects.isNull(configService)) {
                 return RespStatusEnum.NO_LOGIN.getDescription();
             }
             WxMpService wxMpService = configService.getWxOfficialAccountLoginService();
@@ -158,7 +159,7 @@ public class OfficialAccountController {
     @ApiOperation("/生成 服务号 二维码")
     public CommonAmisVo getQrCode() throws WxErrorException {
         WeChatLoginAccountConfig configService = loginUtil.getLoginConfig();
-        if (configService == null) {
+        if (Objects.isNull(configService)) {
             return null;
         }
         String id = IdUtil.getSnowflake().nextIdStr();

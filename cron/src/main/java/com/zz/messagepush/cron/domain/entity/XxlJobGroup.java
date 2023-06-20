@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -46,7 +47,7 @@ public class XxlJobGroup {
 
 
     public List<String> getRegistry() {
-        if (addressList != null && addressList.trim().length() > 0) {
+        if (StringUtils.isNotBlank(addressList) && addressList.trim().length() > 0) {
             registryList = Arrays.asList(addressList.split(","));
         }
         return registryList;

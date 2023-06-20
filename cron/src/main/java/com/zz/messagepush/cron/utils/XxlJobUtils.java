@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.cron.constant.XxlJobConstant;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @Description
@@ -46,8 +48,8 @@ public class XxlJobUtils {
         // 判断是否为cron表达式
         String scheduleConf = messageTemplate.getExpectPushTime();
         //如果没有指定那个表达式立即执行 （给到则延迟）
-        if (messageTemplate.getExpectPushTime().equals(String.valueOf(AustinConstant.FALSE))) {
-            scheduleConf =DateUtil.format(DateUtil.offsetSecond(new Date(),XxlJobConstant.DELAY_TIME),AustinConstant.CRON_FORMAT);
+        if (messageTemplate.getExpectPushTime().equals(String.valueOf(CommonConstant.FALSE))) {
+            scheduleConf =DateUtil.format(DateUtil.offsetSecond(new Date(),XxlJobConstant.DELAY_TIME),CommonConstant.CRON_FORMAT);
         }
 
         XxlJobInfo xxlJobInfo = XxlJobInfo.builder().jobGroup(1).jobDesc(messageTemplate.getName())
@@ -62,14 +64,14 @@ public class XxlJobUtils {
                 .executorTimeout(XxlJobConstant.TIME_OUT)
                 .executorFailRetryCount(XxlJobConstant.RETRY_TIME)
                 .glueType(GlueTypeEnum.BEAN.name())
-                .triggerStatus(AustinConstant.FALSE)
+                .triggerStatus(CommonConstant.FALSE)
                 .glueRemark(StrUtil.EMPTY)
                 .glueSource(StrUtil.EMPTY)
                 .alarmEmail(StrUtil.EMPTY)
 //                .childJobId(StrUtil.EMPTY)
                 .build();
 
-        if (messageTemplate.getCronTaskId() != null) {
+        if (Objects.isNull(messageTemplate.getCronTaskId())) {
             xxlJobInfo.setId(messageTemplate.getCronTaskId());
         }
         return xxlJobInfo;
@@ -85,7 +87,7 @@ public class XxlJobUtils {
     private Integer queryJobGroupId() {
         ResponseResult responseResult = cronTaskService.getGroupId(appname, jobHandlerName);
         if (responseResult.getData() == null) {
-            XxlJobGroup xxlJobGroup = XxlJobGroup.builder().appName(appname).title(jobHandlerName).addressType(AustinConstant.FALSE).build();
+            XxlJobGroup xxlJobGroup = XxlJobGroup.builder().appName(appname).title(jobHandlerName).addressType(CommonConstant.FALSE).build();
             ResponseResult group = cronTaskService.createGroup(xxlJobGroup);
             if (RespStatusEnum.SUCCESS.getCode().equals(group.getCode())) {
                 return (Integer) group.getData();

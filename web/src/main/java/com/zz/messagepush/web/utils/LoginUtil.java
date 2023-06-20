@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * @Description LoginUtil
  * @Author 张卫刚
@@ -32,7 +34,7 @@ public class LoginUtil {
     public Boolean needLogin() {
         try {
             WeChatLoginAccountConfig loginConfig = getLoginConfig();
-            if (CommonConstant.ENV_TEST.equals(env) && loginConfig != null) {
+            if (CommonConstant.ENV_TEST.equals(env) && Objects.nonNull(loginConfig)) {
                 return true;
             }
         } catch (Exception e) {

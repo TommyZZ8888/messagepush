@@ -22,6 +22,7 @@ import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Description
@@ -46,7 +47,7 @@ public class CronTaskServiceImpl implements CronTaskService {
     public ResponseResult saveCronTask(XxlJobInfoDTO xxlJobInfoDTO) {
         Map<String, Object> map = JSONObject.parseObject(JSON.toJSONString(xxlJobInfoDTO), Map.class);
         String path;
-        path = xxlJobInfoDTO.getId() == null ? xxlAddress + XxlJobConstant.INSERT_URL : xxlAddress + XxlJobConstant.UPDATE_URL;
+        path = Objects.isNull(xxlJobInfoDTO.getId()) ? xxlAddress + XxlJobConstant.INSERT_URL : xxlAddress + XxlJobConstant.UPDATE_URL;
         HttpResponse response;
         ReturnT returnT = null;
         try {

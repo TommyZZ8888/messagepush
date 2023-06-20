@@ -52,7 +52,6 @@ public class MaterialServiceImpl implements MaterialService {
     public void dingDingMaterialUpload(MultipartFile file, String sendAccount, String fileType) {
         OapiMediaUploadResponse response;
         try {
-            String accessToken = redisTemplate.opsForValue().get(SendAccountConstant.DING_DING_ACCESS_TOKEN_PREFIX + sendAccount);
             DefaultDingTalkClient client = new DefaultDingTalkClient(DING_DING_URL);
             OapiMediaUploadRequest request = new OapiMediaUploadRequest();
             FileItem fileItem = new FileItem(IdUtil.fastUUID() + file.getOriginalFilename(), file.getInputStream());

@@ -3,6 +3,7 @@ package com.zz.messagepush.handler.flowcontrol.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.util.concurrent.RateLimiter;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.anno.LocalRateLimit;
@@ -66,7 +67,7 @@ public class FlowControlFactory implements ApplicationContextAware {
         RateLimiter rateLimiter;
         Double rateInitValue = flowControlParam.getRateInitValue();
         Double limitStrategy = getRateLimitStrategy(taskInfo.getSendChannel());
-        if (limitStrategy != null && !rateInitValue.equals(limitStrategy)) {
+        if (Objects.nonNull(limitStrategy) && !rateInitValue.equals(limitStrategy)) {
             rateLimiter = RateLimiter.create(limitStrategy);
             flowControlParam.setRateInitValue(limitStrategy);
             flowControlParam.setRateLimiter(rateLimiter);
@@ -91,9 +92,9 @@ public class FlowControlFactory implements ApplicationContextAware {
      * @param channelCode
      */
     private Double getRateLimitStrategy(Integer channelCode) {
-        String property = config.getProperty(FLOW_CONTROL_KEY, AustinConstant.APOLLO_DEFAULT_VALUE_JSON_OBJECT);
+        String property = config.getProperty(FLOW_CONTROL_KEY, CommonConstant.EMPTY_JSON_OBJECT);
         JSONObject jsonObject = JSONObject.parseObject(property);
-        if (jsonObject.getDouble(PREFIX + channelCode) == null) {
+        if (Objects.isNull(jsonObject.getDouble(PREFIX + channelCode))) {
             return null;
         }
         return jsonObject.getDouble(PREFIX + channelCode);

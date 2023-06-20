@@ -54,7 +54,7 @@ public class YunPianSmsServiceImpl implements SmsService {
 
 
     private List<SmsRecordEntity> assembleSmsRecord(SmsParam smsParamDTO, YunPianSendResult yunPianSendResult, YunPianSmsAccount account) {
-        if (yunPianSendResult == null || ArrayUtil.isEmpty(yunPianSendResult.getData())) {
+        if (Objects.isNull(yunPianSendResult) || ArrayUtil.isEmpty(yunPianSendResult.getData())) {
             return null;
         }
         List<SmsRecordEntity> smsRecordList = new ArrayList<>();

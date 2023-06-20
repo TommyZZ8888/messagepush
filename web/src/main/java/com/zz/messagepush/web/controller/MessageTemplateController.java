@@ -143,7 +143,7 @@ public class MessageTemplateController {
     public ResponseResult<Boolean> recall(@RequestParam("id") String id) {
         SendRequest sendRequest = SendRequest.builder().messageTemplateId(Long.valueOf(id)).code(BusinessCode.RECALL_SEND.getCode()).build();
         SendResponse response = recallService.recall(sendRequest);
-        if (response.getCode() != RespStatusEnum.SUCCESS.getCode()) {
+        if (!Objects.equals(response.getCode(), RespStatusEnum.SUCCESS.getCode())) {
             return ResponseResult.fail("recall fail");
         }
         return ResponseResult.success();

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 /**
  * @Description 获取数据接口 == 全链路追踪
@@ -42,7 +43,7 @@ public class DataController {
      */
     @RequestMapping(value = "/getData", method = RequestMethod.POST)
     public ResponseResult<SmsTimeLineVO> getData(@RequestBody DataParamVO dataParamVO) {
-        if (dataParamVO == null || dataParamVO.getDateTime() == null || StrUtil.isBlank(dataParamVO.getReceiver())) {
+        if (Objects.isNull(dataParamVO) || Objects.isNull(dataParamVO.getDateTime()) || StrUtil.isBlank(dataParamVO.getReceiver())) {
             return ResponseResult.success(RespStatusEnum.SUCCESS.getCode(), new SmsTimeLineVO());
         }
         SmsTimeLineVO smsTimeLineVo = dataService.getTraceSmsInfo(dataParamVO);
