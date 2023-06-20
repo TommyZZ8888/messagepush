@@ -23,9 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -81,7 +79,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Override
     public void saveOrUpdate(MessageTemplateParamDTO messageTemplateParamDTO) {
         MessageTemplateEntity copy = BeanUtil.copy(messageTemplateParamDTO, MessageTemplateEntity.class);
-        if (messageTemplateParamDTO.getId() == null) {
+        if (Objects.isNull(messageTemplateParamDTO.getId())) {
             initStatus(copy);
             messageTemplateMapper.save(copy);
             return;
@@ -94,7 +92,7 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
         Iterable<MessageTemplateEntity> entities = messageTemplateMapper.findAllById(ids);
         entities.forEach(messageTemplate -> messageTemplate.setIsDeleted(CommonConstant.TRUE));
         for (MessageTemplateEntity entity : entities) {
-            if (entity.getCronTaskId() != null && entity.getCronTaskId() > 0) {
+            if (Objects.nonNull(entity.getCronTaskId()) && entity.getCronTaskId() > 0) {
                 cronTaskService.deleteCronTask(entity.getCronTaskId());
             }
         }
@@ -143,10 +141,10 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
         Integer cronTaskId = messageTemplateEntity.getCronTaskId();
         ResponseResult responseResult = cronTaskService.saveCronTask(BeanUtil.copy(xxlJobInfo, XxlJobInfoDTO.class));
 
-        if (cronTaskId == null && RespStatusEnum.SUCCESS.getCode().equals(responseResult.getCode()) && responseResult.getData() != null) {
+        if (Objects.isNull(cronTaskId) && RespStatusEnum.SUCCESS.getCode().equals(responseResult.getCode()) && responseResult.getData() != null) {
             cronTaskId = Integer.valueOf(String.valueOf(responseResult.getData()));
         }
-        if (cronTaskId != null) {
+        if (Objects.nonNull(cronTaskId)) {
             cronTaskService.startCronTask(cronTaskId);
             MessageTemplateEntity clone = BeanUtil.copy(messageTemplateEntity, MessageTemplateEntity.class).setMsgStatus(MessageStatus.RUN.getCode()).setUpdated(new Date());
             messageTemplateMapper.save(clone);

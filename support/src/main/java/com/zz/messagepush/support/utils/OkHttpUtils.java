@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Author 张卫刚
@@ -51,7 +52,7 @@ public class OkHttpUtils {
      */
     public String doGet(String url, Map<String, String> params, Map<String, String> headers) {
         StringBuilder sb = new StringBuilder(url);
-        if (params != null && params.keySet().size() > 0) {
+        if (Objects.nonNull(params) && params.keySet().size() > 0) {
             boolean firstFlag = true;
             for (String key : params.keySet()) {
                 if (firstFlag) {
@@ -79,7 +80,7 @@ public class OkHttpUtils {
      */
     public String doPost(String url, Map<String, String> params, Map<String, String> headers) {
         FormBody.Builder builder = new FormBody.Builder();
-        if (params != null && params.keySet().size() > 0) {
+        if (Objects.nonNull(params) && params.keySet().size() > 0) {
             for (String key : params.keySet()) {
                 builder.add(key, params.get(key));
             }

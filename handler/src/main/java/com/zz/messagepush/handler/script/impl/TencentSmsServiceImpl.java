@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author 张卫刚
@@ -56,9 +57,14 @@ public class TencentSmsServiceImpl implements SmsService {
         }
     }
 
+    @Override
+    public List<SmsRecordEntity> pull(String scriptName) {
+        return null;
+    }
+
 
     private List<SmsRecordEntity> assembleSmsRecord(SmsParam smsParamDTO, SendSmsResponse sendSmsResponse, TencentSmsAccount tencentSmsParam) {
-        if (sendSmsResponse == null || ArrayUtil.isEmpty(sendSmsResponse.getSendStatusSet())) {
+        if (Objects.isNull(sendSmsResponse) || ArrayUtil.isEmpty(sendSmsResponse.getSendStatusSet())) {
             return null;
         }
         List<SmsRecordEntity> smsRecordList = new ArrayList<>();

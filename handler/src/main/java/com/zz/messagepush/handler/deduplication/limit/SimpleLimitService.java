@@ -1,12 +1,12 @@
 package com.zz.messagepush.handler.deduplication.limit;
 
 import cn.hutool.core.collection.CollUtil;
-import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.domain.dto.TaskInfo;
 import com.zz.messagepush.handler.deduplication.AbstractDeduplicationService;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
 import com.zz.messagepush.support.utils.RedisUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class SimpleLimitService extends AbstractLimitService {
             String value = inRedisValue.get(key);
 
             //符合条件的用户
-            if (value != null && Integer.parseInt(value) <= param.getCountNum()) {
+            if (StringUtils.isNotBlank(value) && Integer.parseInt(value) <= param.getCountNum()) {
                 filterReceiver.add(key);
             } else {
                 readyPutInRedisReceiver.put(key, receiver);
@@ -65,7 +65,7 @@ public class SimpleLimitService extends AbstractLimitService {
         Map<String, String> keyValues = new HashMap<>(readyPutRedisReceiver.size());
         for (Map.Entry<String, String> entry : readyPutRedisReceiver.entrySet()) {
             String key = entry.getKey();
-            if (inRedisValue.get(key) != null) {
+            if (StringUtils.isNotBlank(inRedisValue.get(key))) {
                 keyValues.put(key, String.valueOf(Integer.parseInt(inRedisValue.get(key)) + 1));
             } else {
                 keyValues.put(key, String.valueOf(CommonConstant.TRUE));

@@ -6,6 +6,8 @@ import com.zz.messagepush.common.enums.DeduplicationType;
 import com.zz.messagepush.handler.domain.DeduplicationParam;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * @Description
  * @Author 张卫刚
@@ -21,7 +23,7 @@ public class ContentDeduplicationBuilder extends AbstractDeduplicationBuilder im
     @Override
     public DeduplicationParam build(String deduplication, TaskInfo taskInfo) {
         DeduplicationParam deduplicationParam = getParamsFromConfig(deduplicationType, deduplication, taskInfo);
-        if (deduplicationParam == null) {
+        if (Objects.isNull(deduplicationParam)) {
             return null;
         }
         deduplicationParam.setAnchorStateEnum(AnchorStateEnum.CONTENT_DEDUPLICATION);

@@ -12,6 +12,7 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 /**
  * @Description 发送各个渠道的handler
@@ -61,7 +62,7 @@ public abstract class BaseHandler implements Handler {
     }
 
     public void flowControl(TaskInfo taskInfo){
-        if (flowControlParam!=null){
+        if (Objects.nonNull(flowControlParam)){
             flowControlFactory.flowControl(taskInfo,flowControlParam);
         }
     }

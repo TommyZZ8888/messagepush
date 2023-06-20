@@ -49,7 +49,7 @@ public class AssembleAction implements BusinessProcess<SendTaskModel> {
         Long messageTemplateId = processModel.getMessageTemplateId();
 
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(messageTemplateId).orElse(null);
-        if (messageTemplateEntity == null || messageTemplateEntity.getIsDeleted().equals(CommonConstant.TRUE)) {
+        if (Objects.isNull(messageTemplateEntity) || messageTemplateEntity.getIsDeleted().equals(CommonConstant.TRUE)) {
             context.setNeedBreak(true).setResponse(ResponseResult.fail(RespStatusEnum.TEMPLATE_NOT_FOUND.getDescription()));
             return;
         }
@@ -77,8 +77,6 @@ public class AssembleAction implements BusinessProcess<SendTaskModel> {
                     .msgType(messageTemplate.getMsgType())
                     .sendAccount(messageTemplate.getSendAccount())
                     .contentModel(getContentModelValue(messageTemplate, messageParam)).build();
-//                    .deduplicationTime(messageTemplate.())
-//                    .isNightShield(messageTemplate.getIsNightShield()).build();
 
             taskInfoList.add(taskInfo);
         }

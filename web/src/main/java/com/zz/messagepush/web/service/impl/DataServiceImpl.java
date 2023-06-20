@@ -176,7 +176,7 @@ public class DataServiceImpl implements DataService {
             return businessId;
         }
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(Long.parseLong(businessId)).orElse(null);
-        if (messageTemplateEntity != null) {
+        if (Objects.nonNull(messageTemplateEntity)) {
             Long generateBusinessId = TaskInfoUtils.generateBusinessId(messageTemplateEntity.getId(), messageTemplateEntity.getTemplateType());
             return String.valueOf(generateBusinessId);
         }

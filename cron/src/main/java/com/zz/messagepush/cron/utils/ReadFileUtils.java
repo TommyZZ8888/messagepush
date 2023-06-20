@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description 读取人群文件工具类
@@ -31,7 +28,6 @@ public class ReadFileUtils {
     /**
      * 读取csv信息
      * 第一行默认为头信息，第一列默认为接收者id
-     *
      * @param path
      * @return
      */
@@ -41,7 +37,7 @@ public class ReadFileUtils {
 
         try {
             CsvData csvData = CsvUtil.getReader().read(FileUtil.file(path));
-            if (csvData == null || csvData.getRow(0) == null || csvData.getRow(1) == null) {
+            if (Objects.isNull(csvData) || Objects.isNull(csvData.getRow(0)) || Objects.isNull(csvData.getRow(1))) {
                 log.error("no data");
                 return new ArrayList<>();
             }
@@ -64,7 +60,6 @@ public class ReadFileUtils {
 
     /**
      * 读取csv文件，每读取一行都会调用CsvRowHandler对应的方法
-     *
      * @param path
      * @param csvRowHandler
      */
@@ -80,7 +75,6 @@ public class ReadFileUtils {
 
     /**
      * 从文件的每一行数据获取param信息
-     *
      * @param fieldMap
      * @return
      */
@@ -97,7 +91,6 @@ public class ReadFileUtils {
 
     /**
      * 读取csv文件，获取文件中的行数
-     *
      * @param path
      * @param countFileRowHandler
      * @return

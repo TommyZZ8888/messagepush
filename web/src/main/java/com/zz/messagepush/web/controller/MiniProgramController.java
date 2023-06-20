@@ -14,12 +14,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.subscribemsg.TemplateInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 
 
 /**
@@ -64,7 +65,7 @@ public class MiniProgramController {
     @PostMapping("/detailTemplate")
     @ApiOperation("/根据账号Id和模板ID获取模板列表")
     public ResponseResult<Boolean> queryDetailList(Long id, String wxTemplateId) {
-        if (id == null || wxTemplateId == null) {
+        if (Objects.isNull(id) || StringUtils.isNotBlank(wxTemplateId)) {
             return ResponseResult.success(RespStatusEnum.CLIENT_BAD_PARAMETERS.getDescription());
         }
         try {
