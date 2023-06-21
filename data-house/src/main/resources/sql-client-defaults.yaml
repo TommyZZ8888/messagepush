@@ -1,0 +1,5 @@
+catalogs:
+   - name: my_hive
+     type: hive
+     default-database: austin-hive
+     hive-conf-dir: /opt/flink/conf
