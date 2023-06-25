@@ -2,7 +2,7 @@ package com.zz.messagepush.web.config;
 
 import com.zz.messagepush.common.constant.OfficialAccountParamConstant;
 import com.zz.messagepush.common.domain.dto.account.WeChatOfficialAccount;
-import com.zz.messagepush.support.utils.WxServiceUtil;
+import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.Data;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;
@@ -43,7 +43,7 @@ public class WeChatLoginAccountConfig {
 
 
     @Autowired
-    private WxServiceUtil wxServiceUtil;
+    private AccountUtils accountUtils;
 
     private WxMpService wxOfficialAccountLoginService;
     private WxMpDefaultConfigImpl wxMpDefaultConfig;
@@ -52,7 +52,7 @@ public class WeChatLoginAccountConfig {
     @PostConstruct
     public void init() {
         WeChatOfficialAccount account = WeChatOfficialAccount.builder().appId(appId).secret(secret).token(token).build();
-        wxOfficialAccountLoginService = wxServiceUtil.initOfficialAccountService(account);
+        wxOfficialAccountLoginService = accountUtils.initOfficialAccountService(account);
         initRoute();
         initConfig();
     }

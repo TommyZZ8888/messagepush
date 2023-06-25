@@ -1,13 +1,13 @@
 package com.zz.messagepush.web.controller;
 
-import cn.binarywang.wx.miniapp.api.WxMaSubscribeService;
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.http.HttpUtil;
 import com.google.common.base.Throwables;
 
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
 import com.zz.messagepush.common.enums.RespStatusEnum;
-import com.zz.messagepush.support.utils.WxServiceUtil;
+import com.zz.messagepush.support.utils.AccountUtils;
 import com.zz.messagepush.web.domain.vo.amis.CommonAmisVo;
 import com.zz.messagepush.web.utils.Convert4Amis;
 import io.swagger.annotations.Api;
@@ -36,15 +36,15 @@ import java.util.Objects;
 public class MiniProgramController {
 
     @Autowired
-    private WxServiceUtil wxServiceUtils;
+    private AccountUtils accountUtils;
 
     @GetMapping("/template/list")
     @ApiOperation("/根据账号Id获取模板列表")
     public ResponseResult<Boolean> queryList(Long id) {
         try {
             List<CommonAmisVo> result = new ArrayList<>();
-            WxMaSubscribeService wxMaSubscribeService = wxServiceUtils.getMiniProgramServiceMap().get(id);
-            List<TemplateInfo> templateList = wxMaSubscribeService.getTemplateList();
+            WxMaService wxMaService = accountUtils.getAccountById(id.intValue(), WxMaService.class);
+            List<TemplateInfo> templateList = wxMaService.getSubscribeService().getTemplateList();
             for (TemplateInfo templateInfo : templateList) {
                 CommonAmisVo commonAmisVo = CommonAmisVo.builder().label(templateInfo.getTitle()).value(templateInfo.getPriTmplId()).build();
                 result.add(commonAmisVo);
@@ -69,8 +69,8 @@ public class MiniProgramController {
             return ResponseResult.success(RespStatusEnum.CLIENT_BAD_PARAMETERS.getDescription());
         }
         try {
-            WxMaSubscribeService wxMaSubscribeService = wxServiceUtils.getMiniProgramServiceMap().get(id);
-            List<TemplateInfo> templateList = wxMaSubscribeService.getTemplateList();
+            WxMaService wxMaService = accountUtils.getAccountById(id.intValue(), WxMaService.class);
+            List<TemplateInfo> templateList = wxMaService.getSubscribeService().getTemplateList();
             CommonAmisVo wxMpTemplateParam = Convert4Amis.getWxMaTemplateParam(wxTemplateId, templateList);
             return ResponseResult.success(wxMpTemplateParam.toString());
         } catch (Exception e) {

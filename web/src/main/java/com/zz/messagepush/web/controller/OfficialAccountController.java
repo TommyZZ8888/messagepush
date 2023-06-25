@@ -4,14 +4,11 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
-import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.constant.OfficialAccountParamConstant;
 import com.zz.messagepush.common.domain.ResponseResult;
-import com.zz.messagepush.common.domain.dto.account.WeChatOfficialAccount;
 import com.zz.messagepush.common.enums.RespStatusEnum;
-import com.zz.messagepush.common.utils.ApplicationContextUtil;
-import com.zz.messagepush.support.utils.WxServiceUtil;
+import com.zz.messagepush.support.utils.AccountUtils;
 import com.zz.messagepush.web.config.WeChatLoginAccountConfig;
 import com.zz.messagepush.web.domain.vo.amis.CommonAmisVo;
 import com.zz.messagepush.web.utils.Convert4Amis;
@@ -20,20 +17,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpQrCodeTicket;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplate;
-import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,10 +45,7 @@ import java.util.Objects;
 public class OfficialAccountController {
 
     @Autowired
-    private WxServiceUtil wxServiceUtil;
-
-    @Autowired
-    private WeChatLoginAccountConfig configService;
+    private AccountUtils accountUtils;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -67,7 +58,7 @@ public class OfficialAccountController {
     @ApiOperation("根据模板id获取模板列表")
     public ResponseResult<List<CommonAmisVo>> queryList(Long id) throws WxErrorException {
         List<CommonAmisVo> list = new ArrayList<>();
-        WxMpService wxMpService = wxServiceUtil.getOfficialAccountServiceMap().get(id);
+        WxMpService wxMpService = accountUtils.getAccountById(id.intValue(),WxMpService.class);
         List<WxMpTemplate> allPrivateTemplate = wxMpService.getTemplateMsgService().getAllPrivateTemplate();
         for (WxMpTemplate wxMpTemplate : allPrivateTemplate) {
             CommonAmisVo commonAmisVo = CommonAmisVo.builder().label(wxMpTemplate.getTitle()).value(wxMpTemplate.getTemplateId()).build();
@@ -81,7 +72,7 @@ public class OfficialAccountController {
     @ApiOperation("根据模板id和账号id获取模板列表")
     public ResponseResult<List<CommonAmisVo>> queryDetailList(Long id, String wxTemplateId) throws WxErrorException {
         List<CommonAmisVo> list = new ArrayList<>();
-        WxMpService wxMpService = wxServiceUtil.getOfficialAccountServiceMap().get(id);
+        WxMpService wxMpService = accountUtils.getAccountById(id.intValue(),WxMpService.class);
         List<WxMpTemplate> allPrivateTemplate = wxMpService.getTemplateMsgService().getAllPrivateTemplate();
         for (WxMpTemplate wxMpTemplate : allPrivateTemplate) {
             if (wxTemplateId.equals(wxMpTemplate.getTemplateId())) {

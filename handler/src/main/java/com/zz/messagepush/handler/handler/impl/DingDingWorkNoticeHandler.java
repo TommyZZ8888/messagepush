@@ -7,8 +7,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
+import com.dingtalk.api.request.OapiMessageCorpconversationGetsendresultRequest;
 import com.dingtalk.api.request.OapiMessageCorpconversationRecallRequest;
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
+import com.dingtalk.api.response.OapiMessageCorpconversationGetsendresultResponse;
 import com.dingtalk.api.response.OapiMessageCorpconversationRecallResponse;
 import com.taobao.api.ApiException;
 import com.zz.messagepush.common.constant.AustinConstant;
@@ -191,7 +193,17 @@ public class DingDingWorkNoticeHandler extends BaseHandler implements Handler {
         });
     }
 
-    public void pull(Long accountId){
-
+    public void pull(Long accountId) {
+        try {
+            DingDingWorkNoticeAccount account = accountUtils.getAccountById(accountId.intValue(), DingDingWorkNoticeAccount.class);
+            String accessToken = redisTemplate.opsForValue().get(SendAccountConstant.DING_DING_ACCESS_TOKEN_PREFIX + accountId);
+            OapiMessageCorpconversationGetsendresultRequest request = new OapiMessageCorpconversationGetsendresultRequest();
+            DefaultDingTalkClient client = new DefaultDingTalkClient(PULL_URL);
+            request.setAgentId(Long.valueOf(account.getAgentId()));
+            request.setTaskId(456L);
+            OapiMessageCorpconversationGetsendresultResponse execute = client.execute(request, accessToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

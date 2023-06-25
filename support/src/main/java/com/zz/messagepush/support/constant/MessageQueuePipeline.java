@@ -5,10 +5,12 @@ package com.zz.messagepush.support.constant;
  * @Author 张卫刚
  * @Date Created on 2023/5/17
  */
-public interface MessageQueuePipeline {
+public class MessageQueuePipeline {
 
-    String EVENT_BUS = "eventBus";
-    String KAFKA = "kafka";
-    String ROCKET_MQ = "rocketMq";
-    String RABBIT_MQ = "rabbitMq";
+   public static final String EVENT_BUS = "eventBus";
+   public static final String KAFKA = "kafka";
+   public static final String ROCKET_MQ = "rocketMq";
+   public static final String RABBIT_MQ = "rabbitMq";
+
+   public static final String SPRING_EVENT_BUS = "springEventBus";
 }

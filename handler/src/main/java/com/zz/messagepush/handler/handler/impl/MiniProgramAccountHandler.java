@@ -1,5 +1,6 @@
 package com.zz.messagepush.handler.handler.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.WxMaSubscribeService;
 import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import com.alibaba.fastjson.JSON;
@@ -10,7 +11,7 @@ import com.zz.messagepush.common.enums.ChannelType;
 import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
-import com.zz.messagepush.support.utils.WxServiceUtil;
+import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,9 +29,9 @@ import java.util.Set;
 @Component
 @Slf4j
 public class MiniProgramAccountHandler extends BaseHandler implements Handler {
-
+    
     @Autowired
-    private WxServiceUtil wxServiceUtil;
+    private AccountUtils accountUtils;
 
     public MiniProgramAccountHandler() {
         channelCode = ChannelType.MINI_PROGRAM.getCode();
@@ -40,11 +41,11 @@ public class MiniProgramAccountHandler extends BaseHandler implements Handler {
     @Override
     public boolean handler(TaskInfo taskInfo) {
         MiniProgramContentModel contentModel = (MiniProgramContentModel) taskInfo.getContentModel();
-        WxMaSubscribeService wxMaSubscribeService = wxServiceUtil.getMiniProgramServiceMap().get(taskInfo.getSendAccount().longValue());
+        WxMaService wxMaService = accountUtils.getAccountById(taskInfo.getSendAccount(), WxMaService.class);
         List<WxMaSubscribeMessage> wxMaSubscribeMessages = assembleReq(taskInfo.getReceiver(), contentModel);
         for (WxMaSubscribeMessage message : wxMaSubscribeMessages) {
             try {
-                wxMaSubscribeService.sendSubscribeMsg(message);
+                wxMaService.getSubscribeService().sendSubscribeMsg(message);
             } catch (Exception e) {
                 log.info("MiniProgramAccountHandler#handler fail! param:{},e:{}", JSON.toJSONString(taskInfo), Throwables.getStackTraceAsString(e));
             }
