@@ -17,4 +17,9 @@ public class SendAccountConstant {
      * 个推
      */
     public static final String GE_TUI_ACCESS_TOKEN_PREFIX = "ge_tui_access_token_";
+
+
+    public static final String OFFICIAL_ACCOUNT_ACCESS_TOKEN_PREFIX = "official_account";
+
+    public static final String MINI_PROGRAM_TOKEN_PREFIX = "mini_program";
 }
