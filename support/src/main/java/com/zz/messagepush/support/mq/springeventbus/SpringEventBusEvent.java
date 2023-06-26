@@ -11,7 +11,7 @@ import java.time.Clock;
  * @Date Created on 2023/6/25
  */
 
-public class SpringEventBusEvent extends ApplicationEvent {
+public class SpringEventBusEvent extends ApplicationEvent{
 
     public String jsonValue;
 
@@ -19,14 +19,12 @@ public class SpringEventBusEvent extends ApplicationEvent {
 
     public String topic;
 
-    public SpringEventBusEvent(Object source) {
+    public SpringEventBusEvent(Object source,String jsonValue, String tagId, String topic) {
         super(source);
+        this.jsonValue = jsonValue;
+        this.tagId = tagId;
+        this.topic = topic;
     }
-
-    public SpringEventBusEvent(Object source, Clock clock) {
-        super(source, clock);
-    }
-
 
     public String getJsonValue() {
         return jsonValue;
