@@ -40,8 +40,8 @@ public class OssUtil {
         try {
             Response response = uploadManager.put(localFilePath, accessKey, uploadToken);
             DefaultPutRet defaultPutRet = JSON.parseObject(response.toString(), DefaultPutRet.class);
-            System.out.println(defaultPutRet.key);
-            System.out.println(defaultPutRet.hash);
+            String s = getFileUrl("FmnBLE4QtkwlErXIAh9pYS029GZk");
+            System.out.println(s);
         } catch (Exception e) {
             e.printStackTrace();
         }

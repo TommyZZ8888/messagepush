@@ -24,9 +24,9 @@ public interface SmsService {
 
     /**
      * 拉取回执
-     * @param scriptName 标识账号的脚本名
+     * @param id 渠道账号的id
      * @return 渠道商拉取回执接口返回值
      */
-    List<SmsRecordEntity> pull(String scriptName);
+    List<SmsRecordEntity> pull(Integer id);
 
 }

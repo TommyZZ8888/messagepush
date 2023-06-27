@@ -38,15 +38,14 @@ public class TencentSmsServiceImpl implements SmsService {
 
     private static final Integer PHONE_NUM = 11;
 
-
     @Autowired
     private AccountUtils accountUtils;
-
 
     @Override
     public List<SmsRecordEntity> send(SmsParam smsParam) {
         try {
-            TencentSmsAccount tencentSmsParam = accountUtils.getAccountById(smsParam.getSendAccountId(), TencentSmsAccount.class);
+            TencentSmsAccount tencentSmsParam = Objects.nonNull(smsParam.getSendAccountId()) ? accountUtils.getAccountById(smsParam.getSendAccountId(), TencentSmsAccount.class) :
+                    accountUtils.getSmsAccountByScriptName(smsParam.getScriptName(), TencentSmsAccount.class);
             SmsClient client = init(tencentSmsParam);
             SendSmsRequest request = assembleReq(smsParam, tencentSmsParam);
             SendSmsResponse response = client.SendSms(request);
@@ -58,7 +57,7 @@ public class TencentSmsServiceImpl implements SmsService {
     }
 
     @Override
-    public List<SmsRecordEntity> pull(String scriptName) {
+    public List<SmsRecordEntity> pull(Integer accountId) {
         return null;
     }
 

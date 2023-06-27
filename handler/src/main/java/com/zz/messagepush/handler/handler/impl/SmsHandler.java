@@ -8,6 +8,7 @@ import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.zz.messagepush.common.constant.AustinConstant;
 import com.zz.messagepush.common.constant.CommonConstant;
+import com.zz.messagepush.common.domain.dto.account.sms.SmsAccount;
 import com.zz.messagepush.common.domain.dto.model.SmsContentModel;
 import com.zz.messagepush.handler.domain.sms.MessageTypeSmsConfig;
 import com.zz.messagepush.handler.domain.sms.SmsParam;
@@ -19,14 +20,12 @@ import com.zz.messagepush.handler.script.SmsService;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
 import com.zz.messagepush.support.mapper.SmsRecordMapper;
+import com.zz.messagepush.support.utils.AccountUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @Description
@@ -36,6 +35,9 @@ import java.util.Random;
 @Component
 @Slf4j
 public class SmsHandler extends BaseHandler implements Handler {
+
+    @Autowired
+    private AccountUtils accountUtils;
 
     @Autowired
     private SmsRecordMapper smsRecordMapper;
@@ -48,6 +50,7 @@ public class SmsHandler extends BaseHandler implements Handler {
 
     private static final String FLOW_KEY = "msgTypeSmsConfig";
     private static final String FLOW_KEY_PREFIX = "message_type_";
+    private static final Integer AUTO_FLOW_TRUE = 0;
 
     public SmsHandler() {
         channelCode = ChannelType.SMS.getCode();
@@ -65,9 +68,11 @@ public class SmsHandler extends BaseHandler implements Handler {
                 .sendAccountId(taskInfo.getSendAccount())
                 .build();
         try {
-            MessageTypeSmsConfig[] messageTypeSmsConfigs = loadBalance(Objects.requireNonNull(messageTypeSmsConfigs(taskInfo.getMsgType())));
+            MessageTypeSmsConfig[] messageTypeSmsConfigs = loadBalance(Objects.requireNonNull(messageTypeSmsConfigs(taskInfo)));
             assert messageTypeSmsConfigs != null;
             for (MessageTypeSmsConfig messageTypeSmsConfig : messageTypeSmsConfigs) {
+                smsParam.setScriptName(messageTypeSmsConfig.getScriptName());
+                smsParam.setSendAccountId(messageTypeSmsConfig.getSendAccount());
                 List<SmsRecordEntity> list = smsServiceMap.get(messageTypeSmsConfig.getScriptName()).send(smsParam);
                 if (CollUtil.isNotEmpty(list)) {
                     smsRecordMapper.saveAll(list);
@@ -84,7 +89,6 @@ public class SmsHandler extends BaseHandler implements Handler {
      * 如果有输入链接，则把连接拼在文案后
      * ps：这里可以考虑将链接 转短链
      * ps：如果是营销类的短信，需考虑拼接 回TD退订 之类的文案
-     *
      * @param taskInfo
      * @return
      */
@@ -101,7 +105,6 @@ public class SmsHandler extends BaseHandler implements Handler {
     /**
      * 流量负载
      * 根据配置的权重优先走某个账号，并取出一个备份的
-     *
      * @param messageTypeSmsConfigs
      * @return
      */
@@ -141,17 +144,20 @@ public class SmsHandler extends BaseHandler implements Handler {
      * 通知类短信有两个发送渠道 TencentSmsScript 占80%流量，YunPianSmsScript占20%流量
      * 营销类短信只有一个发送渠道 YunPianSmsScript
      * 验证码短信只有一个发送渠道 TencentSmsScript
-     *
-     * @param msgType
+     * @param
      * @return
      */
-    private List<MessageTypeSmsConfig> messageTypeSmsConfigs(Integer msgType) {
+    private List<MessageTypeSmsConfig> messageTypeSmsConfigs(TaskInfo taskInfo) {
+        if (!AUTO_FLOW_TRUE.equals(taskInfo.getSendAccount())) {
+            SmsAccount account = accountUtils.getAccountById(taskInfo.getSendAccount(), SmsAccount.class);
+            return Arrays.asList(MessageTypeSmsConfig.builder().sendAccount(taskInfo.getSendAccount()).scriptName(account.getScriptName()).weights(100).build());
+        }
         String property = config.getProperty(FLOW_KEY, CommonConstant.EMPTY_VALUE_JSON_ARRAY);
         JSONArray jsonArray = JSON.parseArray(property);
         for (int i = 0; i < jsonArray.size(); i++) {
-            JSONArray array = jsonArray.getJSONObject(i).getJSONArray(FLOW_KEY_PREFIX+msgType);
+            JSONArray array = jsonArray.getJSONObject(i).getJSONArray(FLOW_KEY_PREFIX + taskInfo.getMsgType());
             if (CollUtil.isNotEmpty(array)) {
-               return JSON.parseArray(JSON.toJSONString(array), MessageTypeSmsConfig.class);
+                return JSON.parseArray(JSON.toJSONString(array), MessageTypeSmsConfig.class);
             }
         }
         return null;
