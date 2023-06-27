@@ -24,4 +24,6 @@ public class EmailContentModel extends ContentModel {
      * 内容（可写入html）
      */
     public String content;
+
+    private String url;
 }

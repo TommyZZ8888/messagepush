@@ -26,4 +26,6 @@ public class MessageTypeSmsConfig {
      */
     private String scriptName;
 
+    private Integer sendAccount;
+
 }

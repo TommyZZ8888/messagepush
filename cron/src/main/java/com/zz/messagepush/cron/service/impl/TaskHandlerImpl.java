@@ -36,7 +36,9 @@ public class TaskHandlerImpl implements TaskHandler {
     public void handler(Long messageTemplateId) {
         MessageTemplateEntity messageTemplateEntity = messageTemplateMapper.findById(messageTemplateId).orElse(null);
 
-        assert messageTemplateEntity != null;
+        if (messageTemplateEntity == null) {
+            return;
+        }
         Long countCsvRow = ReadFileUtils.countCsvRow(messageTemplateEntity.getCronCrowdPath(), new CountFileRowHandler());
 
         if (messageTemplateEntity.getCronCrowdPath() == null) {

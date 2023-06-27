@@ -1,5 +1,6 @@
 package com.zz.messagepush.handler.handler.impl;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
@@ -15,10 +16,13 @@ import com.zz.messagepush.handler.handler.BaseHandler;
 import com.zz.messagepush.handler.handler.Handler;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.utils.AccountUtils;
+import com.zz.messagepush.support.utils.AustinFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.security.GeneralSecurityException;
 
 /**
@@ -33,6 +37,9 @@ public class EmailHandler extends BaseHandler implements Handler {
 
     @Autowired
     private AccountUtils accountUtils;
+
+    @Value("${austin.business.upload.crowd.path}")
+    private String dataPath;
 
 
     public EmailHandler() {
@@ -51,7 +58,8 @@ public class EmailHandler extends BaseHandler implements Handler {
         MailAccount account = getAccountConfig(taskInfo.getSendAccount());
 
         try {
-            MailUtil.send(account, taskInfo.getReceiver(), contentModel.getTitle(), contentModel.getContent(), true, null);
+            File file = StrUtil.isNotBlank(contentModel.getUrl()) ? AustinFileUtil.getRemoteUrl2File(dataPath, contentModel.getUrl()) : null;
+            MailUtil.send(account, taskInfo.getReceiver(), contentModel.getTitle(), contentModel.getContent(), true, file);
         } catch (Exception e) {
             log.error("EmailHandler#handler fail!{},params:{}", Throwables.getStackTraceAsString(e), taskInfo);
             return false;

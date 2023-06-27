@@ -60,7 +60,7 @@ public class ChannelAccountController {
         creator = StrUtil.isBlank(creator) ? AustinConstant.DEFAULT_CREATOR : creator;
 
         List<ChannelAccountEntity> channelAccounts = channelAccountService.queryByChannelType(channelType, creator);
-        return ResponseResult.success("ok",Convert4Amis.getChannelAccountVo(channelAccounts));
+        return ResponseResult.success("ok",Convert4Amis.getChannelAccountVo(channelAccounts,channelType));
     }
 
     @ApiOperation("渠道账户列表信息")
