@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -17,10 +16,10 @@ public class AustinFileUtil {
 
     public static File getRemoteUrl2File(String path, String remoteUrl) {
         try {
-            new File(path).mkdirs();
             URL url = new URL(remoteUrl);
             File file = new File(path, url.getPath());
             if (!file.exists()) {
+                file.getParentFile().mkdirs();
                 IOUtils.copy(url.openStream(), new FileOutputStream(file));
             }
             return file;

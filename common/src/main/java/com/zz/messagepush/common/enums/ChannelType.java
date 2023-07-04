@@ -8,7 +8,7 @@ import com.zz.messagepush.common.domain.dto.model.*;
  * @Author 张卫刚
  * @Date Created on 2023/3/13
  */
-public enum ChannelType {
+public enum ChannelType implements PowerfulEnum{
     IM(10, "IM(站内信)", ImContentModel.class, "im"),
 
     PUSH(20, "push(通知栏)", PushContentModel.class, "push"),
