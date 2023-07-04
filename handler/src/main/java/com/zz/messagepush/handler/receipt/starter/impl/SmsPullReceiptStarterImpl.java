@@ -41,7 +41,7 @@ public class SmsPullReceiptStarterImpl implements ReceiptMessageStarter {
         List<ChannelAccountEntity> accountEntityList = channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(CommonConstant.FALSE, ChannelType.SMS.getCode());
         for (ChannelAccountEntity channelAccountEntity : accountEntityList) {
             SmsAccount smsAccount = JSON.parseObject(channelAccountEntity.getAccountConfig(), SmsAccount.class);
-            List<SmsRecordEntity> recordEntities = smsServiceMap.get(smsAccount.getScriptName()).pull(smsAccount.getScriptName());
+            List<SmsRecordEntity> recordEntities = smsServiceMap.get(smsAccount.getScriptName()).pull(smsAccount.getSupplierId());
             if (CollUtil.isNotEmpty(recordEntities)) {
                 smsRecordMapper.saveAll(recordEntities);
             }

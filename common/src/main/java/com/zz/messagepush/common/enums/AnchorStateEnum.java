@@ -5,7 +5,7 @@ package com.zz.messagepush.common.enums;
  * @Author 张卫刚
  * @Date Created on 2023/3/24
  */
-public enum AnchorStateEnum {
+public enum AnchorStateEnum implements PowerfulEnum{
 
 
     RECEIVE(10, "消息接收成功"),
@@ -29,7 +29,7 @@ public enum AnchorStateEnum {
         this.description = description;
     }
 
-
+    @Override
     public Integer getCode() {
         return code;
     }
@@ -38,27 +38,12 @@ public enum AnchorStateEnum {
         this.code = code;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-
-    /**
-     * 通过code获取描述
-     * @param code
-     * @return
-     */
-    public static String getDescriptionByCode(Integer code){
-        for (AnchorStateEnum anchorStateEnum : AnchorStateEnum.values()) {
-            if (anchorStateEnum.getCode().equals(code)){
-                return anchorStateEnum.getDescription();
-            }
-        }
-
-        return "未知点位";
     }
 }

@@ -8,10 +8,7 @@ import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.messagepush.common.constant.AustinConstant;
-import com.zz.messagepush.common.enums.AnchorStateEnum;
-import com.zz.messagepush.common.enums.ChannelType;
-import com.zz.messagepush.common.enums.SimpleAnchorInfo;
-import com.zz.messagepush.common.enums.SmsStatus;
+import com.zz.messagepush.common.enums.*;
 import com.zz.messagepush.common.utils.EnumUtil;
 import com.zz.messagepush.support.domain.entity.MessageTemplateEntity;
 import com.zz.messagepush.support.domain.entity.SmsRecordEntity;
@@ -78,10 +75,10 @@ public class DataServiceImpl implements DataService {
                     sb.append(StrPool.CRLF);
                 }
                 String startTime = DateUtil.format(new Date(simpleAnchorInfo.getTimestamp()), DatePattern.NORM_DATETIME_PATTERN);
-                String stateDescription = AnchorStateEnum.getDescriptionByCode(simpleAnchorInfo.getState());
+                String stateDescription = EnumUtils.getDescriptionByCode(simpleAnchorInfo.getState(),AnchorStateEnum.class);
                 sb.append(startTime).append(StrPool.C_COLON).append(stateDescription).append("==>");
             }
-            ChannelType enumByCode = ChannelType.getEnumByCode(messageTemplateEntity.getSendChannel());
+            ChannelType enumByCode = EnumUtils.getEnumByCode(messageTemplateEntity.getSendChannel(),ChannelType.class);
             String description = enumByCode == null ? null : enumByCode.getDescription();
             for (String detail : sb.toString().split(StrPool.CRLF)) {
                 if (StrUtil.isNotBlank(detail)) {
@@ -115,7 +112,7 @@ public class DataServiceImpl implements DataService {
         if (CollUtil.isNotEmpty(anchorResult)) {
             anchorResult = MapUtil.sort(anchorResult);
             for (Map.Entry<Object, Object> entry : anchorResult.entrySet()) {
-                String description = AnchorStateEnum.getDescriptionByCode(Integer.valueOf(String.valueOf(entry.getKey())));
+                String description = EnumUtils.getDescriptionByCode(Integer.valueOf(String.valueOf(entry.getKey())),AnchorStateEnum.class);
                 xAxisList.add(description);
                 actualData.add(Integer.valueOf(String.valueOf(entry.getValue())));
             }

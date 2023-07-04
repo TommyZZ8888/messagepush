@@ -3,6 +3,8 @@ package com.zz.messagepush.support.utils;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.PropertyKeyConst;
+import com.alibaba.nacos.api.annotation.NacosInjected;
+import com.alibaba.nacos.api.config.ConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,25 +23,16 @@ import java.util.Properties;
 @Slf4j
 public class NacosUtil {
 
-    @Value("${austin.nacos.server}")
-    private String nacosServer;
 
     @Value("${austin.nacos.group}")
     private String nacosGroup;
 
-    @Value("${austin.nacos.username}")
-    private String nacosUserName;
-
-    @Value("${austin.nacos.password}")
-    private String nacosPassword;
-
     @Value("${austin.nacos.dataId}")
     private String nacosDataId;
 
-    @Value("${austin.nacos.namespace}")
-    private String nacosNamespace;
+    @NacosInjected
+    private ConfigService configService;
 
-    private final Properties request = new Properties();
     private final Properties properties = new Properties();
 
     public String getProperty(String key, String defaultValue) {
@@ -59,9 +52,7 @@ public class NacosUtil {
     private String getContext() {
         String context = null;
         try {
-            request.put(PropertyKeyConst.SERVER_ADDR, nacosServer);
-            request.put(PropertyKeyConst.NAMESPACE, nacosNamespace);
-            context = NacosFactory.createConfigService(request).getConfig(nacosDataId, nacosGroup, 5000);
+            context = configService.getConfig(nacosDataId, nacosGroup, 5000);
         } catch (Exception e) {
             log.error("Nacos error：{}", e.getMessage());
         }

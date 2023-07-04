@@ -22,18 +22,4 @@ public enum SmsSupplier {
     private Integer code;
     private String description;
 
-
-    /**
-     * 根据状态获取描述信息
-     * @param code
-     * @return
-     */
-    public static String getDescriptionByStatus(Integer code) {
-        for (SmsSupplier value : values()) {
-            if (code.equals(value.getCode())) {
-                return value.getDescription();
-            }
-        }
-        return "";
-    }
 }
