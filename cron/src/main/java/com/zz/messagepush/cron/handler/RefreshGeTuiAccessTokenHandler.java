@@ -8,7 +8,7 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.shaded.com.google.common.base.Throwables;
 import com.xxl.job.core.handler.annotation.XxlJob;
-import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.account.GeTuiAccount;
 import com.zz.messagepush.common.enums.ChannelType;
@@ -44,14 +44,13 @@ public class RefreshGeTuiAccessTokenHandler {
     @XxlJob("refreshGeTuiAccessTokenJob")
     public void execute() {
         SupportThreadPoolConfig.getPendingSingleThreadPool().execute(() -> {
-            List<ChannelAccountEntity> accountEntityList = channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(AustinConstant.FALSE, ChannelType.PUSH.getCode());
-            for (int index = SendAccountConstant.START; true; index = index + SendAccountConstant.STEP) {
-                for (ChannelAccountEntity channelAccountEntity : accountEntityList) {
-                    GeTuiAccount geTuiAccount = JSON.parseObject(channelAccountEntity.getAccountConfig(), GeTuiAccount.class);
-                    String accessToken = getAccessToken(geTuiAccount);
-                    if (StrUtil.isNotBlank(accessToken)) {
-                        redisTemplate.opsForValue().set(SendAccountConstant.GE_TUI_ACCESS_TOKEN_PREFIX + index, accessToken);
-                    }
+            List<ChannelAccountEntity> accountEntityList = channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(CommonConstant.FALSE, ChannelType.PUSH.getCode());
+
+            for (ChannelAccountEntity channelAccountEntity : accountEntityList) {
+                GeTuiAccount geTuiAccount = JSON.parseObject(channelAccountEntity.getAccountConfig(), GeTuiAccount.class);
+                String accessToken = getAccessToken(geTuiAccount);
+                if (StrUtil.isNotBlank(accessToken)) {
+                    redisTemplate.opsForValue().set(SendAccountConstant.GE_TUI_ACCESS_TOKEN_PREFIX + channelAccountEntity.getId(), accessToken);
                 }
             }
         });
