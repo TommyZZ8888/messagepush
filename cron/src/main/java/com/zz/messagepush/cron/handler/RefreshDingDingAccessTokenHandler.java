@@ -8,6 +8,7 @@ import com.dingtalk.api.response.OapiGettokenResponse;
 import com.taobao.api.ApiException;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import com.zz.messagepush.common.constant.AustinConstant;
+import com.zz.messagepush.common.constant.CommonConstant;
 import com.zz.messagepush.common.constant.SendAccountConstant;
 import com.zz.messagepush.common.domain.dto.account.DingDingWorkNoticeAccount;
 import com.zz.messagepush.common.enums.ChannelType;
@@ -44,7 +45,7 @@ public class RefreshDingDingAccessTokenHandler {
     @XxlJob("refreshAccessTokenJob")
     public void execute() {
         SupportThreadPoolConfig.getPendingSingleThreadPool().execute(() -> {
-            List<ChannelAccountEntity> accountList = channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(AustinConstant.FALSE, ChannelType.DING_DING_WORK_NOTICE.getCode());
+            List<ChannelAccountEntity> accountList = channelAccountMapper.findAllByIsDeletedEqualsAndSendChannelEquals(CommonConstant.FALSE, ChannelType.DING_DING_WORK_NOTICE.getCode());
             for (ChannelAccountEntity channelAccountEntity : accountList) {
                 DingDingWorkNoticeAccount account = JSON.parseObject(channelAccountEntity.getAccountConfig(), DingDingWorkNoticeAccount.class);
                 String accessToken = getAccessToken(account);

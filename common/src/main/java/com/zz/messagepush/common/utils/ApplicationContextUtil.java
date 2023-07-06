@@ -10,12 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @ClassName:ApplicationContextUtil
- * @Description:
- * @Author: vren
- * @Date: 2022/5/23 15:45
- */
+
 @Component
 @Slf4j
 public class ApplicationContextUtil implements ApplicationContextAware {

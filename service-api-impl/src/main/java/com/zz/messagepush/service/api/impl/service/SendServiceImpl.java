@@ -2,6 +2,7 @@ package com.zz.messagepush.service.api.impl.service;
 
 import cn.monitor4all.logRecord.annotation.OperationLog;
 import com.zz.messagepush.common.domain.ResponseResult;
+import com.zz.messagepush.common.enums.RespStatusEnum;
 import com.zz.messagepush.service.api.domain.SendResponse;
 import com.zz.messagepush.service.api.domain.dto.BatchSendRequest;
 import com.zz.messagepush.service.api.domain.dto.SendRequest;
@@ -12,6 +13,7 @@ import com.zz.messagepush.support.pipeline.ProcessHandler;
 import com.zz.messagepush.support.pipeline.ProcessModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 
@@ -28,6 +30,11 @@ public class SendServiceImpl implements SendService {
     @Override
     @OperationLog(bizType = "SendService#send", bizId = "#sendRequest.messageTemplateId", msg = "#sendRequest")
     public SendResponse send(SendRequest sendRequest) {
+        // 添加对 sendRequest 参数的判空,防止后面空指针
+        if(ObjectUtils.isEmpty(sendRequest)){
+            return new SendResponse(RespStatusEnum.CLIENT_BAD_PARAMETERS.getCode(), RespStatusEnum.CLIENT_BAD_PARAMETERS.getDescription());
+        }
+
         SendTaskModel sendTaskModel = SendTaskModel.builder()
                 .messageTemplateId(sendRequest.getMessageTemplateId())
                 .messageParamList(Collections.singletonList(sendRequest.getMessageParam()))
